@@ -25,6 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('products', [ProductController::class, 'index'])->name('products');
+Route::get('produk', [ProductController::class, 'index'])->name('product')->middleware(['auth', 'verified']);
+Route::get('pulsa', [ProductController::class, 'index'])->name('balance');
+Route::get('hutang')->name('debt');
+Route::get('catatan-aktifitas')->name('activity');
+Route::get('transaksi')->name('transaction');
+Route::get('grafik')->name('chart');
 
 require __DIR__.'/auth.php';
