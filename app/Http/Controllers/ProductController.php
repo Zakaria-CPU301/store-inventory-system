@@ -12,7 +12,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Main/Products', [
+        return Inertia::render('Main/Product', [
             'datas' => [
                 [
                     'name' => 'zaka',
@@ -21,6 +21,46 @@ class ProductController extends Controller
                 [
                     'name' => 'hana',
                     'age' => 17
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
+                ],
+                [
+                    'name' => 'ines',
+                    'age' => 16
                 ],
                 [
                     'name' => 'ines',

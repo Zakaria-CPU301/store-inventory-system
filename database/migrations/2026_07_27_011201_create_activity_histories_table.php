@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction_histories', function (Blueprint $table) {
+        Schema::create('activity_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount');
-            $table->float('nominal');
-            $table->boolean('paid');
+            $table->string('activity_image', 50);
+            $table->text('description');
+            $table->boolean('success');
 
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->morphs('log_reference');
+            $table->foreignId('customer_id')
+                ->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
