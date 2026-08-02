@@ -43,12 +43,12 @@ const Sidebar = () => {
                     icon="bi bi-person-fill-exclamation"
                     amount="20"
                 />
-                <NavigatorLine
+                {/* <NavigatorLine
                     router="deposit"
                     pageName="titipan"
                     icon="bi bi-minecart-loaded"
                     amount="20"
-                />
+                /> */}
                 <NavigatorLine
                     router="transaction"
                     pageName="transaksi"

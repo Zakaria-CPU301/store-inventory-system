@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\BoardingHouseController;
+
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TransactionHistoryController;
+use App\Http\Controllers\PropertyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,10 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-<<<<<<< Updated upstream
-Route::get('products', [ProductController::class, 'index'])->name('products');
-=======
->>>>>>> Stashed changes
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', action: function () {
@@ -34,11 +33,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::get('produk', [ProductController::class, 'index'])->name('product')->middleware(['auth', 'verified']);
     Route::get('pulsa', [BalanceController::class, 'index'])->name('balance');
-    Route::get('kasbon', [TransactionHistoryController::class, 'debt'])->name('debt');
-    Route::get('titipan', [TransactionHistoryController::class, 'depositThing'])->name('deposit');
-    Route::get('asrama')->name('boarding');
+    Route::get('kasbon', [DebtController::class, 'index'])->name('debt');
+    Route::get('asrama', [BoardingHouseController::class, 'index'])->name('boarding');
+    Route::get('properti', [PropertyController::class, 'index'])->name('property');
     Route::get('catatan-aktifitas')->name('activity');
-    Route::get('transaksi')->name('transaction');
     Route::get('grafik')->name('chart');
 });
 

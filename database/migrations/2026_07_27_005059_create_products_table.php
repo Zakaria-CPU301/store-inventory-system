@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('product_name');
+            $table->string('product_image');
             $table->float('price', (10));
             $table->integer('qty');
             $table->enum('unit', ['pcs', 'dus', 'bks']);
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('description');
 
             $table->foreignId('category_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->timestamps();
         });
     }
 
