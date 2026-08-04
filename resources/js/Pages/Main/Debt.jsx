@@ -1,13 +1,11 @@
-import Table from "@/Components/Elements/Table";
+import Table from "@/Components/Partials/Table";
 import App from "@/Layouts/App";
 
 const Debt = () => {
-const columns = [
-    {key: ''}
-]
+    const columns = [{ key: "" }];
     return (
         <App>
-            <Table/>
+            <Table />
         </App>
     );
 };

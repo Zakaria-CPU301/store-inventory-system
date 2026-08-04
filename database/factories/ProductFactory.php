@@ -20,7 +20,7 @@ class ProductFactory extends Factory
         return [
             'product_image' => fake()->imageUrl(360, 360, 'animals', true, 'cats'),
             'product_name' => fake()->words(3, true),
-            'price' => fake()->randomFloat(2, 0, 10000),
+            'price' => fake()->randomFloat(2, 0, 10000000),
             'qty' => fake()->numberBetween(1, 50),
             'unit' => fake()->randomElement(['pcs', 'dus', 'bks']),
             'status' => fake()->randomElement(['available', 'empty', 'blocked']),

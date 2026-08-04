@@ -28,10 +28,11 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', action: function () {
+    Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::get('produk', [ProductController::class, 'index'])->name('product')->middleware(['auth', 'verified']);
+    Route::post('tambah-produk', [ProductController::class, 'store'])->name('product-store');
     Route::get('pulsa', [BalanceController::class, 'index'])->name('balance');
     Route::get('kasbon', [DebtController::class, 'index'])->name('debt');
     Route::get('asrama', [BoardingHouseController::class, 'index'])->name('boarding');

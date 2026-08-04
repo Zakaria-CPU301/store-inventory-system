@@ -1,4 +1,4 @@
-import FadeWhite from "../elements/FadeWhite";
+import FadeWhite from "../Partials/FadeWhite";
 
 export default function Navbar({ auth }) {
     return (

@@ -11,25 +11,27 @@ const Sidebar = () => {
                     amountNotif="20"
                 />
                 <NavigatorLine
-                    routeName="barang"
+                    routeName="product"
+                    pageName="barang"
                     icon="bi bi-table"
                     amountNotif="20"
                 />
                 <NavigatorLine
-                    routeName="pulsa"
+                    routeName="balance"
+                    pageName="pulsa"
                     icon="bi bi-broadcast-pin"
                     amountNotif="20"
                 />
                 <NavigatorLine
-                    router="boarding"
+                    routeName="boarding"
                     pageName="kontrakan"
-                    icon="bi bi-graph-up-arrow"
+                    icon="bi bi-houses"
                     amount="20"
                 />
                 <NavigatorLine
-                    router="chart"
-                    pageName="grafik"
-                    icon="bi bi-graph-up-arrow"
+                    routeName="debt"
+                    pageName="kasbon"
+                    icon="bi bi-person-fill-exclamation"
                     amount="20"
                 />
 
@@ -38,25 +40,25 @@ const Sidebar = () => {
                 <h1 className="font-bold text-xl text-white/60">Catatan</h1>
 
                 <NavigatorLine
-                    router="debt"
-                    pageName="kasbon"
-                    icon="bi bi-person-fill-exclamation"
+                    routeName="chart"
+                    pageName="grafik"
+                    icon="bi bi-graph-up-arrow"
                     amount="20"
                 />
                 {/* <NavigatorLine
-                    router="deposit"
+                    routeName="deposit"
                     pageName="titipan"
                     icon="bi bi-minecart-loaded"
                     amount="20"
                 /> */}
                 <NavigatorLine
-                    router="transaction"
+                    routeName="product"
                     pageName="transaksi"
                     icon="bi bi-cash-coin"
                     amountNotif="20"
                 />
                 <NavigatorLine
-                    router="activity"
+                    routeName="activity"
                     pageName="log aktivitas"
                     icon="bi bi-clock-history"
                     amount="20"

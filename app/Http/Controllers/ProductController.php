@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,60 +14,7 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render('Main/Product', [
-            'datas' => [
-                [
-                    'name' => 'zaka',
-                    'age' => 18
-                ],
-                [
-                    'name' => 'hana',
-                    'age' => 17
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-                [
-                    'name' => 'ines',
-                    'age' => 16
-                ],
-            ],
+            'productDatas' => Product::with('categories')->get(),
         ]);
     }
 
@@ -83,6 +31,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 }
