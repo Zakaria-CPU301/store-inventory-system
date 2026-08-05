@@ -6,5 +6,5 @@ export default function Button({ children, className }) {
     // const changeToggleValue = () => {
     //     return setToggle(!toggle)
     // }
-    return <button className={`py-2 px-3 ${className ?? 'bg-white/30 font-semibold text-indigo-100'} rounded-2xl capitalize`}>{children}</button>;
+    return <button className={`py-2 px-3 ${className ?? 'bg-main-table font-semibold text-indigo-100'} rounded-2xl capitalize`}>{children}</button>;
 }
