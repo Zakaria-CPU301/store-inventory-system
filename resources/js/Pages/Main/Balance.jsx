@@ -6,6 +6,8 @@ import HeaderAccessibillity from "@/Components/Partials/HeaderAccessibillity";
 import Table from "@/Components/Partials/Table";
 import App from "@/Layouts/App";
 import CardAmountInfo from "@/Components/Elements/CardAmountInfo";
+import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
+import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
 
 const Balance = ({ balanceDatas }) => {
     const categories = [];
@@ -16,7 +18,11 @@ const Balance = ({ balanceDatas }) => {
     });
 
     const columns = [
-        { key: `customers.fullname`, label: "nama pelanggan", opsionalClassName: 'text-start' },
+        {
+            key: `customers.fullname`,
+            label: "nama pelanggan",
+            opsionalClassName: "text-start",
+        },
         { key: `number`, label: "nomor saldo" },
         { key: `categories.category_name`, label: "kategori saldo" },
     ];
@@ -43,26 +49,19 @@ const Balance = ({ balanceDatas }) => {
                     />
                 </Card>
             </HeaderInfo>
+
             <HeaderAccessibillity>
-                <div className="h-full px-5 min-w-0 flex items-center rounded-t-2xl bg-[rgb(13,23,46)]">
-                    <div className="flex overflow-x-scroll space-x-3 whitespace-nowrap scrollbar-none">
-                        {categories.map((category, index) => (
-                            <Button key={index}>{category}</Button>
-                        ))}
-                    </div>
-                </div>
-                <div className="h-full flex-1 bg-[rgb(13,23,46)]">
-                    <div className="h-full flex items-center justify-end space-x-3 pl-3 whitespace-nowrap rounded-bl-2xl bg-[rgb(5,14,31)]">
-                        <Button className='bg-main-table text-indigo-100 font-bold'>
-                            Filter{" "}
-                            <i className="bi bi-funnel-fill text-lg text-purple-100"></i>
-                        </Button>
-                        <Button className='bg-[rgb(218,203,255)] text-blue-900 font-bold'>
-                            Tambah{" "}
-                            <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
-                        </Button>
-                    </div>
-                </div>
+                <AccessibillityFirst dataFilter={[...new Set(categories)]} />
+                <AccesibillitySecond>
+                    <Button className="bg-main-table text-indigo-100 font-bold">
+                        Filter{" "}
+                        <i className="bi bi-funnel-fill text-lg text-purple-100"></i>
+                    </Button>
+                    <Button className="bg-light-sky text-blue-900 font-bold">
+                        Tambah{" "}
+                        <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
+                    </Button>
+                </AccesibillitySecond>
             </HeaderAccessibillity>
             <Table columns={columns} datas={balanceDatas} />
         </App>
