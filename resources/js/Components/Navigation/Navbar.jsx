@@ -1,7 +1,8 @@
-import { useState } from "react";
-import FadeWhite from "../Partials/FadeWhite";
+import { usePage } from "@inertiajs/react";
 
-export default function Navbar({toggleSidebar}) {
+export default function Navbar({ toggleSidebar }) {
+    const user = usePage().props.auth.user;
+
     return (
         <>
             <nav className="w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar z-50">
@@ -37,15 +38,15 @@ export default function Navbar({toggleSidebar}) {
                 </div>
                 <div className="flex gap-5 h-full justify-between items-center pr-5">
                     <div className="flex gap-1">
-                        <FadeWhite>
+                        <div className="rounded-full w-10 h-10 flex justify-center items-center hover:bg-white/50 duration-300 cursor-pointer">
                             <div className="relative">
                                 <i className="bi bi-bell-fill text-xl"></i>
                                 <div className="absolute w-2.5 h-2.5 top-0 right-0 translate-x-0.5 bg-red-600 rounded-full"></div>
                             </div>
-                        </FadeWhite>
-                        <FadeWhite>
+                        </div>
+                        <div className="rounded-full w-10 h-10 flex justify-center items-center hover:bg-white/50 duration-300 cursor-pointer">
                             <i className="bi bi-gear-fill text-xl"></i>
-                        </FadeWhite>
+                        </div>
                     </div>
 
                     <div className="w-0.75 h-1/2 rounded-xl bg-white/40"></div>
@@ -53,21 +54,25 @@ export default function Navbar({toggleSidebar}) {
                     <div className="flex items-center space-x-5">
                         <div className="flex flex-col">
                             <span className="font-bold">
-                                {/* {{Str::limit($fullname[0], 8)}} {{Str::limit($fullname[1], 8)}} */}
+                                {user.name
+                                    .split(" ")
+                                    .slice(0, 2)
+                                    .map((e) => `${e.slice(0, 4)}...`)
+                                    .join(" ")}
                             </span>
                             <span className="capitalize text-sm text-right">
                                 supervisor
                             </span>
                         </div>
-                        {/* {auth.user ? (
+                        {!user ? (
                             <i className="bi bi-person-circle text-3xl"></i>
                         ) : (
-                            )} */}
-                        <img
-                            src="/storage/defaults/leptop-chartup.webp"
-                            className="w-12 rounded-full border-2 border-white/40"
-                            alt="laptop"
-                        />
+                            <img
+                                src="/storage/defaults/leptop-chartup.webp"
+                                className="w-12 rounded-full border-2 border-white/40"
+                                alt="laptop"
+                            />
+                        )}
                     </div>
                 </div>
             </nav>
