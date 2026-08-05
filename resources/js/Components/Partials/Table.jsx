@@ -1,13 +1,13 @@
 import Button from "../Elements/Button";
 
-const Table = ({ firstAction = null, columns, datas }) => {
+const Table = ({ firstAction = null, columns, datas, opsionalClassName }) => {
     const result = (obj, keyName) =>
         keyName.split(".").reduce((acc, key) => acc[key], obj);
 
     return (
         <div className="w-full rounded-b-2xl">
-            <table className="border-collapse w-full bg-[rgb(18,28,53)] rounded-2xl">
-                <thead className="bg-[rgb(13,23,46)] text-white sticky top-32">
+            <table className="border-collapse w-full bg-main-table rounded-2xl">
+                <thead className="bg-table-head text-white sticky top-34">
                     <tr>
                         <th className="capitalize p-3">no</th>
                         {columns.map((name, index) => (
@@ -15,7 +15,7 @@ const Table = ({ firstAction = null, columns, datas }) => {
                                 {name.label}
                             </th>
                         ))}
-                        <th className="capitalizebg bg-[rgb(5,14,31)]"><div className="rounded-tr-2xl p-3 bg-[rgb(13,23,46)]">aksi</div></th>
+                        <th className="capitalizebg bg-main-layout"><div className="rounded-tr-2xl p-3 bg-[rgb(13,23,46)]">aksi</div></th>
                     </tr>
                 </thead>
 
@@ -27,7 +27,7 @@ const Table = ({ firstAction = null, columns, datas }) => {
                             </td>
                             {columns.map((col, i) => (
                                 <td
-                                    className={`${col.className ?? "text-center p-3"}`}
+                                    className={`${col.opsionalClassName ?? "text-center p-3"}`}
                                     key={i}
                                 >
                                     {result(data, col.key)}

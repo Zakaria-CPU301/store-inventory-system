@@ -1,11 +1,14 @@
+import { useState } from "react";
 import FadeWhite from "../Partials/FadeWhite";
 
-export default function Navbar({ auth }) {
+export default function Navbar({toggleSidebar}) {
     return (
         <>
-            <nav className="w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-[rgb(3,8,26)] z-50">
+            <nav className="w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar z-50">
                 <div className="h-full flex items-center space-x-5 pl-5 w-1/5">
-                    <i className="bi bi-list text-white text-3xl"></i>
+                    <button onClick={toggleSidebar}>
+                        <i className="bi bi-list text-white text-3xl"></i>
+                    </button>
                     <div className="flex text-lg space-x-2">
                         <img
                             src="/storage/defaults/logo_light.svg"

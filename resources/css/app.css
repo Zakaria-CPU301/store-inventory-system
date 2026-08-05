@@ -6,3 +6,19 @@
 @source "../../storage/framework/views/*.php";
 @source "../**/*.blade.php";
 @source "../**/*.js";
+
+.bg-main-navbar {
+    background-color: rgb(3,8,26);
+}
+
+.bg-main-table {
+    background-color: rgb(18,28,53);
+}
+
+.bg-table-head {
+    background-color: rgb(13,23,46);
+}
+
+.bg-main-layout {
+    background-color: rgb(5,14,31);
+}

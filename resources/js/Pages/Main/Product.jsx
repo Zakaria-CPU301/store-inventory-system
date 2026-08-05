@@ -1,14 +1,21 @@
 import Button from "@/Components/Elements/Button";
 import Card from "@/Components/Partials/Card";
-import MainHeader from "@/Components/Partials/MainHeader";
+import HeaderAccessibillity from "@/Components/Partials/HeaderAccessibillity";
+import HeaderDesc from "@/Components/Partials/HeaderDesc";
+import HeaderInfo from "@/Components/Partials/HeaderInfo";
 import App from "@/Layouts/App";
 
 const Product = ({ productDatas }) => {
     return (
         <App>
-            <MainHeader>
+            <HeaderInfo>
+                <HeaderDesc title='Daftar Barang' desc='Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro, provident fugiat adipisci accusamus maxime repudiandae magni velit vel a impedit quisquam eius laborum repellendus error ab sint fuga eos et!' />
+
+                <Card />
+            </HeaderInfo>
+            <HeaderAccessibillity>
                 <Button></Button>
-            </MainHeader>
+            </HeaderAccessibillity>
             <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-2.5">
                 {productDatas.map((data, i) => (
                     <Card key={i} className='bg-[rgb(17,27,52)]'>
