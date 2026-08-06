@@ -19,7 +19,7 @@ class BalanceNumberFactory extends Factory
     {
         return [
             'number' => fake()->phoneNumber(),
-            'category_id' => fake()->numberBetween(1, 5),
+            'category_id' => fake()->numberBetween(1, 15),
             'customer_id' => fake()->numberBetween(1, 5),
         ];
     }
