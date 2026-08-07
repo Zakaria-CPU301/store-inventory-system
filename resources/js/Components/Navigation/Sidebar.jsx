@@ -13,7 +13,7 @@ const Sidebar = () => {
                 <NavigatorLine
                     routeName="product"
                     pageName="barang"
-                    icon="bi bi-table"
+                    icon="bi bi-boxes"
                     amountNotif="20"
                 />
                 <NavigatorLine
@@ -23,6 +23,12 @@ const Sidebar = () => {
                     amountNotif="20"
                 />
                 <NavigatorLine
+                    routeName="category"
+                    pageName="kategori"
+                    icon="bi bi-collection"
+                    amountNotif="20"
+                />
+                {/* <NavigatorLine
                     routeName="boarding"
                     pageName="kontrakan"
                     icon="bi bi-houses"
@@ -33,24 +39,24 @@ const Sidebar = () => {
                     pageName="kasbon"
                     icon="bi bi-person-fill-exclamation"
                     amount="20"
-                />
+                /> */}
 
                 <div className="h-0.75 w-full bg-white/40 rounded-full my-2.5"></div>
 
                 <h1 className="font-bold text-xl text-white/60">Catatan</h1>
 
-                <NavigatorLine
+                {/* <NavigatorLine
                     routeName="chart"
                     pageName="grafik"
                     icon="bi bi-graph-up-arrow"
                     amount="20"
                 />
-                {/* <NavigatorLine
+                <NavigatorLine
                     routeName="deposit"
                     pageName="titipan"
                     icon="bi bi-minecart-loaded"
                     amount="20"
-                /> */}
+                />
                 <NavigatorLine
                     routeName="product"
                     pageName="transaksi"
@@ -62,7 +68,7 @@ const Sidebar = () => {
                     pageName="log aktivitas"
                     icon="bi bi-clock-history"
                     amount="20"
-                />
+                /> */}
             </div>
         </div>
     );

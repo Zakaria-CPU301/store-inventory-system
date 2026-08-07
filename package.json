@@ -23,6 +23,7 @@
     "dependencies": {
         "bootstrap-icons": "^1.13.1",
         "tailwindcss": "^4.3.3",
+        "tom-select": "^2.6.2",
         "ziggy-js": "^2.6.3"
     }
 }

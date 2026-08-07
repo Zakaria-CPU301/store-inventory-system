@@ -8,8 +8,8 @@ export default function NavigatorLine({
 }) {
     return (
         <Link
-            href={route(`${routeName}`)}
-            className={`flex justify-between items-center text-white p-2 rounded-xl hover:bg-[rgb(30,37,66)] duration-300 ${routeName === route().current() ? "bg-[rgb(29,37,73)]" : ""}`}
+            href={route(`${routeName}.index`)}
+            className={`flex justify-between items-center text-white p-2 rounded-xl hover:bg-[rgb(30,37,66)] duration-300 ${routeName + '.index' === route().current() ? "bg-[rgb(29,37,73)]" : ""}`}
         >
             <div className="flex items-center space-x-3">
                 <i className={`${icon} text-xl`}></i>

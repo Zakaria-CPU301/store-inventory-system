@@ -1,23 +1,21 @@
 import Button from "../Elements/Button";
+import SmoothTableHead from "../Elements/SmoothTableHead";
+import StandardTableHead from "../Elements/StandardTableHead";
 
-const Table = ({ firstAction = null, columns, datas, opsionalClassName }) => {
+const Table = ({ firstAction = null, columns, datas, className }) => {
     const result = (obj, keyName) =>
         keyName.split(".").reduce((acc, key) => acc[key], obj);
+
+    const currentRoute = route().current();
 
     return (
         <div className="w-full rounded-b-2xl">
             <table className="border-collapse w-full bg-main-table rounded-2xl">
-                <thead className="bg-table-head text-white sticky top-34">
-                    <tr>
-                        <th className="capitalize p-3">no</th>
-                        {columns.map((name, index) => (
-                            <th className="capitalize p-3" key={index}>
-                                {name.label}
-                            </th>
-                        ))}
-                        <th className="capitalizebg bg-main-layout"><div className="rounded-tr-2xl p-3 bg-[rgb(13,23,46)]">aksi</div></th>
-                    </tr>
-                </thead>
+                {currentRoute == "category.index" ? (
+                    <StandardTableHead columns={columns} />
+                ) : (
+                    <SmoothTableHead columns={columns} />
+                )}
 
                 <tbody className="text-white">
                     {datas.map((data, index) => (

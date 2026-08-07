@@ -33,16 +33,16 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(6)
         ]);
 
-        Category::factory(15)->create();
+        // Category::factory(15)->create();
 
-        Product::factory(30)->create();
+        // Product::factory(30)->create();
 
-        Customer::factory(50)->create();
+        // Customer::factory(50)->create();
 
-        BalanceNumber::factory(15)->create();
+        // BalanceNumber::factory(15)->create();
 
-        Property::factory(5)->create();
+        // Property::factory(5)->create();
 
-        BoardingHouse::factory(10)->create();
+        // BoardingHouse::factory(10)->create();
     }
 }

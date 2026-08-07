@@ -1,12 +1,9 @@
 <?php
 
 use App\Http\Controllers\BalanceController;
-use App\Http\Controllers\BoardingHouseController;
-
-use App\Http\Controllers\DebtController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PropertyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,17 +25,29 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-    Route::get('produk', [ProductController::class, 'index'])->name('product')->middleware(['auth', 'verified']);
-    Route::post('tambah-produk', [ProductController::class, 'store'])->name('product-store');
-    Route::get('pulsa', [BalanceController::class, 'index'])->name('balance');
-    Route::get('kasbon', [DebtController::class, 'index'])->name('debt');
-    Route::get('asrama', [BoardingHouseController::class, 'index'])->name('boarding');
-    Route::get('properti', [PropertyController::class, 'index'])->name('property');
-    Route::get('catatan-aktifitas')->name('activity');
-    Route::get('grafik')->name('chart');
+
+    Route::prefix('dashboard')->name('dashboard.')->group(function (): void {
+        Route::get('/', function () {
+            return Inertia::render('Dashboard');
+        })->name('index');
+    });
+    Route::prefix('category')->name('category.')->group(function (): void {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::post('/tambah', [CategoryController::class, 'store'])->name('store');
+    });
+    Route::prefix('product')->name('product.')->group(function (): void {
+        Route::get('', [ProductController::class, 'index'])->name('index');
+        Route::post('/tambah', [ProductController::class, 'store'])->name('store');
+    });
+    Route::prefix('balance')->name('balance.')->group(function (): void {
+        Route::get('/', [BalanceController::class, 'index'])->name('index');
+        Route::post('/tambah', [BalanceController::class, 'store'])->name('store');
+    });
+    // Route::get('debt', [DebtController::class, 'index'])->name('debt');
+    // Route::get('boarding', [BoardingHouseController::class, 'index'])->name('boarding');
+    // Route::get('property', [PropertyController::class, 'index'])->name('property');
+    // Route::get('catatan-aktifitas')->name('activity');
+    // Route::get('grafik')->name('chart');
 });
 
 require __DIR__ . '/auth.php';

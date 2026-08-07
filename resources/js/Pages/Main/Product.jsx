@@ -23,7 +23,7 @@ const Product = ({ productDatas }) => {
                     desc="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro, provident fugiat adipisci accusamus maxime repudiandae magni velit vel a impedit quisquam eius laborum repellendus error ab sint fuga eos et!"
                 />
 
-                <Card className="bg-[rgb(18,28,53)]">
+                <Card className="bg-[rgb(18,28,53)] p-4">
                     <CardAmountInfo
                         label="total produk tersedia"
                         amount={productDatas.length}
@@ -35,8 +35,7 @@ const Product = ({ productDatas }) => {
                 <AccessibillityFirst dataFilter={[...new Set(categories)]} />
                 <AccesibillitySecond>
                     <Button className="bg-[rgb(29,42,77)] text-indigo-100 font-bold">
-                        Filter{" "}
-                        <i className="bi bi-funnel-fill text-lg"></i>
+                        Filter <i className="bi bi-funnel-fill text-lg"></i>
                     </Button>
                     <Button className="bg-light-sky text-blue-900 font-bold">
                         Tambah{" "}

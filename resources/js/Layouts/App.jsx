@@ -1,18 +1,19 @@
 import Navbar from "@/Components/Navigation/Navbar";
 import Sidebar from "@/Components/Navigation/Sidebar";
+import OverlayModal from "@/Components/Partials/OverlayModal";
 import { useState } from "react";
 
 const App = ({ children }) => {
     const [showSidebar, setShowSidebar] = useState(() => {
-        return JSON.parse(localStorage.getItem('toggle-sidebar')) ?? true
-    })
+        return JSON.parse(localStorage.getItem("toggle-sidebar")) ?? true;
+    });
 
     function toggleSidebar() {
-        const isShow = !showSidebar
-        setShowSidebar(isShow)
-        localStorage.setItem('toggle-sidebar', isShow)
+        const isShow = !showSidebar;
+        setShowSidebar(isShow);
+        localStorage.setItem("toggle-sidebar", isShow);
     }
-    
+
     return (
         <>
             <Navbar toggleSidebar={toggleSidebar} />
