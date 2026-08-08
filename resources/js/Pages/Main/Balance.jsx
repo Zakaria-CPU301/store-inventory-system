@@ -54,9 +54,9 @@ const Balance = ({ balanceDatas }) => {
         processing,
         clearErrors,
     } = useForm({
-        custName: "",
-        balanceNumber: "",
-        category: "",
+        customer_id: "",
+        number: "",
+        category_id: "",
     });
 
     const submit = (e) => {
@@ -86,16 +86,16 @@ const Balance = ({ balanceDatas }) => {
                                             placeholder={
                                                 "Masukkan Nama Pelanggan"
                                             }
-                                            value={data.custName}
+                                            value={data.customer_id}
                                             onChange={(e) => {
                                                 setData(
-                                                    "custName",
+                                                    "customer_id",
                                                     e.target.value,
                                                 );
-                                                clearErrors("custName");
+                                                clearErrors("customer_id");
                                             }}
                                         />
-                                        <InputError message={errors.custName} />
+                                        <InputError message={errors.customer_id} />
                                     </div>
                                     <div className="">
                                         <InputLabel value={"Nomor Deposit"} />
@@ -105,30 +105,30 @@ const Balance = ({ balanceDatas }) => {
                                             placeholder={
                                                 "Masukkan Nomor Deposit"
                                             }
-                                            value={data.balanceNumber}
+                                            value={data.nu}
                                             onChange={(e) => {
                                                 setData(
-                                                    "balanceNumber",
+                                                    "number",
                                                     e.target.value,
                                                 );
-                                                clearErrors("balanceNumber");
+                                                clearErrors("number");
                                             }}
                                         />
                                         <InputError
-                                            message={errors.balanceNumber}
+                                            message={errors.nu}
                                         />
                                     </div>
                                     <div className="">
                                         <select
-                                            name="category"
+                                            name="category_id"
                                             id=""
-                                            value={data.category}
+                                            value={data.category_id}
                                             onChange={(e) => {
                                                 setData(
-                                                    "category",
+                                                    "category_id",
                                                     e.target.value,
                                                 );
-                                                clearErrors("category");
+                                                clearErrors("category_id");
                                             }}
                                             className="captalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         >
@@ -139,7 +139,7 @@ const Balance = ({ balanceDatas }) => {
                                             <option value="dana">Dana</option>
                                             <option value="token">token</option>
                                         </select>
-                                        <InputError message={errors.category} />
+                                        <InputError message={errors.category_id} />
                                     </div>
                                 </div>
 

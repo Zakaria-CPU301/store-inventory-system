@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('balance_numbers', function (Blueprint $table) {
+        Schema::create('numbers', function (Blueprint $table) {
             $table->id();
-            $table->string('number', 20);
+            $table->char('number', 20);
 
             $table->foreignId('category_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('customer_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('balance_numbers');
+        Schema::dropIfExists('numbers');
     }
 };

@@ -20,9 +20,4 @@ class Customer extends Model
     {
         return $this->hasMany(BoardingHouse::class);
     }
-
-    public function balance()
-    {
-        return $this->hasMany(BalanceNumber::class);
-    }
 }

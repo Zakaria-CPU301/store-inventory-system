@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BalanceNumber extends Model
+class Number extends Model
 {
     use HasFactory;
 
@@ -14,10 +14,5 @@ class BalanceNumber extends Model
     public function categories()
     {
         return $this->belongsTo(Category::class, 'category_id');
-    }
-
-    public function customers()
-    {
-        return $this->belongsTo(Customer::class, 'customer_id');
     }
 }
