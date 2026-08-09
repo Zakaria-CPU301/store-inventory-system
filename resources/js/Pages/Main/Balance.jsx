@@ -72,8 +72,6 @@ const Balance = ({ balanceDatas }) => {
                         <ModalHeader
                             title={"nomor saldo baru"}
                             clickFunc={toggleOverlay}
-                            successProcess={recentlySuccessful}
-                            message={flash.success}
                         />
                         <form onSubmit={submit} className="">
                             <FormOverlay>

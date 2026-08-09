@@ -9,7 +9,7 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['fullname'];
+    protected $fillable = ['cust_name'];
 
     public function debt()
     {
@@ -19,5 +19,9 @@ class Customer extends Model
     public function boarding()
     {
         return $this->hasMany(BoardingHouse::class);
+    }
+
+    public function numberCustomer() {
+        return $this->hasMany(NumberCustomer::class);
     }
 }

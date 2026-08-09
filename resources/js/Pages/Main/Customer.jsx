@@ -4,6 +4,7 @@ import InputError from "@/Components/Elements/InputError";
 import InputLabel from "@/Components/Elements/InputLabel";
 import LoadingSession from "@/Components/Elements/LoadingSession";
 import ModalHeader from "@/Components/Elements/ModalHeader";
+import SessionInformasion from "@/Components/Elements/SessionInformasion";
 import TextInput from "@/Components/Elements/TextInput";
 import Card from "@/Components/Partials/Card";
 import FormOverlay from "@/Components/Partials/FormOverlay";
@@ -13,39 +14,38 @@ import OverlayModal from "@/Components/Partials/OverlayModal";
 import Table from "@/Components/Partials/Table";
 import App from "@/Layouts/App";
 import { useForm } from "@inertiajs/react";
-import React, { useState } from "react";
-import SessionInformasion from "@/Components/Elements/sessionInformasion";
+import { useState } from "react";
 
-const Category = ({ datas }) => {
-    const [showOverlay, SetShowOverlay] = useState(false);
-
-    const toggleOverlay = () => {
-        SetShowOverlay(!showOverlay);
-    };
-
-    const columns = [{ key: "category_name", label: "nama category", opsionalClassName: 'capitalize text-center' }];
+const Customer = ({ datas }) => {
+    const columns = [{ key: "cust_name", label: "nama pembeli", opsionalClassName: 'capitalize' }];
 
     const {
         data,
         setData,
-        processing,
-        post,
-        errors,
         clearErrors,
+        errors,
         recentlySuccessful,
+        post,
+        processing,
     } = useForm({
-        category: "",
+        customer: "",
     });
+
+    const [showOverlay, setShowOverlay] = useState(false);
+
+    const toggleOverlay = () => {
+        setShowOverlay(!showOverlay);
+    };
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("category.store"));
+        post(route("customer.store"));
     };
 
     return (
         <>
-        <SessionInformasion recentlySuccessful={recentlySuccessful} />
+            <SessionInformasion recentlySuccessful={recentlySuccessful} />
             {showOverlay && (
                 <OverlayModal clickFunc={toggleOverlay}>
                     <Card
@@ -55,27 +55,27 @@ const Category = ({ datas }) => {
                     >
                         <ModalHeader
                             clickFunc={toggleOverlay}
-                            title={"tambah kategori baru"}
+                            title={"tambah pelanggan baru"}
                         />
                         <form onSubmit={submit}>
                             <FormOverlay>
                                 <div className="grid grid-1">
                                     <div className="">
-                                        <InputLabel value={"Nama kategori"} />
+                                        <InputLabel value={"Nama pelanggan"} />
                                         <TextInput
-                                            placeholder="masukkan nama kategori"
+                                            placeholder="masukkan nama pelanggan"
                                             type={"text"}
-                                            name="category"
-                                            value={data.category}
+                                            name="customer"
+                                            value={data.customer}
                                             onChange={(e) => {
                                                 setData(
-                                                    "category",
+                                                    "customer",
                                                     e.target.value,
                                                 );
-                                                clearErrors("category");
+                                                clearErrors("customer");
                                             }}
                                         />
-                                        <InputError message={errors.category} />
+                                        <InputError message={errors.customer} />
                                     </div>
                                 </div>
 
@@ -95,12 +95,12 @@ const Category = ({ datas }) => {
             <App>
                 <HeaderInfo>
                     <HeaderDesc
-                        title={`kelola kategori`}
+                        title={`kelola pelanggan`}
                         desc={`Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis rerum architecto saepe consequuntur, quibusdam natus modi, eveniet error quia ea aut, eos veritatis voluptatem praesentium suscipit odit reiciendis eum in.`}
                     />
                     <Card className={"bg-main-table p-4"}>
                         <CardAmountInfo
-                            label={"total kategori"}
+                            label={"total pelanggan terdaftar"}
                             amount={datas.length}
                         />
                     </Card>
@@ -115,11 +115,10 @@ const Category = ({ datas }) => {
                         </Button>
                     </Card>
                 </HeaderInfo>
-
-                <Table datas={datas} columns={columns} />
+                <Table columns={columns} datas={datas} />
             </App>
         </>
     );
 };
 
-export default Category;
+export default Customer;

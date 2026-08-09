@@ -19,8 +19,11 @@ class CategoryController extends Controller
             'category' => 'required'
         ]);
 
-        Category::updateOrCreate(['category_name' => $validate['category']], ['category_name' => $validate['category']]);
+        $category = Category::updateOrCreate(['category_name' => $validate['category']], ['category_name' => $validate['category']]);
 
-        return Inertia::flash('success', 'berhasil ditambahkan')->back();
+        $message = $category->wasRecentlyCreated
+            ? 'kategori berhasil di tambahkan'
+            : 'kategori sudah ada';
+        return Inertia::flash('success', $message)->back();
     }
 }

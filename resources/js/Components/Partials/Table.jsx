@@ -1,4 +1,3 @@
-import Button from "../Elements/Button";
 import SmoothTableHead from "../Elements/SmoothTableHead";
 import StandardTableHead from "../Elements/StandardTableHead";
 
@@ -9,9 +8,9 @@ const Table = ({ firstAction = null, columns, datas, className }) => {
     const currentRoute = route().current();
 
     return (
-        <div className="w-full rounded-b-2xl">
-            <table className="border-collapse w-full bg-main-table rounded-2xl">
-                {currentRoute == "category.index" ? (
+        <div className="w-full">
+            <table className="border-collapse w-full bg-main-table rounded-b-2xl">
+                {currentRoute === "category.index" || currentRoute === "customer.index" ? (
                     <StandardTableHead columns={columns} />
                 ) : (
                     <SmoothTableHead columns={columns} />
@@ -25,7 +24,7 @@ const Table = ({ firstAction = null, columns, datas, className }) => {
                             </td>
                             {columns.map((col, i) => (
                                 <td
-                                    className={`${col.opsionalClassName ?? "text-center p-3"}`}
+                                    className={`${col.opsionalClassName ?? "text-center"} p-3`}
                                     key={i}
                                 >
                                     {result(data, col.key)}

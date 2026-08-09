@@ -15,8 +15,8 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
-    public function balance()
+    public function numbers()
     {
-        return $this->hasMany(BalanceNumber::class);
+        return $this->hasMany(Number::class);
     }
 }

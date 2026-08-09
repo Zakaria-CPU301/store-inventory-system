@@ -28,6 +28,12 @@ const Sidebar = () => {
                     icon="bi bi-collection"
                     amountNotif="20"
                 />
+                <NavigatorLine
+                    routeName="customer"
+                    pageName="pelanggan"
+                    icon="bi bi-people"
+                    amountNotif="20"
+                />
                 {/* <NavigatorLine
                     routeName="boarding"
                     pageName="kontrakan"

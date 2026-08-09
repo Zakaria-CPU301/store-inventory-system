@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NumberController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -30,6 +31,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', function () {
             return Inertia::render('Dashboard');
         })->name('index');
+    });
+    Route::prefix('customer')->name('customer.')->group(function (): void {
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::post('/tambah', [CustomerController::class, 'store'])->name('store');
     });
     Route::prefix('category')->name('category.')->group(function (): void {
         Route::get('/', [CategoryController::class, 'index'])->name('index');

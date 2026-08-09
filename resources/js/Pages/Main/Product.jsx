@@ -11,7 +11,7 @@ import App from "@/Layouts/App";
 const Product = ({ productDatas }) => {
     const categories = [];
 
-    productDatas.forEach((product) => {
+    productDatas.map((product) => {
         categories.push(product.categories.category_name);
     });
 

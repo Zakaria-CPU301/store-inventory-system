@@ -18,6 +18,6 @@ class BoardingHouse extends Model
 
     public function customers()
     {
-        return $this->hasMany(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 }

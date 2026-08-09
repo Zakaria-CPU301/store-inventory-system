@@ -5,7 +5,6 @@ const Debt = () => {
     const columns = [{ key: "" }];
     return (
         <App>
-            <Table />
         </App>
     );
 };
