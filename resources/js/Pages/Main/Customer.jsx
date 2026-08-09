@@ -115,7 +115,7 @@ const Customer = ({ datas }) => {
                         </Button>
                     </Card>
                 </HeaderInfo>
-                <Table columns={columns} datas={datas} />
+                <Table columns={columns} datas={datas} iconEmpty={'bi bi-person-fill-x'} reason={'Tidak ada data pelanggan'} />
             </App>
         </>
     );

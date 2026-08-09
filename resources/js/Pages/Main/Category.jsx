@@ -12,7 +12,7 @@ import HeaderInfo from "@/Components/Partials/HeaderInfo";
 import OverlayModal from "@/Components/Partials/OverlayModal";
 import Table from "@/Components/Partials/Table";
 import App from "@/Layouts/App";
-import { useForm } from "@inertiajs/react";
+import { Form, useForm } from "@inertiajs/react";
 import React, { useState } from "react";
 import SessionInformasion from "@/Components/Elements/sessionInformasion";
 
@@ -23,7 +23,13 @@ const Category = ({ datas }) => {
         SetShowOverlay(!showOverlay);
     };
 
-    const columns = [{ key: "category_name", label: "nama category", opsionalClassName: 'capitalize text-center' }];
+    const columns = [
+        {
+            key: "category_name",
+            label: "nama category",
+            opsionalClassName: "capitalize text-center",
+        },
+    ];
 
     const {
         data,
@@ -39,13 +45,13 @@ const Category = ({ datas }) => {
 
     const submit = (e) => {
         e.preventDefault();
-
+        
         post(route("category.store"));
     };
 
     return (
         <>
-        <SessionInformasion recentlySuccessful={recentlySuccessful} />
+            <SessionInformasion recentlySuccessful={recentlySuccessful} />
             {showOverlay && (
                 <OverlayModal clickFunc={toggleOverlay}>
                     <Card
@@ -57,7 +63,7 @@ const Category = ({ datas }) => {
                             clickFunc={toggleOverlay}
                             title={"tambah kategori baru"}
                         />
-                        <form onSubmit={submit}>
+                        <Form onSubmit={submit} resetOnSuccess>
                             <FormOverlay>
                                 <div className="grid grid-1">
                                     <div className="">
@@ -88,7 +94,7 @@ const Category = ({ datas }) => {
                                     </Button>
                                 </div>
                             </FormOverlay>
-                        </form>
+                        </Form>
                     </Card>
                 </OverlayModal>
             )}
