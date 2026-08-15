@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "./Button";
 import { useForm } from "@inertiajs/react";
 
 const AccessibillityFirst = ({ dataFilters }) => {
+    const [category, setCategory] = useState()
+
+    const [keyword, setKeyword] = useState()
+    
     const { post, data, setData } = useForm({
-        category: null,
+        discovery: [],
     });
 
     const reqChangeData = (e) => {
         e.preventDefault();
 
+        setData('discovery', [category, keyword])
         post(route("balance.index"));
     };
+
+    console.log([category, keyword]);
+    
 
     return (
         <div
@@ -26,18 +34,19 @@ const AccessibillityFirst = ({ dataFilters }) => {
                 >
                     {dataFilters.length ? (
                         <>
-                            <Button
+                            {/* <Button
                                 type="submit"
-                                {...(data.category === null
+                                {...(data.discovery === null
                                     ? {
                                           className:
                                               "bg-indigo-100 font-bold text-[bg-main-table]",
                                       }
                                     : {})}
-                                clickFunc={() => setData("category", null)}
+                                clickFunc={() => setKeyword('asdlkj')}
                             >
                                 semua
-                            </Button>
+                            </Button> */}
+                            <input type="text" name="" onChange={e => setKeyword(e.target.value)} id="" />
                             {dataFilters.map((dataFilter, index) => (
                                 <Button
                                     type="submit"
@@ -48,7 +57,7 @@ const AccessibillityFirst = ({ dataFilters }) => {
                                           }
                                         : {})}
                                     clickFunc={() =>
-                                        setData("category", dataFilter)
+                                        setCategory(dataFilter)
                                     }
                                     key={index}
                                 >
