@@ -32,7 +32,7 @@ const Product = ({ productDatas }) => {
                 </Card>
             </HeaderInfo>
             <HeaderAccessibillity>
-                <AccessibillityFirst dataFilter={[...new Set(categories)]} />
+                <AccessibillityFirst dataFilters={[...new Set(categories)]} />
                 <AccesibillitySecond>
                     <Button className="bg-[rgb(29,42,77)] text-indigo-100 font-bold">
                         Filter <i className="bi bi-funnel-fill text-lg"></i>

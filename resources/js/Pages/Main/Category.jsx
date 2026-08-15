@@ -39,6 +39,7 @@ const Category = ({ datas }) => {
         errors,
         clearErrors,
         recentlySuccessful,
+        reset
     } = useForm({
         category: "",
     });
@@ -46,7 +47,9 @@ const Category = ({ datas }) => {
     const submit = (e) => {
         e.preventDefault();
         
-        post(route("category.store"));
+        post(route("category.store"), {
+            onSuccess: () => reset()
+        });
     };
 
     return (
@@ -63,7 +66,7 @@ const Category = ({ datas }) => {
                             clickFunc={toggleOverlay}
                             title={"tambah kategori baru"}
                         />
-                        <Form onSubmit={submit} resetOnSuccess>
+                        <form onSubmit={submit}>
                             <FormOverlay>
                                 <div className="grid grid-1">
                                     <div className="">
@@ -94,7 +97,7 @@ const Category = ({ datas }) => {
                                     </Button>
                                 </div>
                             </FormOverlay>
-                        </Form>
+                        </form>
                     </Card>
                 </OverlayModal>
             )}

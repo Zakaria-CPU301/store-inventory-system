@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-export default function Button({ children, className, clickFunc, props, disabled }) {
+export default function Button({
+    children,
+    className,
+    clickFunc,
+    props,
+    disabled,
+}) {
     return (
         <button
             {...props}

@@ -9,7 +9,6 @@ import CardAmountInfo from "@/Components/Elements/CardAmountInfo";
 import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
 import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
 import OverlayModal from "@/Components/Partials/OverlayModal";
-import { useState } from "react";
 import { useForm, usePage } from "@inertiajs/react";
 import TextInput from "@/Components/Elements/TextInput";
 import InputLabel from "@/Components/Elements/InputLabel";
@@ -17,9 +16,26 @@ import ModalHeader from "@/Components/Elements/ModalHeader";
 import InputError from "@/Components/Elements/InputError";
 import LoadingSession from "@/Components/Elements/LoadingSession";
 import FormOverlay from "@/Components/Partials/FormOverlay";
+import TomSelect from "tom-select";
+import { useEffect, useState } from "react";
+import "tom-select/dist/css/tom-select.css";
+import SessionInformasion from "@/Components/Elements/SessionInformasion";
 
-const Balance = ({ balanceDatas }) => {
+const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
     const [showOverlay, setShowOverlay] = useState(false);
+
+    //todo TomSelect
+    useEffect(() => {
+        if (!showOverlay) return;
+
+        new TomSelect("#select-customer-name", {
+            create: true,
+            sortField: {
+                field: "text",
+                direction: "asc",
+            },
+        });
+    }, [showOverlay]);
 
     const toggleOverlay = () => {
         setShowOverlay(!showOverlay);
@@ -27,23 +43,22 @@ const Balance = ({ balanceDatas }) => {
 
     const categories = [];
     const customers = [];
-    balanceDatas.map((balanceData) => {
-        categories.push(balanceData.categories.category_name);
-        customers.push(balanceData.customers.fullname);
+    balanceDatas.map((customer) => {
+        customers.push(customer.customers.cust_name);
+    });
+    categoryDatas.map((category) => {
+        categories.push(category.number.categories.category_name);
     });
 
     const columns = [
         {
-            key: `customers.fullname`,
+            key: `customers.cust_name`,
             label: "nama pelanggan",
-            opsionalClassName: "text-start",
+            opsionalClassName: "text-start capitalize",
         },
-        { key: `number`, label: "nomor saldo" },
-        { key: `categories.category_name`, label: "kategori saldo" },
+        { key: `number.number`, label: "nomor saldo" },
+        { key: `number.categories.category_name`, label: "kategori saldo" },
     ];
-
-    //todo FORM
-    const { flash } = usePage();
 
     const {
         data,
@@ -54,9 +69,9 @@ const Balance = ({ balanceDatas }) => {
         processing,
         clearErrors,
     } = useForm({
-        customer_id: "",
+        customer: "",
         number: "",
-        category_id: "",
+        category: "",
     });
 
     const submit = (e) => {
@@ -66,6 +81,8 @@ const Balance = ({ balanceDatas }) => {
     };
     return (
         <>
+            <SessionInformasion recentlySuccessful={recentlySuccessful} />
+
             {showOverlay && (
                 <OverlayModal clickFunc={toggleOverlay}>
                     <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
@@ -78,32 +95,42 @@ const Balance = ({ balanceDatas }) => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ">
                                     <div className="">
                                         <InputLabel value={"Nama Pelanggan"} />
-                                        <TextInput
-                                            name={"cust_name"}
-                                            type={"text"}
-                                            placeholder={
-                                                "Masukkan Nama Pelanggan"
-                                            }
-                                            value={data.customer_id}
+                                        <select
+                                            id="select-customer-name"
+                                            defaultValue={data.customer}
                                             onChange={(e) => {
                                                 setData(
-                                                    "customer_id",
+                                                    "customer",
                                                     e.target.value,
                                                 );
-                                                clearErrors("customer_id");
+                                                clearErrors("customer");
                                             }}
-                                        />
-                                        <InputError message={errors.customer_id} />
+                                        >
+                                            <option value="">
+                                                Pilih atau Tambah
+                                            </option>
+
+                                            {customerDatas.map(
+                                                (customerData, i) => (
+                                                    <option
+                                                        value={customerData.id}
+                                                        key={i}
+                                                    >
+                                                        {customerData.cust_name}
+                                                    </option>
+                                                ),
+                                            )}
+                                        </select>
+                                        <InputError message={errors.customer} />
                                     </div>
                                     <div className="">
                                         <InputLabel value={"Nomor Deposit"} />
                                         <TextInput
-                                            name={"balance_number"}
                                             type={"text"}
                                             placeholder={
                                                 "Masukkan Nomor Deposit"
                                             }
-                                            value={data.nu}
+                                            value={data.number}
                                             onChange={(e) => {
                                                 setData(
                                                     "number",
@@ -112,32 +139,30 @@ const Balance = ({ balanceDatas }) => {
                                                 clearErrors("number");
                                             }}
                                         />
-                                        <InputError
-                                            message={errors.nu}
-                                        />
+                                        <InputError message={errors.number} />
                                     </div>
                                     <div className="">
                                         <select
-                                            name="category_id"
+                                            name="category"
                                             id=""
-                                            value={data.category_id}
+                                            defaultValue={data.category}
                                             onChange={(e) => {
                                                 setData(
-                                                    "category_id",
+                                                    "category",
                                                     e.target.value,
                                                 );
-                                                clearErrors("category_id");
+                                                clearErrors("category");
                                             }}
                                             className="captalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         >
-                                            <option hidden selected>
+                                            <option hidden>
                                                 Pilih Kategori Produk
                                             </option>
                                             <option value="pulsa">Pulsa</option>
                                             <option value="dana">Dana</option>
                                             <option value="token">token</option>
                                         </select>
-                                        <InputError message={errors.category_id} />
+                                        <InputError message={errors.category} />
                                     </div>
                                 </div>
 
@@ -175,7 +200,7 @@ const Balance = ({ balanceDatas }) => {
                     <Card className="bg-[rgb(18,28,53)] p-4">
                         <CardAmountInfo
                             label="total pelanggan"
-                            amount={customers.length}
+                            amount={[...new Set(customers)].length}
                             unit="pelanggan"
                         />
                     </Card>
@@ -183,7 +208,7 @@ const Balance = ({ balanceDatas }) => {
 
                 <HeaderAccessibillity>
                     <AccessibillityFirst
-                        dataFilter={[...new Set(categories)]}
+                        dataFilters={[...new Set(categories)]}
                     />
                     <AccesibillitySecond>
                         <Button className="bg-main-table text-indigo-100 font-bold">
