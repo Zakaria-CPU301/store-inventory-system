@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NumberController;
 use App\Http\Controllers\CategoryController;
@@ -45,8 +46,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/tambah', [ProductController::class, 'store'])->name('store');
     });
     Route::prefix('balance')->name('balance.')->group(function (): void {
-        Route::get('/', [NumberController::class, 'index'])->name('index');
-        Route::post('/tambah', [NumberController::class, 'store'])->name('store');
+        Route::match(['get', 'post'], '/', [BalanceController::class, 'index'])->name('index');
+        Route::post('/tambah', [BalanceController::class, 'store'])->name('store');
+        // Route::post('/update', [BalanceController::class, 'filterCategory'])->name('test');
     });
     // Route::get('debt', [DebtController::class, 'index'])->name('debt');
     // Route::get('boarding', [BoardingHouseController::class, 'index'])->name('boarding');
