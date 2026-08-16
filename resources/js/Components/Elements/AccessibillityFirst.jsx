@@ -26,7 +26,7 @@ const AccessibillityFirst = ({ dataFilters }) => {
                                               "bg-indigo-100 font-bold text-[bg-main-table]",
                                       }
                                     : {})}
-                                clickFunc={() => setCategory([null])}
+                                clickFunc={() => setCategory(null)}
                             >
                                 semua
                             </Button>

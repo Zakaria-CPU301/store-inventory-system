@@ -16,17 +16,25 @@ class BalanceController extends Controller
     {
         $datas = NumberCustomer::with(['customers', 'number.categories']);
         if ($request->discovery) {
-            $discovery = collect($request->discovery)->filter()->values();
+            $discovery = $request->discovery;
 
-            $datass = NumberCustomer::with(['customers', 'number.categories']);
-            foreach ($discovery as $disc) {
-                $datass->whereHas('number.categories', function ($e) use ($disc) {
-                    $e->orWhere('category_name', 'LIKE', '%' . $disc . '%');
+            $datas
+                ->when($discovery[1], function ($q, $value) {
+                    $q->whereHas('number.categories', function ($e) use ($value) {
+                        $e->where('category_name', 'LIKE', "%{$value}%");
+                    });
+                })
+                ->when($discovery[0], function ($q, $value) {
+                    $q->whereHas('customers', function ($e) use ($value) {
+                        $e->where('cust_name', 'LIKE', "%{$value}%");
+                    });
+                })
+                ->when($discovery[0], function ($q, $value) {
+                    $q->orWhereHas('number', function ($e) use ($value) {
+                        $e->where('number', 'LIKE', "%{$value}%");
+                    });
                 });
-            }
-            dump($datass);
         }
-
         return Inertia::render('Main/Balance', [
             'balanceDatas' => $datas->get(),
             'customerDatas' => Customer::select('cust_name')->get(),
