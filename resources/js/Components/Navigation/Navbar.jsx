@@ -1,17 +1,11 @@
-import { useForm, usePage } from "@inertiajs/react";
+import { DiscoveryContext } from "@/Context/Discovery";
+import { usePage } from "@inertiajs/react";
+import { useContext, useState } from "react";
 
 export default function Navbar({ toggleSidebar }) {
     const user = usePage().props.auth.user;
+    const { discoverySubmit, setKeyword } = useContext(DiscoveryContext);
 
-const {post} = useForm({
-    discovery: null,
-})
-
-const searchEngine = (e) => {
-    e.preventDefault()
-
-    post(route(route().current()))
-}
     return (
         <>
             <nav className="w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar z-50">
@@ -33,19 +27,20 @@ const searchEngine = (e) => {
                         </span>
                     </div>
                 </div>
-                <form 
-                onSubmit={searchEngine}
-                className="flex-1 h-full items-center flex">
+                <div className="flex-1 h-full items-center flex">
                     <input
                         type="text"
-                        id=""
+                        onChange={(e) => setKeyword(e.target.value)}
                         placeholder="Search"
                         className="bg-black w-full h-3/4 px-4 rounded-l-2xl focus:outline-none focus:border-2 focus:border-white"
                     />
-                    <button className="bg-black border-l-2 border-white/10 rounded-r-2xl h-3/4 w-[10%] flex items-center justify-center cursor-pointer">
+                    <button
+                        onClick={discoverySubmit}
+                        className="bg-black border-l-2 border-white/10 rounded-r-2xl h-3/4 w-[10%] flex items-center justify-center cursor-pointer"
+                    >
                         <i className="bi bi-search text-lg"></i>
                     </button>
-                </form>
+                </div>
                 <div className="flex gap-5 h-full justify-between items-center pr-5">
                     <div className="flex gap-1">
                         <div className="rounded-full w-10 h-10 flex justify-center items-center hover:bg-white/50 duration-300 cursor-pointer">

@@ -1,25 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
-import { useForm } from "@inertiajs/react";
+import { DiscoveryContext } from "@/Context/Discovery";
 
 const AccessibillityFirst = ({ dataFilters }) => {
-    const [category, setCategory] = useState()
-
-    const [keyword, setKeyword] = useState()
-    
-    const { post, data, setData } = useForm({
-        discovery: [],
-    });
-
-    const reqChangeData = (e) => {
-        e.preventDefault();
-
-        setData('discovery', [category, keyword])
-        post(route("balance.index"));
-    };
-
-    console.log([category, keyword]);
-    
+    const { discoverySubmit, setCategory, category } = useContext(DiscoveryContext);
 
     return (
         <div
@@ -29,36 +13,33 @@ const AccessibillityFirst = ({ dataFilters }) => {
                 className={`h-full w-full items-center flex ${route().current("product.index") ? "justify-center bg-main-layout rounded-2xl px-3" : ""}`}
             >
                 <form
-                    onSubmit={reqChangeData}
+                    onSubmit={discoverySubmit}
                     className="w-full flex overflow-x-scroll space-x-3 whitespace-nowrap scrollbar-none rounded-lg"
                 >
                     {dataFilters.length ? (
                         <>
-                            {/* <Button
+                            <Button
                                 type="submit"
-                                {...(data.discovery === null
+                                {...(category === null
                                     ? {
                                           className:
                                               "bg-indigo-100 font-bold text-[bg-main-table]",
                                       }
                                     : {})}
-                                clickFunc={() => setKeyword('asdlkj')}
+                                clickFunc={() => setCategory([null])}
                             >
                                 semua
-                            </Button> */}
-                            <input type="text" name="" onChange={e => setKeyword(e.target.value)} id="" />
+                            </Button>
                             {dataFilters.map((dataFilter, index) => (
                                 <Button
                                     type="submit"
-                                    {...(dataFilter === data.category
+                                    {...(dataFilter === category
                                         ? {
                                               className:
                                                   "bg-indigo-100 font-bold text-[bg-main-table]",
                                           }
                                         : {})}
-                                    clickFunc={() =>
-                                        setCategory(dataFilter)
-                                    }
+                                    clickFunc={() => setCategory(dataFilter)}
                                     key={index}
                                 >
                                     {dataFilter}
