@@ -15,14 +15,16 @@ class BalanceController extends Controller
     public function index(Request $request)
     {
         $datas = NumberCustomer::with(['customers', 'number.categories']);
-        dump($request->all());
         if ($request->discovery) {
-            $discovery = $request->discovery;
-            dump($discovery);
+            $discovery = collect($request->discovery)->filter()->values();
 
-            // $datas->whereHas('number.categories', function ($e) use ($request) {
-            //     $e->where('category_name', $request->category);
-            // });
+            $datass = NumberCustomer::with(['customers', 'number.categories']);
+            foreach ($discovery as $disc) {
+                $datass->whereHas('number.categories', function ($e) use ($disc) {
+                    $e->orWhere('category_name', 'LIKE', '%' . $disc . '%');
+                });
+            }
+            dump($datass);
         }
 
         return Inertia::render('Main/Balance', [
