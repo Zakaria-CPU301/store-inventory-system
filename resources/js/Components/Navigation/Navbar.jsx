@@ -4,7 +4,8 @@ import { useContext, useState } from "react";
 
 export default function Navbar({ toggleSidebar }) {
     const user = usePage().props.auth.user;
-    const { setKeyword, discoverySubmit } = useContext(DiscoveryContext);
+    const { keyword, setKeyword, discoverySubmit, processing } =
+        useContext(DiscoveryContext);
 
     return (
         <>
@@ -38,6 +39,7 @@ export default function Navbar({ toggleSidebar }) {
                         className="bg-black w-full h-3/4 px-4 rounded-l-2xl focus:outline-none focus:border-2 focus:border-white"
                     />
                     <button
+                        disabled={processing}
                         type="submit"
                         className="bg-black border-l-2 border-white/10 rounded-r-2xl h-3/4 w-[10%] flex items-center justify-center cursor-pointer"
                     >

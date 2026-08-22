@@ -1,0 +1,238 @@
+import { useForm } from "@inertiajs/react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import FormOverlay from "../Partials/FormOverlay";
+import InputLabel from "../Elements/InputLabel";
+import InputError from "../Elements/InputError";
+import TextInput from "../Elements/TextInput";
+import LoadingSession from "../Elements/LoadingSession";
+import Button from "../Elements/Button";
+import SessionInformasion from "../Elements/SessionInformasion";
+import { OverlayContext } from "@/Context/Overlay";
+import TomSelect from "tom-select";
+
+export const FormBalanceContext = createContext();
+
+const FormBalance = ({ children }) => {
+    const {
+        data,
+        setData,
+        post,
+        put,
+        errors,
+        recentlySuccessful,
+        processing,
+        clearErrors,
+    } = useForm({
+        customer: "",
+        number: "",
+        category: "",
+    });
+    
+    const submitCreate = (e) => {
+        e.preventDefault();
+
+        post(route("balance.store"));
+    };
+    const submitUpdate = (e) => {
+        e.preventDefault();
+
+        put(route("balance.update"));
+    };
+
+    const { showOverlay } = useContext(OverlayContext);
+
+    useEffect(() => {
+        const selectCreate = document.querySelectorAll(".select-create");
+        const selectUncreate = document.querySelectorAll(".select-uncreate");
+
+        if (selectCreate.length) {
+            selectCreate.forEach((e) => {
+                new TomSelect(e, {
+                    create: true,
+                    sortField: {
+                        field: "text",
+                        direction: "asc",
+                    },
+                });
+            });
+        }
+
+        if (selectUncreate.length) {
+            selectUncreate.forEach((e) => {
+                new TomSelect(e, {
+                    create: false,
+                    sortField: {
+                        field: "text",
+                        direction: "asc",
+                    },
+                });
+            });
+        }
+    }, [showOverlay]);
+
+    return (
+        <FormBalanceContext.Provider
+            value={{
+                submitCreate,
+                submitUpdate,
+                data,
+                setData,
+                errors,
+                processing,
+                clearErrors,
+            }}
+        >
+            <SessionInformasion recentlySuccessful={recentlySuccessful} />
+            {children}
+        </FormBalanceContext.Provider>
+    );
+};
+
+const Create = ({ customerDatas }) => {
+    const { submitCreate, data, setData, errors, processing, clearErrors } =
+        useContext(FormBalanceContext);
+
+    return (
+        <FormOverlay handleSubmitForm={submitCreate}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ">
+                <div className="">
+                    <InputLabel value={"Nama Pelanggan"} />
+                    <select
+                        className="select-create"
+                        defaultValue={data.customer}
+                        onChange={(e) => {
+                            setData("customer", e.target.value);
+                            clearErrors("customer");
+                        }}
+                        data-placeholder="Pilih atau Tambah"
+                    >
+                        <option value="">Pilih atau Tambah</option>
+                        {customerDatas.map((customerData, i) => (
+                            <option value={customerData.id} key={i}>
+                                {customerData.cust_name}
+                            </option>
+                        ))}
+                    </select>
+                    <InputError message={errors.customer} />
+                </div>
+                <div className="">
+                    <InputLabel value={"Nomor Deposit"} />
+                    <TextInput
+                        type={"text"}
+                        placeholder={"Masukkan Nomor Deposit"}
+                        value={data.number}
+                        onChange={(e) => {
+                            setData("number", e.target.value);
+                            clearErrors("number");
+                        }}
+                    />
+                    <InputError message={errors.number} />
+                </div>
+                <div className="">
+                    <select
+                        value={data.category}
+                        onChange={(e) => {
+                            setData("category", e.target.value);
+                            clearErrors("category");
+                        }}
+                        className="select-uncreate capitalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        data-placeholder="Pilih Kategori Produk"
+                    >
+                        <option value="">Pilih Kategori Produk</option>
+                        <option value="pulsa">Pulsa</option>
+                        <option value="dana">Dana</option>
+                        <option value="token">token</option>
+                    </select>
+                    <InputError message={errors.category} />
+                </div>
+            </div>
+
+            <div className="flex w-full justify-center mt-5">
+                <Button
+                    type="submit"
+                    className={`flex gap-5 items-center text-xl bg-sky-300 font-semibold`}
+                    disabled={processing}
+                >
+                    kirim
+                    <LoadingSession processing={processing} />
+                </Button>
+            </div>
+        </FormOverlay>
+    );
+};
+
+const Edit = ({ customerDatas, dataEdit }) => {
+    const { submitUpdate, data, setData, errors, processing, clearErrors } =
+        useContext(FormBalanceContext);
+
+    return (
+        <FormOverlay handleSubmitForm={submitUpdate}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="">
+                    <InputLabel value={"Nama Pelanggan"} />
+                    <select
+                        className="select-create"
+                        defaultValue={dataEdit.customers.cust_name}
+                        onChange={(e) => {
+                            setData("customer", e.target.value);
+                            clearErrors("customer");
+                        }}
+                    >
+                        <option value="">Pilih atau Tambah</option>
+
+                        {customerDatas.map((customerData, i) => (
+                            <option value={customerData.id} key={i}>
+                                {customerData.cust_name}
+                            </option>
+                        ))}
+                    </select>
+                    <InputError message={errors.customer} />
+                </div>
+                <div className="">
+                    <InputLabel value={"Nomor Deposit"} />
+                    <TextInput
+                        type={"text"}
+                        placeholder={"Masukkan Nomor Deposit"}
+                        defaultValue={dataEdit.number.number}
+                        onChange={(e) => {
+                            setData("number", e.target.value);
+                            clearErrors("number");
+                        }}
+                    />
+                    <InputError message={errors.number} />
+                </div>
+                <div className="">
+                    <select
+                        defaultValue={dataEdit.number.categories.category_name}
+                        onChange={(e) => {
+                            setData("category", e.target.value);
+                            clearErrors("category");
+                        }}
+                        className="select-uncreate captalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    >
+                        <option value=''>Pilih Kategori Produk</option>
+                        <option value="pulsa">Pulsa</option>
+                        <option value="dana">Dana</option>
+                        <option value="token">token</option>
+                    </select>
+                    <InputError message={errors.category} />
+                </div>
+            </div>
+
+            <div className="flex w-full justify-center mt-5">
+                <Button
+                    type="submit"
+                    className={`flex gap-5 items-center text-xl bg-sky-300 font-semibold`}
+                    disabled={processing}
+                >
+                    kirim
+                    <LoadingSession processing={processing} />
+                </Button>
+            </div>
+        </FormOverlay>
+    );
+};
+
+FormBalance.Create = Create;
+FormBalance.Update = Edit;
+export default FormBalance;

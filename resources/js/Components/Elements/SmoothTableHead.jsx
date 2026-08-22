@@ -2,7 +2,7 @@ import React from "react";
 
 const SmoothTableHead = ({columns}) => {
     return (
-        <thead className="bg-table-head text-white sticky top-34">
+        <thead className="bg-table-head text-white sticky top-34 z-50">
             <tr>
                 <th className="capitalize p-3">no</th>
                 {columns.map((name, index) => (
