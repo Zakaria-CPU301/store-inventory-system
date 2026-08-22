@@ -25,7 +25,7 @@ class ProductFactory extends Factory
             'unit' => fake()->randomElement(['pcs', 'dus', 'bks']),
             'status' => fake()->randomElement(['available', 'empty', 'blocked']),
             'description' => fake()->text(),
-            'category_id' => fake()->numberBetween(1, 15)
+            'category_id' => fake()->numberBetween(1, 3)
         ];
     }
 }

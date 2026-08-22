@@ -19,19 +19,17 @@ class BalanceController extends Controller
             $discovery = $request->discovery;
 
             $datas
-                ->when($discovery[1], function ($q, $value) {
-                    $q->whereHas('number.categories', function ($e) use ($value) {
-                        $e->where('category_name', 'LIKE', "%{$value}%");
-                    });
+                ->whereHas('number.categories', function ($e) use ($discovery) {
+                    $e->where('category_name', 'LIKE', "%{$discovery[1]}%");
                 })
-                ->when($discovery[0], function ($q, $value) {
-                    $q->whereHas('customers', function ($e) use ($value) {
-                        $e->where('cust_name', 'LIKE', "%{$value}%");
-                    });
-                })
-                ->when($discovery[0], function ($q, $value) {
-                    $q->orWhereHas('number', function ($e) use ($value) {
-                        $e->where('number', 'LIKE', "%{$value}%");
+                ->where(function ($query) use ($discovery) {
+                    $query->when($discovery[0], function ($q, $value) {
+                        $q->whereHas('customers', function ($e) use ($value) {
+                            $e->where('cust_name', 'LIKE', "%{$value}%");
+                        });
+                        $q->orWhereHas('number', function ($e) use ($value) {
+                            $e->where('number', 'LIKE', "%{$value}%");
+                        });
                     });
                 });
         }
@@ -80,5 +78,9 @@ class BalanceController extends Controller
         }
 
         return Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $className ?? null])->back();
+    }
+
+    public function update(Request $request) {
+        dd($request->all());
     }
 }

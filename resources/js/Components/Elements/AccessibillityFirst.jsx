@@ -3,7 +3,8 @@ import Button from "./Button";
 import { DiscoveryContext } from "@/Context/Discovery";
 
 const AccessibillityFirst = ({ dataFilters }) => {
-    const { discoverySubmit, setCategory, category } = useContext(DiscoveryContext);
+    const { discoverySubmit, setCategory, category, processing } =
+        useContext(DiscoveryContext);
 
     return (
         <div
@@ -19,6 +20,7 @@ const AccessibillityFirst = ({ dataFilters }) => {
                     {dataFilters.length ? (
                         <>
                             <Button
+                                disabled={processing}
                                 type="submit"
                                 {...(category === null
                                     ? {
@@ -32,6 +34,7 @@ const AccessibillityFirst = ({ dataFilters }) => {
                             </Button>
                             {dataFilters.map((dataFilter, index) => (
                                 <Button
+                                    disabled={processing}
                                     type="submit"
                                     {...(dataFilter === category
                                         ? {
