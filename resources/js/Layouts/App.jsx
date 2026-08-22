@@ -1,6 +1,5 @@
 import Navbar from "@/Components/Navigation/Navbar";
 import Sidebar from "@/Components/Navigation/Sidebar";
-import OverlayModal from "@/Components/Partials/OverlayModal";
 import { useState } from "react";
 // Global (app defaults)
 import { config } from "@inertiajs/react";

@@ -8,38 +8,16 @@ import App from "@/Layouts/App";
 import CardAmountInfo from "@/Components/Elements/CardAmountInfo";
 import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
 import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
-import OverlayModal from "@/Components/Partials/OverlayModal";
-import { useForm, usePage } from "@inertiajs/react";
-import TextInput from "@/Components/Elements/TextInput";
-import InputLabel from "@/Components/Elements/InputLabel";
-import ModalHeader from "@/Components/Elements/ModalHeader";
-import InputError from "@/Components/Elements/InputError";
-import LoadingSession from "@/Components/Elements/LoadingSession";
-import FormOverlay from "@/Components/Partials/FormOverlay";
-import TomSelect from "tom-select";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import "tom-select/dist/css/tom-select.css";
-import SessionInformasion from "@/Components/Elements/SessionInformasion";
+import Overlay, { OverlayContext } from "@/Context/Overlay";
+import { DiscoveryContext } from "@/Context/Discovery";
+import ModalHeader from "@/Components/Elements/ModalHeader";
+import FormBalance from "@/Components/Form/FormBalance";
+import OverlayModal from "@/Components/Partials/OverlayModal";
 
 const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
-    const [showOverlay, setShowOverlay] = useState(false);
-
-    //todo TomSelect
-    useEffect(() => {
-        if (!showOverlay) return;
-
-        new TomSelect("#select-customer-name", {
-            create: true,
-            sortField: {
-                field: "text",
-                direction: "asc",
-            },
-        });
-    }, [showOverlay]);
-
-    const toggleOverlay = () => {
-        setShowOverlay(!showOverlay);
-    };
+    const { showOverlay, toggleOverlay } = useContext(OverlayContext);
 
     const categories = [];
     const customers = [];
@@ -60,129 +38,8 @@ const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
         { key: `number.categories.category_name`, label: "kategori saldo" },
     ];
 
-    const {
-        data,
-        setData,
-        post,
-        errors,
-        recentlySuccessful,
-        processing,
-        clearErrors,
-    } = useForm({
-        customer: "",
-        number: "",
-        category: "",
-    });
-
-    const submit = (e) => {
-        e.preventDefault();
-
-        return post(route("balance.store"));
-    };
     return (
         <>
-            <SessionInformasion recentlySuccessful={recentlySuccessful} />
-
-            {showOverlay && (
-                <OverlayModal clickFunc={toggleOverlay}>
-                    <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                        <ModalHeader
-                            title={"nomor saldo baru"}
-                            clickFunc={toggleOverlay}
-                        />
-                        <form onSubmit={submit} className="">
-                            <FormOverlay>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ">
-                                    <div className="">
-                                        <InputLabel value={"Nama Pelanggan"} />
-                                        <select
-                                            id="select-customer-name"
-                                            defaultValue={data.customer}
-                                            onChange={(e) => {
-                                                setData(
-                                                    "customer",
-                                                    e.target.value,
-                                                );
-                                                clearErrors("customer");
-                                            }}
-                                        >
-                                            <option value="">
-                                                Pilih atau Tambah
-                                            </option>
-
-                                            {customerDatas.map(
-                                                (customerData, i) => (
-                                                    <option
-                                                        value={customerData.id}
-                                                        key={i}
-                                                    >
-                                                        {customerData.cust_name}
-                                                    </option>
-                                                ),
-                                            )}
-                                        </select>
-                                        <InputError message={errors.customer} />
-                                    </div>
-                                    <div className="">
-                                        <InputLabel value={"Nomor Deposit"} />
-                                        <TextInput
-                                            type={"text"}
-                                            placeholder={
-                                                "Masukkan Nomor Deposit"
-                                            }
-                                            value={data.number}
-                                            onChange={(e) => {
-                                                setData(
-                                                    "number",
-                                                    e.target.value,
-                                                );
-                                                clearErrors("number");
-                                            }}
-                                        />
-                                        <InputError message={errors.number} />
-                                    </div>
-                                    <div className="">
-                                        <select
-                                            name="category"
-                                            id=""
-                                            defaultValue={data.category}
-                                            onChange={(e) => {
-                                                setData(
-                                                    "category",
-                                                    e.target.value,
-                                                );
-                                                clearErrors("category");
-                                            }}
-                                            className="captalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                        >
-                                            <option hidden>
-                                                Pilih Kategori Produk
-                                            </option>
-                                            <option value="pulsa">Pulsa</option>
-                                            <option value="dana">Dana</option>
-                                            <option value="token">token</option>
-                                        </select>
-                                        <InputError message={errors.category} />
-                                    </div>
-                                </div>
-
-                                <div className="flex w-full justify-center mt-5">
-                                    <Button
-                                        type="submit"
-                                        className={`flex gap-5 items-center text-xl bg-sky-300 font-semibold`}
-                                        disabled={processing}
-                                    >
-                                        kirim
-                                        <LoadingSession
-                                            processing={processing}
-                                        />
-                                    </Button>
-                                </div>
-                            </FormOverlay>
-                        </form>
-                    </Card>
-                </OverlayModal>
-            )}
             <App>
                 <HeaderInfo>
                     <HeaderDesc
@@ -224,8 +81,26 @@ const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
                         </Button>
                     </AccesibillitySecond>
                 </HeaderAccessibillity>
-                <Table columns={columns} datas={balanceDatas} />
+                <Table
+                    columns={columns}
+                    datas={balanceDatas}
+                    customerDatas={customerDatas}
+                />
             </App>
+            {showOverlay && (
+                <OverlayModal clickFunc={toggleOverlay}>
+                    <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                        <ModalHeader
+                            title={"nomor saldo baru"}
+                            clickFunc={toggleOverlay}
+                        />
+
+                        <FormBalance>
+                            <FormBalance.Create customerDatas={customerDatas} />
+                        </FormBalance>
+                    </Card>
+                </OverlayModal>
+            )}
         </>
     );
 };

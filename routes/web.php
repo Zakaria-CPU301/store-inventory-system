@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('balance')->name('balance.')->group(function (): void {
         Route::match(['get', 'post'], '/', [BalanceController::class, 'index'])->name('index');
         Route::post('/tambah', [BalanceController::class, 'store'])->name('store');
-        // Route::post('/update', [BalanceController::class, 'filterCategory'])->name('test');
+        Route::put('/update', [BalanceController::class, 'update'])->name('update');
     });
     // Route::get('debt', [DebtController::class, 'index'])->name('debt');
     // Route::get('boarding', [BoardingHouseController::class, 'index'])->name('boarding');
