@@ -1,16 +1,16 @@
 import { useForm } from "@inertiajs/react";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 
 export const DiscoveryContext = createContext();
 
 const DiscoveryContextProvider = ({ children }) => {
-    const { post, data, setData } = useForm({
+    const { post, setData, processing } = useForm({
         discovery: [],
     });
 
     const [category, setCategory] = useState(null);
     const [keyword, setKeyword] = useState(null);
-
+    
     const discoverySubmit = (e) => {
         e.preventDefault();
 
@@ -18,11 +18,10 @@ const DiscoveryContextProvider = ({ children }) => {
 
         post(route(route().current()));
     };
-    console.log(data.discovery);
 
     return (
         <DiscoveryContext.Provider
-            value={{ discoverySubmit, category, setCategory, setKeyword }}
+            value={{ discoverySubmit, category, setCategory, keyword, setKeyword, processing }}
         >
             {children}
         </DiscoveryContext.Provider>
