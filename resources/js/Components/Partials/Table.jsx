@@ -24,9 +24,7 @@ const Table = ({
     const { url } = usePage();
 
     const [showOverlay, setShowOverlay] = useState(false);
-    const toggleOverlay = () => {
-        setShowOverlay(!showOverlay);
-    };
+    const toggleOverlay = () => setShowOverlay((prev) => !prev);
 
     const [method, setMethod] = useState();
 
@@ -74,7 +72,7 @@ const Table = ({
                                                         clickFunc={() => {
                                                             toggleOverlay();
                                                             setMethod("edit");
-                                                            setRepoData(data)
+                                                            setRepoData(data);
                                                         }}
                                                     >
                                                         <i
@@ -86,7 +84,8 @@ const Table = ({
                                                         className={""}
                                                         clickFunc={() => {
                                                             toggleOverlay();
-                                                            setMethod("hapus");
+                                                            setMethod("delete");
+                                                            setRepoData(data)
                                                         }}
                                                     >
                                                         <i
@@ -108,8 +107,7 @@ const Table = ({
                                             className={`${iconEmpty ? iconEmpty : "bi bi-database-fill-x"} text-5xl`}
                                         ></i>
                                         <span className="text-3xl font-extrabold">
-                                            {reason ??
-                                                "Tidak ada data ditemukan"}
+                                            {reason ?? "Data tidak di temukan"}
                                         </span>
                                     </div>
                                 </td>
@@ -122,25 +120,38 @@ const Table = ({
             {showOverlay && (
                 <OverlayModal clickFunc={toggleOverlay}>
                     <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                        {url === "/balance" && (
-                            <>
-                                <ModalHeader
-                                    title={"edit nomor"}
-                                    clickFunc={toggleOverlay}
-                                />
+                        {url === "/balance" &&
+                            (method === "edit" ? (
+                                <>
+                                    <ModalHeader
+                                        title={"edit nomor"}
+                                        clickFunc={toggleOverlay}
+                                        iconTitle={'pencil'}
+                                    />
 
-                                <FormBalance>
-                                    {method === "edit" ? (
+                                    <FormBalance>
                                         <FormBalance.Update
                                             customerDatas={customerDatas}
                                             dataEdit={repoData}
                                         />
-                                    ) : (
-                                        <FormBalance.Delete />
-                                    )}
-                                </FormBalance>
-                            </>
-                        )}
+                                    </FormBalance>
+                                </>
+                            ) : (
+                                <>
+                                    <ModalHeader
+                                        title={"hapus nomor"}
+                                        clickFunc={toggleOverlay}
+                                        iconTitle={'trash'}
+                                    />
+
+                                    <FormBalance>
+                                        <FormBalance.Destroy
+                                        toggleOverlay={toggleOverlay}
+                                            dataEdit={repoData}
+                                        />
+                                    </FormBalance>
+                                </>
+                            ))}
                     </Card>
                 </OverlayModal>
             )}

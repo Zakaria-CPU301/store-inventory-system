@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/react";
+import { Form, useForm } from "@inertiajs/react";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import FormOverlay from "../Partials/FormOverlay";
 import InputLabel from "../Elements/InputLabel";
@@ -7,8 +7,8 @@ import TextInput from "../Elements/TextInput";
 import LoadingSession from "../Elements/LoadingSession";
 import Button from "../Elements/Button";
 import SessionInformasion from "../Elements/SessionInformasion";
-import { OverlayContext } from "@/Context/Overlay";
 import TomSelect from "tom-select";
+import BennerText from "../Elements/BennerText";
 
 export const FormBalanceContext = createContext();
 
@@ -23,11 +23,12 @@ const FormBalance = ({ children }) => {
         processing,
         clearErrors,
     } = useForm({
+        id: null,
         customer: "",
         number: "",
         category: "",
     });
-    
+
     const submitCreate = (e) => {
         e.preventDefault();
 
@@ -38,8 +39,11 @@ const FormBalance = ({ children }) => {
 
         put(route("balance.update"));
     };
+    const submitDestroy = (e) => {
+        e.preventDefault();
 
-    const { showOverlay } = useContext(OverlayContext);
+        post(route("balance.destroy"));
+    };
 
     useEffect(() => {
         const selectCreate = document.querySelectorAll(".select-create");
@@ -68,18 +72,20 @@ const FormBalance = ({ children }) => {
                 });
             });
         }
-    }, [showOverlay]);
+    }, []);
 
     return (
         <FormBalanceContext.Provider
             value={{
                 submitCreate,
                 submitUpdate,
+                submitDestroy,
                 data,
                 setData,
                 errors,
                 processing,
                 clearErrors,
+                recentlySuccessful
             }}
         >
             <SessionInformasion recentlySuccessful={recentlySuccessful} />
@@ -165,6 +171,13 @@ const Edit = ({ customerDatas, dataEdit }) => {
     const { submitUpdate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
+    useEffect(() => {
+        setData("id", dataEdit.id);
+        setData("customer", dataEdit.customers.cust_name);
+        setData("number", dataEdit.number.number);
+        setData("category", dataEdit.number.categories.category_name);
+    }, []);
+
     return (
         <FormOverlay handleSubmitForm={submitUpdate}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -210,7 +223,7 @@ const Edit = ({ customerDatas, dataEdit }) => {
                         }}
                         className="select-uncreate captalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     >
-                        <option value=''>Pilih Kategori Produk</option>
+                        <option value="">Pilih Kategori Produk</option>
                         <option value="pulsa">Pulsa</option>
                         <option value="dana">Dana</option>
                         <option value="token">token</option>
@@ -233,6 +246,45 @@ const Edit = ({ customerDatas, dataEdit }) => {
     );
 };
 
+const Delete = ({ dataEdit, toggleOverlay }) => {
+    const { submitDestroy, processing, setData, recentlySuccessful } =
+        useContext(FormBalanceContext);
+
+    useEffect(() => setData("id", dataEdit.id), []);
+
+    useEffect(() => {if (recentlySuccessful) toggleOverlay()}, [recentlySuccessful]);
+
+    return (
+        <FormOverlay handleSubmitForm={submitDestroy}>
+            <div className="flex flex-col w-full space-y-2.5">
+                <BennerText
+                    label="nama pelanggan"
+                    dataContent={dataEdit.customers.cust_name}
+                />
+                <BennerText
+                    label="nomor"
+                    dataContent={dataEdit.number.number}
+                />
+                <BennerText
+                    label="kategori nomor"
+                    dataContent={dataEdit.number.categories.category_name}
+                />
+            </div>
+            <div className="flex w-full justify-center mt-5">
+                <Button
+                    type="submit"
+                    className={`flex gap-5 items-center text-xl bg-red-700 text-indigo-100 font-semibold`}
+                    disabled={processing}
+                >
+                    Hapus Nomor
+                    <LoadingSession processing={processing} />
+                </Button>
+            </div>
+        </FormOverlay>
+    );
+};
+
 FormBalance.Create = Create;
 FormBalance.Update = Edit;
+FormBalance.Destroy = Delete;
 export default FormBalance;
