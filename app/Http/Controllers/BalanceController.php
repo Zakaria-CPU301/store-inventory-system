@@ -9,6 +9,7 @@ use App\Models\NumberCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Throwable;
 
 class BalanceController extends Controller
 {
@@ -34,7 +35,7 @@ class BalanceController extends Controller
                 });
         }
         return Inertia::render('Main/Balance', [
-            'balanceDatas' => $datas->get(),
+            'balanceDatas' => $datas->latest()->get(),
             'customerDatas' => Customer::select('cust_name')->get(),
             'categoryDatas' => NumberCustomer::with('number.categories')->get(),
         ]);
@@ -48,29 +49,29 @@ class BalanceController extends Controller
             'category' => 'required',
         ]);
 
-        $category = Category::where('category_name', $validate['category'])->first(); //
+        $category = Category::where('category_name', $validate['category'])->first();
 
         $number = Number::firstOrCreate([
             'category_id' => $category->id,
             'number' => $validate['number']
         ]);
 
-        $customer = Customer::firstOrCreate(['cust_name' => $validate['customer']]); //
+        $customer = Customer::firstOrCreate(['cust_name' => $validate['customer']]);
 
         try {
             DB::beginTransaction();
 
-            $numberCustomer = new NumberCustomer();
-            $numberCustomer->number_id = $number->id;
-            $numberCustomer->customer_id = $customer->id;
-
-            $numberCustomer->saveOrFail();
+            NumberCustomer::create([
+                'customer_id' => $customer->id,
+                'number_id' => $number->id,
+            ]);
 
             $message = 'data berhasil di tambahkan!';
             $icon = 'check-circle';
+            $className = 'bg-green-500';
 
             DB::commit();
-        } catch (\Throwable $err) {
+        } catch (Throwable $err) {
             DB::rollBack();
             $message = 'gagal, silahkan pilih nomor lain';
             $icon = 'x-circle';
@@ -80,7 +81,60 @@ class BalanceController extends Controller
         return Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $className ?? null])->back();
     }
 
-    public function update(Request $request) {
-        dd($request->all());
+    public function update(Request $request)
+    {
+        $validate = $request->validate([
+            'customer' => ['required'],
+            'number' => ['required', 'max:20'],
+            'category' => ['required']
+        ]);
+
+        $customer = Customer::firstOrCreate(['cust_name' => $validate['customer']]);
+
+        $category = Category::where('category_name', $validate['category'])->first();
+
+        $number = Number::firstOrCreate([
+            'category_id' => $category->id,
+            'number' => $validate['number']
+        ]);
+
+
+        try {
+            DB::beginTransaction();
+
+            $existData = NumberCustomer::where([
+                'number_id' => $number->id,
+                'customer_id' => $customer->id,
+            ])->first();
+
+            if ($existData) {
+                $message = 'tidak ada perubahan data!';
+                $icon = 'exclamation-circle';
+                $className = 'bg-yellow-600';
+            } else {
+                NumberCustomer::find($request->id)->update([
+                    'number_id' => $number->id,
+                    'customer_id' => $customer->id,
+                ]);
+                $message = 'data berhasil di edit!';
+                $icon = 'check-circle';
+                $className = 'bg-green-500';
+            }
+
+            DB::commit();
+        } catch (Throwable $err) {
+            DB::rollBack();
+            $message = 'gagal, silahkan pilih nomor lain';
+            $icon = 'x-circle';
+            $className = 'bg-red-500';
+        }
+
+        return Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $className ?? null])->back();
+    }
+
+    public function destroy(Request $request)
+    {
+        NumberCustomer::find($request->id)->delete();
+        return Inertia::flash(['success' => 'nomor berhasil di hapus', 'icon' => 'check-circle'])->back();
     }
 }
