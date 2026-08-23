@@ -6,7 +6,7 @@ import { config } from "@inertiajs/react";
 import DiscoveryContextProvider from "@/Context/Discovery";
 
 const App = ({ children }) => {
-    config.set("form.recentlySuccessfulDuration", 3000);
+    config.set("form.recentlySuccessfulDuration", 5000);
     const [showSidebar, setShowSidebar] = useState(() => {
         return JSON.parse(localStorage.getItem("toggle-sidebar")) ?? true;
     });

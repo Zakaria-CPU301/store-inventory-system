@@ -8,16 +8,15 @@ import App from "@/Layouts/App";
 import CardAmountInfo from "@/Components/Elements/CardAmountInfo";
 import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
 import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
-import { useContext } from "react";
 import "tom-select/dist/css/tom-select.css";
-import Overlay, { OverlayContext } from "@/Context/Overlay";
-import { DiscoveryContext } from "@/Context/Discovery";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import FormBalance from "@/Components/Form/FormBalance";
 import OverlayModal from "@/Components/Partials/OverlayModal";
+import { useState } from "react";
 
 const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
-    const { showOverlay, toggleOverlay } = useContext(OverlayContext);
+    const [showOverlay, setShowOverlay] = useState(false);
+    const toggleOverlay = () => setShowOverlay((prev) => !prev);
 
     const categories = [];
     const customers = [];
