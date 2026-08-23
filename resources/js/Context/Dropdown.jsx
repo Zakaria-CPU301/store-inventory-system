@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { Link } from '@inertiajs/react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const DropDownContext = createContext();
 
@@ -12,25 +12,25 @@ const Dropdown = ({ children }) => {
     };
 
     return (
-        <DropDownContext.Provider value={{ open, setOpen, toggleOpen }}>
+        <DropDownContext.Provider value={{ open, toggleOpen }}>
             <div className="relative">{children}</div>
         </DropDownContext.Provider>
     );
 };
 
 const Trigger = ({ children }) => {
-    const { open, setOpen, toggleOpen } = useContext(DropDownContext);
+    const { open, toggleOpen } = useContext(DropDownContext);
 
     return (
         <>
             <div onClick={toggleOpen}>{children}</div>
 
-            {open && (
+            {/* {open && (
                 <div
                     className="fixed inset-0 z-51"
-                    onClick={() => setOpen(false)}
+                    onClick={() => toggleOpen()}
                 ></div>
-            )}
+            )} */}
         </>
     );
 };
