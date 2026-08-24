@@ -21,12 +21,12 @@ const App = ({ children }) => {
         <>
             <DiscoveryContextProvider>
                 <Navbar toggleSidebar={toggleSidebar} />
-                <div className="flex bg-main-layout w-full min-h-[calc(100vh-4rem)]">
-                    {showSidebar && <Sidebar />}
-                    <main className="p-8 flex-1 min-w-0 w-full">
-                        {children}
-                    </main>
-                </div>
+                    <div className="flex bg-main-layout w-full min-h-[calc(100vh-4rem)]">
+                        {showSidebar && <Sidebar />}
+                        <main className="p-8 flex-1 min-w-0 w-full">
+                            {children}
+                        </main>
+                    </div>
             </DiscoveryContextProvider>
         </>
     );
