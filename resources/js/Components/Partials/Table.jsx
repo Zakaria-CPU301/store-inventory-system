@@ -57,11 +57,11 @@ const Table = ({
                                         </td>
                                     ))}
                                     <td className="text-center p-3">
-                                        <Dropdown>
-                                            <Dropdown.Trigger>
+                                            <Dropdown.Trigger id={data.id}>
                                                 <i className="bi bi-three-dots cursor-pointer"></i>
                                             </Dropdown.Trigger>
                                             <Dropdown.Content
+                                            id={data.id}
                                                 width="w-30"
                                                 contentClasses="py-2 bg-light-sky"
                                                 z={"z-52"}
@@ -95,7 +95,6 @@ const Table = ({
                                                     </Button>
                                                 </div>
                                             </Dropdown.Content>
-                                        </Dropdown>
                                     </td>
                                 </tr>
                             ))
