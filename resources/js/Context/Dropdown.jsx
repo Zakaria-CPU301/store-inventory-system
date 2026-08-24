@@ -1,34 +1,57 @@
-import { Transition } from '@headlessui/react';
-import { Link } from '@inertiajs/react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { Transition } from "@headlessui/react";
+import { Link } from "@inertiajs/react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const DropDownContext = createContext();
 
 const Dropdown = ({ children }) => {
     const [open, setOpen] = useState(false);
+    const [identity, setIdentity] = useState(null);
 
     const toggleOpen = () => {
-        setOpen((previousState) => !previousState);
+        setOpen((prev) => !prev);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
     };
 
     return (
-        <DropDownContext.Provider value={{ open, toggleOpen }}>
+        <DropDownContext.Provider
+            value={{ open, toggleOpen, handleClose, identity, setIdentity }}
+        >
             <div className="relative">{children}</div>
         </DropDownContext.Provider>
     );
 };
 
-const Trigger = ({ children }) => {
-    const { open, toggleOpen } = useContext(DropDownContext);
+const Trigger = ({ children, id }) => {
+    const { toggleOpen, setIdentity } = useContext(DropDownContext);
+
+    return (
+        <div
+            onClick={() => {
+                toggleOpen();
+                setIdentity(id);
+            }}
+        >
+            {children}
+        </div>
+    );
+};
+
+const Close = ({ children }) => {
+    const { open, handleClose } = useContext(DropDownContext);
 
     return (
         <>
-            <div onClick={toggleOpen}>{children}</div>
-
+            <div onClick={handleClose} className="">
+                {children}
+            </div>
             {/* {open && (
                 <div
-                    className="fixed inset-0 z-51"
-                    onClick={() => toggleOpen()}
+                    className="fixed inset-0 z-51 bg-yellow-500"
+                    onClick={() => setOpen(false)}
                 ></div>
             )} */}
         </>
@@ -36,26 +59,27 @@ const Trigger = ({ children }) => {
 };
 
 const Content = ({
-    align = 'right',
-    width = 'w-48',
-    contentClasses = 'py-1 bg-white z-50',
-    z = 'z-50',
+    id,
+    align = "right",
+    width = "w-48",
+    contentClasses = "py-1 bg-white z-50",
+    z = "z-50",
     children,
 }) => {
-    const { open } = useContext(DropDownContext);
+    const { open, identity } = useContext(DropDownContext);
 
-    let alignmentClasses = 'origin-top';
+    let alignmentClasses = "origin-top";
 
-    if (align === 'left') {
-        alignmentClasses = 'ltr:origin-top-left rtl:origin-top-right start-0';
-    } else if (align === 'right') {
-        alignmentClasses = 'ltr:origin-top-right rtl:origin-top-left end-0';
+    if (align === "left") {
+        alignmentClasses = "ltr:origin-top-left rtl:origin-top-right start-0";
+    } else if (align === "right") {
+        alignmentClasses = "ltr:origin-top-right rtl:origin-top-left end-0";
     }
 
     return (
         <>
             <Transition
-                show={open}
+                show={open && identity === id}
                 enter="transition ease-out duration-200"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
@@ -66,12 +90,7 @@ const Content = ({
                 <div
                     className={`absolute mt-2 rounded-md shadow-lg ${z} ${alignmentClasses} ${width}`}
                 >
-                    <div
-                        className={
-                            `rounded-md ` +
-                            contentClasses
-                        }
-                    >
+                    <div className={`rounded-md ` + contentClasses}>
                         {children}
                     </div>
                 </div>
@@ -80,12 +99,12 @@ const Content = ({
     );
 };
 
-const DropdownLink = ({ className = '', children, ...props }) => {
+const DropdownLink = ({ className = "", children, ...props }) => {
     return (
         <Link
             {...props}
             className={
-                'block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none ' +
+                "block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-gray-100 focus:outline-none " +
                 className
             }
         >
@@ -95,6 +114,7 @@ const DropdownLink = ({ className = '', children, ...props }) => {
 };
 
 Dropdown.Trigger = Trigger;
+Dropdown.Close = Close;
 Dropdown.Content = Content;
 Dropdown.Link = DropdownLink;
 
