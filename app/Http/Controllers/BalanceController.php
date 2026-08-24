@@ -13,27 +13,30 @@ use Throwable;
 
 class BalanceController extends Controller
 {
+    public function filters(Object $query, array $discovery)
+    {
+        return $query->whereHas('number.categories', function ($e) use ($discovery) {
+            $e->where('category_name', 'LIKE', "%{$discovery[1]}%");
+        })
+            ->where(function ($query) use ($discovery) {
+                $query->when($discovery[0], function ($q, $value) {
+                    $q->whereHas('customers', function ($e) use ($value) {
+                        $e->where('cust_name', 'LIKE', "%{$value}%");
+                    });
+                    $q->orWhereHas('number', function ($e) use ($value) {
+                        $e->where('number', 'LIKE', "%{$value}%");
+                    });
+                });
+            });
+    }
+
     public function index(Request $request)
     {
         $datas = NumberCustomer::with(['customers', 'number.categories']);
         if ($request->discovery) {
-            $discovery = $request->discovery;
-
-            $datas
-                ->whereHas('number.categories', function ($e) use ($discovery) {
-                    $e->where('category_name', 'LIKE', "%{$discovery[1]}%");
-                })
-                ->where(function ($query) use ($discovery) {
-                    $query->when($discovery[0], function ($q, $value) {
-                        $q->whereHas('customers', function ($e) use ($value) {
-                            $e->where('cust_name', 'LIKE', "%{$value}%");
-                        });
-                        $q->orWhereHas('number', function ($e) use ($value) {
-                            $e->where('number', 'LIKE', "%{$value}%");
-                        });
-                    });
-                });
+            $datas = $this->filters($datas, $request->discovery);
         }
+
         return Inertia::render('Main/Balance', [
             'balanceDatas' => $datas->latest()->get(),
             'customerDatas' => Customer::select('cust_name')->get(),
@@ -122,7 +125,7 @@ class BalanceController extends Controller
             }
 
             DB::commit();
-        } catch (Throwable $err) {
+        } catch (Throwable) {
             DB::rollBack();
             $message = 'gagal, silahkan pilih nomor lain';
             $icon = 'x-circle';

@@ -9,6 +9,7 @@ import Button from "../Elements/Button";
 import SessionInformasion from "../Elements/SessionInformasion";
 import TomSelect from "tom-select";
 import BennerText from "../Elements/BennerText";
+import { DiscoveryContext } from "@/Context/Discovery";
 
 export const FormBalanceContext = createContext();
 
@@ -27,6 +28,7 @@ const FormBalance = ({ children }) => {
         customer: "",
         number: "",
         category: "",
+        discovery: [],
     });
 
     const submitCreate = (e) => {
@@ -37,12 +39,17 @@ const FormBalance = ({ children }) => {
     const submitUpdate = (e) => {
         e.preventDefault();
 
-        put(route("balance.update"));
+        put(route("balance.update"), {
+            preserveScroll: true
+        });
     };
     const submitDestroy = (e) => {
         e.preventDefault();
 
-        post(route("balance.destroy"));
+        post(route("balance.destroy"), {
+            preserveState: false,
+            preserveScroll: true
+        });
     };
 
     useEffect(() => {
@@ -171,11 +178,14 @@ const Edit = ({ customerDatas, dataEdit }) => {
     const { submitUpdate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
+        const {discovery} = useContext(DiscoveryContext);
+
     useEffect(() => {
         setData("id", dataEdit.id);
         setData("customer", dataEdit.customers.cust_name);
         setData("number", dataEdit.number.number);
         setData("category", dataEdit.number.categories.category_name);
+        setData("discovery", discovery)
     }, []);
 
     return (
@@ -247,12 +257,10 @@ const Edit = ({ customerDatas, dataEdit }) => {
 };
 
 const Delete = ({ dataEdit, toggleOverlay }) => {
-    const { submitDestroy, processing, setData, recentlySuccessful } =
+    const { submitDestroy, setData, processing } =
         useContext(FormBalanceContext);
 
     useEffect(() => setData("id", dataEdit.id), []);
-
-    useEffect(() => {if (recentlySuccessful) toggleOverlay()}, [recentlySuccessful]);
 
     return (
         <FormOverlay handleSubmitForm={submitDestroy}>

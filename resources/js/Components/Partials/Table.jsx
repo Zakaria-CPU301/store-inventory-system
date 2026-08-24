@@ -25,7 +25,7 @@ const Table = ({
 
     const [showOverlay, setShowOverlay] = useState(false);
     const toggleOverlay = () => setShowOverlay((prev) => !prev);
-
+    
     const [method, setMethod] = useState();
 
     const [repoData, setRepoData] = useState([]);
@@ -145,7 +145,6 @@ const Table = ({
 
                                     <FormBalance>
                                         <FormBalance.Destroy
-                                        toggleOverlay={toggleOverlay}
                                             dataEdit={repoData}
                                         />
                                     </FormBalance>
