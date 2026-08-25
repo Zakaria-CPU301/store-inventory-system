@@ -33,8 +33,10 @@ class BalanceController extends Controller
     public function index(Request $request)
     {
         $datas = NumberCustomer::with(['customers', 'number.categories']);
-        if ($request->discovery) {
-            $datas = $this->filters($datas, $request->discovery);
+        if ($request->discovery || session('discovery')) {
+            $discovery = $request->discovery ?? session('discovery');
+            // if (session('discovery')) dump(session('discovery'));
+            $datas = $this->filters($datas, $discovery);
         }
 
         return Inertia::render('Main/Balance', [
@@ -132,7 +134,8 @@ class BalanceController extends Controller
             $className = 'bg-red-500';
         }
 
-        return Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $className ?? null])->back();
+        Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $className ?? null]);
+        return back()->with('discovery', $request->discovery);
     }
 
     public function destroy(Request $request)

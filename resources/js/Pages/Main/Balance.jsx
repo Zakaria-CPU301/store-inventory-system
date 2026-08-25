@@ -12,11 +12,19 @@ import "tom-select/dist/css/tom-select.css";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import FormBalance from "@/Components/Form/FormBalance";
 import OverlayModal from "@/Components/Partials/OverlayModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
     const [showOverlay, setShowOverlay] = useState(false);
     const toggleOverlay = () => setShowOverlay((prev) => !prev);
+
+    const [balance, setBalance] = useState(balanceDatas);
+
+    useEffect(() => {
+        setBalance(balanceDatas);
+    }, [balanceDatas]);
+
+    console.log(balance);
 
     const categories = [];
     const customers = [];
@@ -82,7 +90,7 @@ const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
                 </HeaderAccessibillity>
                 <Table
                     columns={columns}
-                    datas={balanceDatas}
+                    datas={balance}
                     customerDatas={customerDatas}
                 />
             </App>
