@@ -35,7 +35,6 @@ class BalanceController extends Controller
         $datas = NumberCustomer::with(['customers', 'number.categories']);
         if ($request->discovery || session('discovery')) {
             $discovery = $request->discovery ?? session('discovery');
-            // if (session('discovery')) dump(session('discovery'));
             $datas = $this->filters($datas, $discovery);
         }
 
