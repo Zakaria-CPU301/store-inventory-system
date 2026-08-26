@@ -18,14 +18,6 @@ const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
     const [showOverlay, setShowOverlay] = useState(false);
     const toggleOverlay = () => setShowOverlay((prev) => !prev);
 
-    const [balance, setBalance] = useState(balanceDatas);
-
-    useEffect(() => {
-        setBalance(balanceDatas);
-    }, [balanceDatas]);
-
-    console.log(balance);
-
     const categories = [];
     const customers = [];
     balanceDatas.map((customer) => {
@@ -90,7 +82,7 @@ const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
                 </HeaderAccessibillity>
                 <Table
                     columns={columns}
-                    datas={balance}
+                    datas={balanceDatas}
                     customerDatas={customerDatas}
                 />
             </App>

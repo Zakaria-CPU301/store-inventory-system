@@ -116,7 +116,7 @@ class BalanceController extends Controller
                 $icon = 'exclamation-circle';
                 $className = 'bg-yellow-600';
             } else {
-                NumberCustomer::find($request->id)->update([
+                NumberCustomer::find($request->id)->update([  
                     'number_id' => $number->id,
                     'customer_id' => $customer->id,
                 ]);
