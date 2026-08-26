@@ -4,6 +4,7 @@ import { useState } from "react";
 // Global (app defaults)
 import { config } from "@inertiajs/react";
 import DiscoveryContextProvider from "@/Context/Discovery";
+import Dropdown from "@/Context/Dropdown";
 
 const App = ({ children }) => {
     config.set("form.recentlySuccessfulDuration", 5000);
@@ -19,15 +20,17 @@ const App = ({ children }) => {
 
     return (
         <>
-            <DiscoveryContextProvider>
-                <Navbar toggleSidebar={toggleSidebar} />
+            <Dropdown>
+                <DiscoveryContextProvider>
+                    <Navbar toggleSidebar={toggleSidebar} />
                     <div className="flex bg-main-layout w-full min-h-[calc(100vh-4rem)]">
                         {showSidebar && <Sidebar />}
                         <main className="p-8 flex-1 min-w-0 w-full">
                             {children}
                         </main>
                     </div>
-            </DiscoveryContextProvider>
+                </DiscoveryContextProvider>
+            </Dropdown>
         </>
     );
 };
