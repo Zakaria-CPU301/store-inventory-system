@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Dropdown from "../../Context/Dropdown";
+import { useContext, useState } from "react";
 import Button from "../Elements/Button";
 import SmoothTableHead from "../Elements/SmoothTableHead";
 import StandardTableHead from "../Elements/StandardTableHead";
@@ -8,6 +7,7 @@ import FormBalance from "../Form/FormBalance";
 import ModalHeader from "../Elements/ModalHeader";
 import Card from "./Card";
 import { usePage } from "@inertiajs/react";
+import Dropdown, { DropDownContext } from "@/Context/Dropdown";
 
 const Table = ({
     firstAction = null,
@@ -25,10 +25,12 @@ const Table = ({
 
     const [showOverlay, setShowOverlay] = useState(false);
     const toggleOverlay = () => setShowOverlay((prev) => !prev);
-    
+
     const [method, setMethod] = useState();
 
     const [repoData, setRepoData] = useState([]);
+
+    const { open, identity } = useContext(DropDownContext);
 
     return (
         <>
@@ -57,44 +59,47 @@ const Table = ({
                                         </td>
                                     ))}
                                     <td className="text-center p-3">
-                                            <Dropdown.Trigger id={data.id}>
-                                                <i className="bi bi-three-dots cursor-pointer"></i>
-                                            </Dropdown.Trigger>
-                                            <Dropdown.Content
+                                        <Dropdown.Trigger id={data.id}>
+                                            {console.log()}
+                                            <i
+                                                className={`bi bi-three-dots cursor-pointer px-2 py-1 rounded-lg duration-100  ${open && identity === data.id ? "ring-2" : ""}`}
+                                            ></i>
+                                        </Dropdown.Trigger>
+                                        <Dropdown.Content
                                             id={data.id}
-                                                width="w-30"
-                                                contentClasses="py-2 bg-light-sky"
-                                                z={"z-52"}
-                                            >
-                                                <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
-                                                    <Button
-                                                        className={""}
-                                                        clickFunc={() => {
-                                                            toggleOverlay();
-                                                            setMethod("edit");
-                                                            setRepoData(data);
-                                                        }}
-                                                    >
-                                                        <i
-                                                            className={`bi bi-pencil text-xl`}
-                                                        ></i>
-                                                        edit
-                                                    </Button>
-                                                    <Button
-                                                        className={""}
-                                                        clickFunc={() => {
-                                                            toggleOverlay();
-                                                            setMethod("delete");
-                                                            setRepoData(data)
-                                                        }}
-                                                    >
-                                                        <i
-                                                            className={`bi bi-trash text-xl`}
-                                                        ></i>
-                                                        hapus
-                                                    </Button>
-                                                </div>
-                                            </Dropdown.Content>
+                                            width="w-30"
+                                            contentClasses="py-2 bg-light-sky"
+                                            z={"z-52"}
+                                        >
+                                            <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
+                                                <Button
+                                                    className={""}
+                                                    clickFunc={() => {
+                                                        toggleOverlay();
+                                                        setMethod("edit");
+                                                        setRepoData(data);
+                                                    }}
+                                                >
+                                                    <i
+                                                        className={`bi bi-pencil text-xl`}
+                                                    ></i>
+                                                    edit
+                                                </Button>
+                                                <Button
+                                                    className={""}
+                                                    clickFunc={() => {
+                                                        toggleOverlay();
+                                                        setMethod("delete");
+                                                        setRepoData(data);
+                                                    }}
+                                                >
+                                                    <i
+                                                        className={`bi bi-trash text-xl`}
+                                                    ></i>
+                                                    hapus
+                                                </Button>
+                                            </div>
+                                        </Dropdown.Content>
                                     </td>
                                 </tr>
                             ))
@@ -125,7 +130,7 @@ const Table = ({
                                     <ModalHeader
                                         title={"edit nomor"}
                                         clickFunc={toggleOverlay}
-                                        iconTitle={'pencil'}
+                                        iconTitle={"pencil"}
                                     />
 
                                     <FormBalance>
@@ -140,7 +145,7 @@ const Table = ({
                                     <ModalHeader
                                         title={"hapus nomor"}
                                         clickFunc={toggleOverlay}
-                                        iconTitle={'trash'}
+                                        iconTitle={"trash"}
                                     />
 
                                     <FormBalance>
