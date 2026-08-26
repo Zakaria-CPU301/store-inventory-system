@@ -2,7 +2,7 @@ import { Transition } from "@headlessui/react";
 import { Link } from "@inertiajs/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
-const DropDownContext = createContext();
+export const DropDownContext = createContext();
 
 const Dropdown = ({ children }) => {
     const [open, setOpen] = useState(false);
@@ -18,7 +18,14 @@ const Dropdown = ({ children }) => {
 
     return (
         <DropDownContext.Provider
-            value={{ open, toggleOpen, handleClose, identity, setIdentity }}
+            value={{
+                open,
+                setOpen,
+                toggleOpen,
+                handleClose,
+                identity,
+                setIdentity,
+            }}
         >
             <div className="relative">{children}</div>
         </DropDownContext.Provider>
@@ -26,12 +33,14 @@ const Dropdown = ({ children }) => {
 };
 
 const Trigger = ({ children, id }) => {
-    const { toggleOpen, setIdentity } = useContext(DropDownContext);
+    const { setOpen, toggleOpen, setIdentity, identity } =
+        useContext(DropDownContext);
 
     return (
         <div
             onClick={() => {
-                toggleOpen();
+                if (identity === id) toggleOpen();
+                else setOpen(true);
                 setIdentity(id);
             }}
         >
@@ -80,10 +89,10 @@ const Content = ({
         <>
             <Transition
                 show={open && identity === id}
-                enter="transition ease-out duration-200"
+                enter="transition ease-out duration-100"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
-                leave="transition ease-in duration-75"
+                leave="transition ease-in duration-100"
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
             >
