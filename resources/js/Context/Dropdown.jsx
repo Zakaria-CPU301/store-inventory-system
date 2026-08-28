@@ -8,13 +8,9 @@ const Dropdown = ({ children }) => {
     const [open, setOpen] = useState(false);
     const [identity, setIdentity] = useState(null);
 
-    const toggleOpen = () => {
-        setOpen((prev) => !prev);
-    };
+    const toggleOpen = () => setOpen((prev) => !prev);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleClose = () => setOpen(false);
 
     return (
         <DropDownContext.Provider
@@ -57,12 +53,10 @@ const Close = ({ children }) => {
             <div onClick={handleClose} className="">
                 {children}
             </div>
-            {/* {open && (
-                <div
-                    className="fixed inset-0 z-51 bg-yellow-500"
-                    onClick={() => setOpen(false)}
-                ></div>
-            )} */}
+            <div
+                className="fixed z-49 inset-0 bg-black"
+                onClick={handleClose}
+            ></div>
         </>
     );
 };

@@ -12,9 +12,9 @@ import "tom-select/dist/css/tom-select.css";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import FormBalance from "@/Components/Form/FormBalance";
 import OverlayModal from "@/Components/Partials/OverlayModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
+function Balance({ balanceDatas, customerDatas, categoryDatas }) {
     const [showOverlay, setShowOverlay] = useState(false);
     const toggleOverlay = () => setShowOverlay((prev) => !prev);
 
@@ -102,6 +102,6 @@ const Balance = ({ balanceDatas, customerDatas, categoryDatas }) => {
             )}
         </>
     );
-};
+}
 
 export default Balance;
