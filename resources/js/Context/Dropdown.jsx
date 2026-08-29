@@ -53,10 +53,9 @@ const Close = ({ children }) => {
             <div onClick={handleClose} className="">
                 {children}
             </div>
-            <div
-                className="fixed z-49 inset-0 bg-black"
-                onClick={handleClose}
-            ></div>
+            {open && (
+                <div className="fixed z-49 inset-0" onClick={handleClose}></div>
+            )}
         </>
     );
 };
