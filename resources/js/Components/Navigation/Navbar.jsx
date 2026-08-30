@@ -9,7 +9,7 @@ export default function Navbar({ toggleSidebar }) {
 
     return (
         <>
-            <nav className="w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar z-50">
+            <nav className="z-20 w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar ">
                 <div className="h-full flex items-center space-x-5 pl-5 w-1/5">
                     <button onClick={toggleSidebar}>
                         <i className="bi bi-list text-white text-3xl"></i>

@@ -12,6 +12,8 @@ const Dropdown = ({ children }) => {
 
     const handleClose = () => setOpen(false);
 
+    document.addEventListener("scroll", () => handleClose())
+
     return (
         <DropDownContext.Provider
             value={{
@@ -53,9 +55,9 @@ const Close = ({ children }) => {
             <div onClick={handleClose} className="">
                 {children}
             </div>
-            {open && (
-                <div className="fixed z-49 inset-0" onClick={handleClose}></div>
-            )}
+            {/* {open && (
+                <div className="absolute top-0 z-40 w-50 h-50 bg-black" onClick={handleClose}></div>
+            )} */}
         </>
     );
 };

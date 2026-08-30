@@ -101,7 +101,7 @@ const FormBalance = ({ children }) => {
     );
 };
 
-const Create = ({ customerDatas }) => {
+const Create = ({ datasFormulir }) => {
     const { submitCreate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
@@ -120,7 +120,7 @@ const Create = ({ customerDatas }) => {
                         data-placeholder="Pilih atau Tambah"
                     >
                         <option value="">Pilih atau Tambah</option>
-                        {customerDatas.map((customerData, i) => (
+                        {datasFormulir.cust.map((customerData, i) => (
                             <option value={customerData.id} key={i}>
                                 {customerData.cust_name}
                             </option>
@@ -130,15 +130,21 @@ const Create = ({ customerDatas }) => {
                 </div>
                 <div className="">
                     <InputLabel value={"Nomor Deposit"} />
-                    <TextInput
-                        type={"text"}
-                        placeholder={"Masukkan Nomor Deposit"}
+                    <select
                         value={data.number}
                         onChange={(e) => {
                             setData("number", e.target.value);
                             clearErrors("number");
                         }}
-                    />
+                        className="select-create capitalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    >
+                        <option value="">Pilih Nomor Deposit</option>
+                        {datasFormulir.numCat.map((numberData, i) => (
+                            <option value={numberData.number.number} key={i}>
+                                {numberData.number.number}
+                            </option>
+                        ))}
+                    </select>
                     <InputError message={errors.number} />
                 </div>
                 <div className="">
@@ -149,12 +155,12 @@ const Create = ({ customerDatas }) => {
                             clearErrors("category");
                         }}
                         className="select-uncreate capitalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        data-placeholder="Pilih Kategori Produk"
                     >
                         <option value="">Pilih Kategori Produk</option>
                         <option value="pulsa">Pulsa</option>
                         <option value="dana">Dana</option>
-                        <option value="token">token</option>
+                        <option value="paket data">Paket Data</option>
+                        <option value="token">Token</option>
                     </select>
                     <InputError message={errors.category} />
                 </div>
@@ -174,7 +180,7 @@ const Create = ({ customerDatas }) => {
     );
 };
 
-const Edit = ({ customerDatas, dataEdit }) => {
+const Edit = ({ datasFormulir, dataEdit }) => {
     const { submitUpdate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
@@ -203,7 +209,7 @@ const Edit = ({ customerDatas, dataEdit }) => {
                     >
                         <option value="">Pilih atau Tambah</option>
 
-                        {customerDatas.map((customerData, i) => (
+                        {datasFormulir.cust.map((customerData, i) => (
                             <option value={customerData.id} key={i}>
                                 {customerData.cust_name}
                             </option>
@@ -213,15 +219,21 @@ const Edit = ({ customerDatas, dataEdit }) => {
                 </div>
                 <div className="">
                     <InputLabel value={"Nomor Deposit"} />
-                    <TextInput
-                        type={"text"}
-                        placeholder={"Masukkan Nomor Deposit"}
+                    <select
                         defaultValue={dataEdit.number.number}
                         onChange={(e) => {
                             setData("number", e.target.value);
                             clearErrors("number");
                         }}
-                    />
+                        className="select-create capitalize text-sm md:text-xl p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    >
+                        <option value="">Pilih Nomor Deposit</option>
+                        {datasFormulir.numCat.map((numberData, i) => (
+                            <option value={numberData.number.number} key={i}>
+                                {numberData.number.number}
+                            </option>
+                        ))}
+                    </select>
                     <InputError message={errors.number} />
                 </div>
                 <div className="">
@@ -237,6 +249,7 @@ const Edit = ({ customerDatas, dataEdit }) => {
                         <option value="pulsa">Pulsa</option>
                         <option value="dana">Dana</option>
                         <option value="token">token</option>
+                        <option value="paket data">paket data</option>
                     </select>
                     <InputError message={errors.category} />
                 </div>
