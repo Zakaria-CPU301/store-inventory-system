@@ -2,7 +2,7 @@ import React from "react";
 
 const StandardTableHead = ({ columns }) => {
     return (
-        <thead className="bg-main-layout text-white sticky top-16">
+        <thead className="z-20 bg-main-layout text-white sticky top-16">
             <tr>
                 <th className="capitalize">
                     <div className="rounded-tl-2xl p-3 bg-table-head">no</div>

@@ -8,7 +8,7 @@ const AccessibillityFirst = ({ dataFilters }) => {
 
     return (
         <div
-            className={`h-full flex items-center bg-table-head z-50 
+            className={`h-full flex items-center bg-table-head
                 ${dataFilters.length ? "" : " min-w-1/2"} 
                 ${
                     route().current("product.index")
