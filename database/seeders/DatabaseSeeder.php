@@ -33,6 +33,13 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(6)
         ]);
 
+        Category::factory()->createMany([
+            ['category_name' => 'pulsa'],
+            ['category_name' => 'token'],
+            ['category_name' => 'paket data'],
+            ['category_name' => 'dana'],
+        ]);
+
         // Category::factory(15)->create();
 
         // Product::factory(30)->create();

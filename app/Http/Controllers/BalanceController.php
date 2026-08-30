@@ -41,7 +41,7 @@ class BalanceController extends Controller
         return Inertia::render('Main/Balance', [
             'balanceDatas' => $datas->latest()->get(),
             'customerDatas' => Customer::select('cust_name')->get(),
-            'categoryDatas' => NumberCustomer::with('number.categories')->get(),
+            'numberCategoryDatas' => NumberCustomer::with('number.categories')->get(),
         ]);
     }
 
