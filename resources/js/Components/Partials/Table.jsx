@@ -15,7 +15,7 @@ const Table = ({
     datas,
     iconEmpty,
     reason,
-    customerDatas = null,
+    datasFormulir = null,
     className,
 }) => {
     const result = (obj, keyName) =>
@@ -34,7 +34,7 @@ const Table = ({
 
     return (
         <>
-            <div className="w-full">
+            <div className="w-full relative">
                 <table className="border-collapse w-full bg-main-table rounded-b-2xl">
                     {route().current("customer.index") ||
                     route().current("category.index") ? (
@@ -60,7 +60,6 @@ const Table = ({
                                     ))}
                                     <td className="text-center p-3">
                                         <Dropdown.Trigger id={data.id}>
-                                            {console.log()}
                                             <i
                                                 className={`bi bi-three-dots cursor-pointer px-2 py-1 rounded-lg duration-100  ${open && identity === data.id ? "ring-2" : ""}`}
                                             ></i>
@@ -69,7 +68,7 @@ const Table = ({
                                             id={data.id}
                                             width="w-30"
                                             contentClasses="py-2 bg-light-sky"
-                                            z={"z-52"}
+                                            z={"z-10"}
                                         >
                                             <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
                                                 <Button
@@ -135,7 +134,7 @@ const Table = ({
 
                                     <FormBalance>
                                         <FormBalance.Update
-                                            customerDatas={customerDatas}
+                                            datasFormulir={datasFormulir}
                                             dataEdit={repoData}
                                         />
                                     </FormBalance>

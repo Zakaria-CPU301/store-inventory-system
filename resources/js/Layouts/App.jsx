@@ -1,10 +1,11 @@
 import Navbar from "@/Components/Navigation/Navbar";
 import Sidebar from "@/Components/Navigation/Sidebar";
-import { useState } from "react";
+import { useContext, useState } from "react";
 // Global (app defaults)
 import { config } from "@inertiajs/react";
 import DiscoveryContextProvider from "@/Context/Discovery";
 import Dropdown from "@/Context/Dropdown";
+import Modal, { ModalContext } from "@/Context/Modal";
 
 const App = ({ children }) => {
     config.set("form.recentlySuccessfulDuration", 5000);
@@ -18,6 +19,8 @@ const App = ({ children }) => {
         localStorage.setItem("toggle-sidebar", isShow);
     }
 
+    const {modal} = useContext(ModalContext);
+
     return (
         <>
             <Dropdown>
@@ -29,6 +32,7 @@ const App = ({ children }) => {
                             {children}
                         </main>
                     </div>
+                    {modal && <Modal.Content />}
                 </DiscoveryContextProvider>
             </Dropdown>
         </>

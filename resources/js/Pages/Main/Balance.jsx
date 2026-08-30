@@ -9,21 +9,20 @@ import CardAmountInfo from "@/Components/Elements/CardAmountInfo";
 import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
 import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
 import "tom-select/dist/css/tom-select.css";
+import { useContext } from "react";
+import { ModalContext } from "@/Context/Modal";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import FormBalance from "@/Components/Form/FormBalance";
-import OverlayModal from "@/Components/Partials/OverlayModal";
-import { useState } from "react";
 
-function Balance({ balanceDatas, customerDatas, categoryDatas }) {
-    const [showOverlay, setShowOverlay] = useState(false);
-    const toggleOverlay = () => setShowOverlay((prev) => !prev);
+function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
+    const { setModalContent, setModal } = useContext(ModalContext);
 
     const categories = [];
     const customers = [];
     balanceDatas.map((customer) => {
         customers.push(customer.customers.cust_name);
     });
-    categoryDatas.map((category) => {
+    numberCategoryDatas.map((category) => {
         categories.push(category.number.categories.category_name);
     });
 
@@ -36,6 +35,11 @@ function Balance({ balanceDatas, customerDatas, categoryDatas }) {
         { key: `number.number`, label: "nomor saldo" },
         { key: `number.categories.category_name`, label: "kategori saldo" },
     ];
+
+    const datasFormulir = {
+        cust: customerDatas,
+        numCat: numberCategoryDatas,
+    };
 
     return (
         <>
@@ -73,7 +77,23 @@ function Balance({ balanceDatas, customerDatas, categoryDatas }) {
                         </Button>
                         <Button
                             className="bg-light-sky text-blue-900 font-bold"
-                            clickFunc={toggleOverlay}
+                            clickFunc={() => {
+                                setModal((prev) => !prev);
+                                setModalContent(() => (
+                                    <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                        <ModalHeader
+                                            title={"nomor saldo baru"}
+                                            clickFunc={() => setModal(false)}
+                                        />
+
+                                        <FormBalance>
+                                            <FormBalance.Create
+                                                datasFormulir={datasFormulir}
+                                            />
+                                        </FormBalance>
+                                    </Card>
+                                ));
+                            }}
                         >
                             Tambah{" "}
                             <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
@@ -83,23 +103,9 @@ function Balance({ balanceDatas, customerDatas, categoryDatas }) {
                 <Table
                     columns={columns}
                     datas={balanceDatas}
-                    customerDatas={customerDatas}
+                    datasFormulir={datasFormulir}
                 />
             </App>
-            {showOverlay && (
-                <OverlayModal clickFunc={toggleOverlay}>
-                    <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                        <ModalHeader
-                            title={"nomor saldo baru"}
-                            clickFunc={toggleOverlay}
-                        />
-
-                        <FormBalance>
-                            <FormBalance.Create customerDatas={customerDatas} />
-                        </FormBalance>
-                    </Card>
-                </OverlayModal>
-            )}
         </>
     );
 }
