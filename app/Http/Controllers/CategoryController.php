@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return Inertia::render(('Main/Category'), ['datas' => Category::all()]);
+        return Inertia::render(('Main/Category'), ['datas' => Category::latest()->get()]);
     }
 
     public function store(Request $request)

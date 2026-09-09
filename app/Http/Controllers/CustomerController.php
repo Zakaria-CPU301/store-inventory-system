@@ -11,7 +11,7 @@ class CustomerController extends Controller
     public function index()
     {
         return Inertia::render('Main/Customer', [
-            'datas' => Customer::all()
+            'datas' => Customer::latest()->get()
         ]);
     }
 
