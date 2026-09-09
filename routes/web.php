@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,21 +32,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::prefix('customer')->name('customer.')->group(function (): void {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
-        Route::post('/tambah', [CustomerController::class, 'store'])->name('store');
+        Route::post('/insert', [CustomerController::class, 'store'])->name('store');
     });
     Route::prefix('category')->name('category.')->group(function (): void {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
-        Route::post('/tambah', [CategoryController::class, 'store'])->name('store');
+        Route::post('/insert', [CategoryController::class, 'store'])->name('store');
     });
     Route::prefix('product')->name('product.')->group(function (): void {
         Route::get('', [ProductController::class, 'index'])->name('index');
-        Route::post('/tambah', [ProductController::class, 'store'])->name('store');
+        Route::post('/insert', [ProductController::class, 'store'])->name('store');
     });
     Route::prefix('balance')->name('balance.')->group(function (): void {
         Route::match(['get', 'post'], '/', [BalanceController::class, 'index'])->name('index');
-        Route::post('/tambah', [BalanceController::class, 'store'])->name('store');
+        Route::post('/insert', [BalanceController::class, 'store'])->name('store');
         Route::put('/update', [BalanceController::class, 'update'])->name('update');
         Route::post('/destroy', [BalanceController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('transaction')->name('log.')->group(function () {
+        Route::get('print', [TransactionController::class, 'printIndex'])->name('print.index');
     });
     // Route::get('debt', [DebtController::class, 'index'])->name('debt');
     // Route::get('boarding', [BoardingHouseController::class, 'index'])->name('boarding');

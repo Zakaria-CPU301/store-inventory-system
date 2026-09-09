@@ -17,7 +17,13 @@ import { useForm } from "@inertiajs/react";
 import { useState } from "react";
 
 const Customer = ({ datas }) => {
-    const columns = [{ key: "cust_name", label: "nama pembeli", opsionalClassName: 'capitalize' }];
+    const columns = [
+        {
+            key: "cust_name",
+            label: "nama pembeli",
+            opsionalClassName: "capitalize",
+        },
+    ];
 
     const {
         data,
@@ -57,65 +63,67 @@ const Customer = ({ datas }) => {
                             clickFunc={toggleOverlay}
                             title={"tambah pelanggan baru"}
                         />
-                        <form onSubmit={submit}>
-                            <FormOverlay>
-                                <div className="grid grid-1">
-                                    <div className="">
-                                        <InputLabel value={"Nama pelanggan"} />
-                                        <TextInput
-                                            placeholder="masukkan nama pelanggan"
-                                            type={"text"}
-                                            name="customer"
-                                            value={data.customer}
-                                            onChange={(e) => {
-                                                setData(
-                                                    "customer",
-                                                    e.target.value,
-                                                );
-                                                clearErrors("customer");
-                                            }}
-                                        />
-                                        <InputError message={errors.customer} />
-                                    </div>
+                        <FormOverlay submitForm={submit}>
+                            <div className="grid grid-1">
+                                <div className="">
+                                    <InputLabel value={"Nama pelanggan"} />
+                                    <TextInput
+                                        placeholder="masukkan nama pelanggan"
+                                        type={"text"}
+                                        name="customer"
+                                        value={data.customer}
+                                        onChange={(e) => {
+                                            setData("customer", e.target.value);
+                                            clearErrors("customer");
+                                        }}
+                                    />
+                                    <InputError message={errors.customer} />
                                 </div>
+                            </div>
 
-                                <div className="flex justify-center mt-5">
-                                    <Button>
-                                        Kirim
-                                        <LoadingSession
-                                            processing={processing}
-                                        />
-                                    </Button>
-                                </div>
-                            </FormOverlay>
-                        </form>
+                            <div className="flex justify-center mt-5">
+                                <Button>
+                                    Kirim
+                                    <LoadingSession processing={processing} />
+                                </Button>
+                            </div>
+                        </FormOverlay>
                     </Card>
                 </OverlayModal>
             )}
             <App>
-                <HeaderInfo>
-                    <HeaderDesc
-                        title={`kelola pelanggan`}
-                        desc={`Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis rerum architecto saepe consequuntur, quibusdam natus modi, eveniet error quia ea aut, eos veritatis voluptatem praesentium suscipit odit reiciendis eum in.`}
-                    />
-                    <Card className={"bg-main-table p-4"}>
-                        <CardAmountInfo
-                            label={"total pelanggan terdaftar"}
-                            amount={datas.length}
-                        />
-                    </Card>
+                {() => (
+                    <>
+                        <HeaderInfo>
+                            <HeaderDesc
+                                title={`kelola pelanggan`}
+                                desc={`Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis rerum architecto saepe consequuntur, quibusdam natus modi, eveniet error quia ea aut, eos veritatis voluptatem praesentium suscipit odit reiciendis eum in.`}
+                            />
+                            <Card className={"bg-main-table p-4"}>
+                                <CardAmountInfo
+                                    label={"total pelanggan terdaftar"}
+                                    amount={datas.length}
+                                />
+                            </Card>
 
-                    <Card>
-                        <Button
-                            clickFunc={toggleOverlay}
-                            className="bg-light-sky text-blue-900 font-bold"
-                        >
-                            Tambah{" "}
-                            <i className="bi bi-plus-circle-fill text-lg"></i>
-                        </Button>
-                    </Card>
-                </HeaderInfo>
-                <Table columns={columns} datas={datas} iconEmpty={'bi bi-person-fill-x'} reason={'Tidak ada data pelanggan'} />
+                            <Card>
+                                <Button
+                                    clickFunc={toggleOverlay}
+                                    className="bg-light-sky text-blue-900 font-bold"
+                                >
+                                    Tambah{" "}
+                                    <i className="bi bi-plus-circle-fill text-lg"></i>
+                                </Button>
+                            </Card>
+                        </HeaderInfo>
+                        <Table
+                            columns={columns}
+                            datas={datas}
+                            iconEmpty={"bi bi-person-fill-x"}
+                            reason={"Tidak ada data pelanggan"}
+                        />
+                    </>
+                )}
             </App>
         </>
     );

@@ -39,16 +39,16 @@ const Category = ({ datas }) => {
         errors,
         clearErrors,
         recentlySuccessful,
-        reset
+        reset,
     } = useForm({
         category: "",
     });
 
     const submit = (e) => {
         e.preventDefault();
-        
+
         post(route("category.store"), {
-            onSuccess: () => reset()
+            onSuccess: () => reset(),
         });
     };
 
@@ -63,69 +63,66 @@ const Category = ({ datas }) => {
                         }
                     >
                         <ModalHeader
-                            clickFunc={toggleOverlay}
+                            closeModal={toggleOverlay}
                             title={"tambah kategori baru"}
                         />
-                        <form onSubmit={submit}>
-                            <FormOverlay>
-                                <div className="grid grid-1">
-                                    <div className="">
-                                        <InputLabel value={"Nama kategori"} />
-                                        <TextInput
-                                            placeholder="masukkan nama kategori"
-                                            type={"text"}
-                                            name="category"
-                                            value={data.category}
-                                            onChange={(e) => {
-                                                setData(
-                                                    "category",
-                                                    e.target.value,
-                                                );
-                                                clearErrors("category");
-                                            }}
-                                        />
-                                        <InputError message={errors.category} />
-                                    </div>
+                        <FormOverlay submitForm={submit}>
+                            <div className="grid grid-1">
+                                <div className="">
+                                    <InputLabel value={"Nama kategori"} />
+                                    <TextInput
+                                        placeholder="masukkan nama kategori"
+                                        type={"text"}
+                                        name="category"
+                                        value={data.category}
+                                        onChange={(e) => {
+                                            setData("category", e.target.value);
+                                            clearErrors("category");
+                                        }}
+                                    />
+                                    <InputError message={errors.category} />
                                 </div>
+                            </div>
 
-                                <div className="flex justify-center mt-5">
-                                    <Button>
-                                        Kirim
-                                        <LoadingSession
-                                            processing={processing}
-                                        />
-                                    </Button>
-                                </div>
-                            </FormOverlay>
-                        </form>
+                            <div className="flex justify-center mt-5">
+                                <Button type="submit">
+                                    Kirim
+                                    <LoadingSession processing={processing} />
+                                </Button>
+                            </div>
+                        </FormOverlay>
                     </Card>
                 </OverlayModal>
             )}
             <App>
-                <HeaderInfo>
-                    <HeaderDesc
-                        title={`kelola kategori`}
-                        desc={`Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis rerum architecto saepe consequuntur, quibusdam natus modi, eveniet error quia ea aut, eos veritatis voluptatem praesentium suscipit odit reiciendis eum in.`}
-                    />
-                    <Card className={"bg-main-table p-4"}>
-                        <CardAmountInfo
-                            label={"total kategori"}
-                            amount={datas.length}
-                        />
-                    </Card>
+                {() => (
+                    <>
+                        <HeaderInfo>
+                            <HeaderDesc
+                                title={`kelola kategori`}
+                                desc={`Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis rerum architecto saepe consequuntur, quibusdam natus modi, eveniet error quia ea aut, eos veritatis voluptatem praesentium suscipit odit reiciendis eum in.`}
+                            />
+                            <Card className={"bg-main-table p-4"}>
+                                <CardAmountInfo
+                                    label={"total kategori"}
+                                    amount={datas.length}
+                                />
+                            </Card>
 
-                    <Card>
-                        <Button
-                            clickFunc={toggleOverlay}
-                            className="bg-light-sky text-blue-900 font-bold"
-                        >
-                            Tambah{" "}
-                            <i className="bi bi-plus-circle-fill text-lg"></i>
-                        </Button>
-                    </Card>
-                </HeaderInfo>
+                            <Card>
+                                <Button
+                                    clickFunc={toggleOverlay}
+                                    className="bg-light-sky text-blue-900 font-bold"
+                                >
+                                    Tambah{" "}
+                                    <i className="bi bi-plus-circle-fill text-lg"></i>
+                                </Button>
+                            </Card>
+                        </HeaderInfo>
 
-                <Table datas={datas} columns={columns} />
+                        <Table datas={datas} columns={columns} />
+                    </>
+                )}
             </App>
         </>
     );

@@ -1,9 +1,8 @@
 import { useForm } from "@inertiajs/react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import FormOverlay from "../Partials/FormOverlay";
 import InputLabel from "../Elements/InputLabel";
 import InputError from "../Elements/InputError";
-import TextInput from "../Elements/TextInput";
 import LoadingSession from "../Elements/LoadingSession";
 import Button from "../Elements/Button";
 import SessionInformasion from "../Elements/SessionInformasion";
@@ -13,7 +12,7 @@ import { DiscoveryContext } from "@/Context/Discovery";
 
 export const FormBalanceContext = createContext();
 
-const FormBalance = ({ children }) => {
+const FormBalance = ({ children, setModal, setEndForm }) => {
     const {
         data,
         setData,
@@ -31,24 +30,25 @@ const FormBalance = ({ children }) => {
         discovery: [],
     });
 
-    const submitCreate = (e) => {
+    const handleCreate = (e) => {
         e.preventDefault();
 
         post(route("balance.store"));
     };
-    const submitUpdate = (e) => {
+    const handleUpdate = (e) => {
         e.preventDefault();
 
         put(route("balance.update"), {
-            preserveScroll: true
+            preserveScroll: true,
         });
     };
-    const submitDestroy = (e) => {
+
+    const handleDestroy = (e) => {
         e.preventDefault();
 
         post(route("balance.destroy"), {
-            preserveState: false,
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: () => setModal(false),
         });
     };
 
@@ -81,18 +81,20 @@ const FormBalance = ({ children }) => {
         }
     }, []);
 
+    useEffect(() => setEndForm(recentlySuccessful), [recentlySuccessful]);
+
     return (
         <FormBalanceContext.Provider
             value={{
-                submitCreate,
-                submitUpdate,
-                submitDestroy,
+                handleCreate,
+                handleUpdate,
+                handleDestroy,
                 data,
                 setData,
                 errors,
                 processing,
                 clearErrors,
-                recentlySuccessful
+                recentlySuccessful,
             }}
         >
             <SessionInformasion recentlySuccessful={recentlySuccessful} />
@@ -102,11 +104,11 @@ const FormBalance = ({ children }) => {
 };
 
 const Create = ({ datasFormulir }) => {
-    const { submitCreate, data, setData, errors, processing, clearErrors } =
+    const { handleCreate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
     return (
-        <FormOverlay handleSubmitForm={submitCreate}>
+        <FormOverlay submitForm={handleCreate}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ">
                 <div className="">
                     <InputLabel value={"Nama Pelanggan"} />
@@ -168,7 +170,7 @@ const Create = ({ datasFormulir }) => {
 
             <div className="flex w-full justify-center mt-5">
                 <Button
-                    type="submit"
+                    type="handle"
                     className={`flex gap-5 items-center text-xl bg-sky-300 font-semibold`}
                     disabled={processing}
                 >
@@ -181,21 +183,21 @@ const Create = ({ datasFormulir }) => {
 };
 
 const Edit = ({ datasFormulir, dataEdit }) => {
-    const { submitUpdate, data, setData, errors, processing, clearErrors } =
+    const { handleUpdate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
-        const {discovery} = useContext(DiscoveryContext);
+    const { discovery } = useContext(DiscoveryContext);
 
     useEffect(() => {
         setData("id", dataEdit.id);
         setData("customer", dataEdit.customers.cust_name);
         setData("number", dataEdit.number.number);
         setData("category", dataEdit.number.categories.category_name);
-        setData("discovery", discovery)
+        setData("discovery", discovery);
     }, []);
 
     return (
-        <FormOverlay handleSubmitForm={submitUpdate}>
+        <FormOverlay submitForm={handleUpdate}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="">
                     <InputLabel value={"Nama Pelanggan"} />
@@ -257,7 +259,7 @@ const Edit = ({ datasFormulir, dataEdit }) => {
 
             <div className="flex w-full justify-center mt-5">
                 <Button
-                    type="submit"
+                    type="handle"
                     className={`flex gap-5 items-center text-xl bg-sky-300 font-semibold`}
                     disabled={processing}
                 >
@@ -269,14 +271,14 @@ const Edit = ({ datasFormulir, dataEdit }) => {
     );
 };
 
-const Delete = ({ dataEdit, toggleOverlay }) => {
-    const { submitDestroy, setData, processing } =
+const Delete = ({ dataEdit }) => {
+    const { handleDestroy, setData, processing } =
         useContext(FormBalanceContext);
 
     useEffect(() => setData("id", dataEdit.id), []);
 
     return (
-        <FormOverlay handleSubmitForm={submitDestroy}>
+        <FormOverlay submitForm={handleDestroy}>
             <div className="flex flex-col w-full space-y-2.5">
                 <BennerText
                     label="nama pelanggan"
@@ -293,7 +295,7 @@ const Delete = ({ dataEdit, toggleOverlay }) => {
             </div>
             <div className="flex w-full justify-center mt-5">
                 <Button
-                    type="submit"
+                    type="handle"
                     className={`flex gap-5 items-center text-xl bg-red-700 text-indigo-100 font-semibold`}
                     disabled={processing}
                 >

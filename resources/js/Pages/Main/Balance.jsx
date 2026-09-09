@@ -13,10 +13,9 @@ import { useContext } from "react";
 import { ModalContext } from "@/Context/Modal";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import FormBalance from "@/Components/Form/FormBalance";
+import SessionInformasion from "@/Components/Elements/SessionInformasion";
 
 function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
-    const { setModalContent, setModal } = useContext(ModalContext);
-
     const categories = [];
     const customers = [];
     balanceDatas.map((customer) => {
@@ -42,71 +41,80 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
     };
 
     return (
-        <>
-            <App>
-                <HeaderInfo>
-                    <HeaderDesc
-                        title="daftar langganan saldo deposit"
-                        desc="LoremLorem ipsum dolor sit amet consectetur adipisicing elit. Iure unde nisi velit voluptates.Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure unde nisi velit voluptates."
-                    />
-
-                    <Card className="bg-[rgb(18,28,53)] p-4">
-                        <CardAmountInfo
-                            label="total nomor"
-                            amount={balanceDatas.length}
-                            unit="nomor"
+        <App>
+            {({ setModal, setModalContent, setEndForm }) => (
+                <>
+                    <HeaderInfo>
+                        <HeaderDesc
+                            title="daftar langganan saldo deposit"
+                            desc="LoremLorem ipsum dolor sit amet consectetur adipisicing elit. Iure unde nisi velit voluptates.Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure unde nisi velit voluptates."
                         />
-                    </Card>
-                    <Card className="bg-[rgb(18,28,53)] p-4">
-                        <CardAmountInfo
-                            label="total pelanggan"
-                            amount={[...new Set(customers)].length}
-                            unit="pelanggan"
+
+                        <Card className="bg-[rgb(18,28,53)] p-4">
+                            <CardAmountInfo
+                                label="total nomor"
+                                amount={balanceDatas.length}
+                                unit="nomor"
+                            />
+                        </Card>
+                        <Card className="bg-[rgb(18,28,53)] p-4">
+                            <CardAmountInfo
+                                label="total pelanggan"
+                                amount={[...new Set(customers)].length}
+                                unit="pelanggan"
+                            />
+                        </Card>
+                    </HeaderInfo>
+
+                    <HeaderAccessibillity>
+                        <AccessibillityFirst
+                            dataFilters={[...new Set(categories)]}
                         />
-                    </Card>
-                </HeaderInfo>
-
-                <HeaderAccessibillity>
-                    <AccessibillityFirst
-                        dataFilters={[...new Set(categories)]}
-                    />
-                    <AccesibillitySecond>
-                        <Button className="bg-main-table text-indigo-100 font-bold">
-                            Filter{" "}
-                            <i className="bi bi-funnel-fill text-lg text-purple-100"></i>
-                        </Button>
-                        <Button
-                            className="bg-light-sky text-blue-900 font-bold"
-                            clickFunc={() => {
-                                setModal((prev) => !prev);
-                                setModalContent(() => (
-                                    <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                                        <ModalHeader
-                                            title={"nomor saldo baru"}
-                                            clickFunc={() => setModal(false)}
-                                        />
-
-                                        <FormBalance>
-                                            <FormBalance.Create
-                                                datasFormulir={datasFormulir}
+                        <AccesibillitySecond>
+                            <Button className="bg-main-table text-indigo-100 font-bold">
+                                Filter{" "}
+                                <i className="bi bi-funnel-fill text-lg text-purple-100"></i>
+                            </Button>
+                            <Button
+                                className="bg-light-sky text-blue-900 font-bold"
+                                clickFunc={() => {
+                                    setModal(true);
+                                    setModalContent(
+                                        <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                            <ModalHeader
+                                                title={"nomor saldo baru"}
+                                                closeModal={() =>
+                                                    setModal(false)
+                                                }
                                             />
-                                        </FormBalance>
-                                    </Card>
-                                ));
-                            }}
-                        >
-                            Tambah{" "}
-                            <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
-                        </Button>
-                    </AccesibillitySecond>
-                </HeaderAccessibillity>
-                <Table
-                    columns={columns}
-                    datas={balanceDatas}
-                    datasFormulir={datasFormulir}
-                />
-            </App>
-        </>
+
+                                            <FormBalance setEndForm={setEndForm}>
+                                                <FormBalance.Create
+                                                    datasFormulir={
+                                                        datasFormulir
+                                                    }
+                                                />
+                                            </FormBalance>
+                                        </Card>,
+                                    );
+                                }}
+                            >
+                                Tambah{" "}
+                                <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
+                            </Button>
+                        </AccesibillitySecond>
+                    </HeaderAccessibillity>
+                    <Table
+                        setEndForm={setEndForm}
+                        setModal={setModal}
+                        setModalContent={setModalContent}
+                        columns={columns}
+                        datas={balanceDatas}
+                        datasFormulir={datasFormulir}
+                    />
+                </>
+            )}
+        </App>
     );
 }
 

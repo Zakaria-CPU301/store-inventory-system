@@ -1,12 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Button from "../Elements/Button";
 import SmoothTableHead from "../Elements/SmoothTableHead";
 import StandardTableHead from "../Elements/StandardTableHead";
-import OverlayModal from "./OverlayModal";
 import FormBalance from "../Form/FormBalance";
 import ModalHeader from "../Elements/ModalHeader";
 import Card from "./Card";
-import { usePage } from "@inertiajs/react";
 import Dropdown, { DropDownContext } from "@/Context/Dropdown";
 
 const Table = ({
@@ -17,18 +15,12 @@ const Table = ({
     reason,
     datasFormulir = null,
     className,
+    setModal,
+    setModalContent,
+    setEndForm
 }) => {
     const result = (obj, keyName) =>
         keyName.split(".").reduce((acc, key) => acc[key], obj);
-
-    const { url } = usePage();
-
-    const [showOverlay, setShowOverlay] = useState(false);
-    const toggleOverlay = () => setShowOverlay((prev) => !prev);
-
-    const [method, setMethod] = useState();
-
-    const [repoData, setRepoData] = useState([]);
 
     const { open, identity } = useContext(DropDownContext);
 
@@ -74,9 +66,35 @@ const Table = ({
                                                 <Button
                                                     className={""}
                                                     clickFunc={() => {
-                                                        toggleOverlay();
-                                                        setMethod("edit");
-                                                        setRepoData(data);
+                                                        setModal(true);
+                                                        setModalContent(
+                                                            <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                                                <ModalHeader
+                                                                    title={
+                                                                        "edit nomor"
+                                                                    }
+                                                                    closeModal={() =>
+                                                                        setModal(
+                                                                            false,
+                                                                        )
+                                                                    }
+                                                                    iconTitle={
+                                                                        "pencil"
+                                                                    }
+                                                                />
+
+                                                                <FormBalance setEndForm={setEndForm}>
+                                                                    <FormBalance.Update
+                                                                        datasFormulir={
+                                                                            datasFormulir
+                                                                        }
+                                                                        dataEdit={
+                                                                            data
+                                                                        }
+                                                                    />
+                                                                </FormBalance>
+                                                            </Card>,
+                                                        );
                                                     }}
                                                 >
                                                     <i
@@ -87,9 +105,30 @@ const Table = ({
                                                 <Button
                                                     className={""}
                                                     clickFunc={() => {
-                                                        toggleOverlay();
-                                                        setMethod("delete");
-                                                        setRepoData(data);
+                                                        setModal(true);
+                                                        setModalContent(
+                                                            <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                                                <ModalHeader
+                                                                    title={
+                                                                        "hapus nomor"
+                                                                    }
+                                                                    closeModal={() =>
+                                                                        setModal(false)
+                                                                    }
+                                                                    iconTitle={
+                                                                        "trash"
+                                                                    }
+                                                                />
+
+                                                                <FormBalance setModal={setModal} setEndForm={setEndForm}>
+                                                                    <FormBalance.Destroy
+                                                                        dataEdit={
+                                                                            data
+                                                                        }
+                                                                    />
+                                                                </FormBalance>
+                                                            </Card>,
+                                                        );
                                                     }}
                                                 >
                                                     <i
@@ -119,44 +158,6 @@ const Table = ({
                     </tbody>
                 </table>
             </div>
-
-            {showOverlay && (
-                <OverlayModal clickFunc={toggleOverlay}>
-                    <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                        {url === "/balance" &&
-                            (method === "edit" ? (
-                                <>
-                                    <ModalHeader
-                                        title={"edit nomor"}
-                                        clickFunc={toggleOverlay}
-                                        iconTitle={"pencil"}
-                                    />
-
-                                    <FormBalance>
-                                        <FormBalance.Update
-                                            datasFormulir={datasFormulir}
-                                            dataEdit={repoData}
-                                        />
-                                    </FormBalance>
-                                </>
-                            ) : (
-                                <>
-                                    <ModalHeader
-                                        title={"hapus nomor"}
-                                        clickFunc={toggleOverlay}
-                                        iconTitle={"trash"}
-                                    />
-
-                                    <FormBalance>
-                                        <FormBalance.Destroy
-                                            dataEdit={repoData}
-                                        />
-                                    </FormBalance>
-                                </>
-                            ))}
-                    </Card>
-                </OverlayModal>
-            )}
         </>
     );
 };

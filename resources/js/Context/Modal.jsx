@@ -1,5 +1,5 @@
 import OverlayModal from "@/Components/Partials/OverlayModal";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const ModalContext = createContext();
 
