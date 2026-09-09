@@ -15,8 +15,8 @@ const Scanning = ({}) => {
                 {
                     fps: 10,
                     qrbox: {
-                        width: 350,
-                        height: 200,
+                        width: 650,
+                        height: 400,
                     },
                     aspectRatio: 1.777778,
                 },
@@ -59,9 +59,9 @@ const Scanning = ({}) => {
                     ></div>
                 </div>
             </div>
-            <div className="w-1/2 h-full flex px-4">
+            {/* <div className="w-1/2 h-full flex px-4">
                 <h1 className="font-extrabold text-2xl text-black/90">Hasil</h1>
-            </div>
+            </div> */}
         </div>
     );
 };
