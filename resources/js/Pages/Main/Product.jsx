@@ -8,13 +8,9 @@ import Card from "@/Components/Partials/Card";
 import HeaderAccessibillity from "@/Components/Partials/HeaderAccessibillity";
 import HeaderDesc from "@/Components/Partials/HeaderDesc";
 import HeaderInfo from "@/Components/Partials/HeaderInfo";
-import { ModalContext } from "@/Context/Modal";
 import App from "@/Layouts/App";
-import { useContext } from "react";
 
 const Product = ({ productDatas }) => {
-    const { setModal, setModalContent } = useContext(ModalContext);
-
     const categories = [];
     productDatas.map((product) => {
         categories.push(product.categories.category_name);
@@ -22,7 +18,7 @@ const Product = ({ productDatas }) => {
 
     return (
         <App>
-            {({}) => (
+            {({setModal, setModalContent, setEndForm}) => (
                 <>
                     <HeaderInfo>
                         <HeaderDesc
@@ -50,7 +46,7 @@ const Product = ({ productDatas }) => {
                             <Button
                                 className="bg-light-sky text-blue-900 font-bold"
                                 clickFunc={() => {
-                                    setModal((prev) => !prev);
+                                    setModal(true);
                                     setModalContent(() => (
                                         <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
                                             <ModalHeader
@@ -60,7 +56,7 @@ const Product = ({ productDatas }) => {
                                                 }
                                             />
 
-                                            <FormProduct>
+                                            <FormProduct setEndForm={setEndForm}>
                                                 <FormProduct.Create
                                                     datasFormulir={productDatas}
                                                 />
