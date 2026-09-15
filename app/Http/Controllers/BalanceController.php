@@ -16,10 +16,10 @@ class BalanceController extends Controller
     public function filters(Object $query, array $discovery)
     {
         return $query->whereHas('number.categories', function ($e) use ($discovery) {
-            $e->where('category_name', 'LIKE', "%{$discovery[1]}%");
+            $e->where('category_name', 'LIKE', "%{$discovery['category']}%");
         })
             ->where(function ($query) use ($discovery) {
-                $query->when($discovery[0], function ($q, $value) {
+                $query->when($discovery['keyword'], function ($q, $value) {
                     $q->whereHas('customers', function ($e) use ($value) {
                         $e->where('cust_name', 'LIKE', "%{$value}%");
                     });
@@ -106,17 +106,15 @@ class BalanceController extends Controller
         try {
             DB::beginTransaction();
 
-            $existData = NumberCustomer::where([
+            if (NumberCustomer::where([
                 'number_id' => $number->id,
                 'customer_id' => $customer->id,
-            ])->first();
-
-            if ($existData) {
+            ])->exists()) {
                 $message = 'tidak ada perubahan data!';
                 $icon = 'exclamation-circle';
                 $className = 'bg-yellow-600';
             } else {
-                NumberCustomer::find($request->id)->update([  
+                NumberCustomer::find($request->id)->update([
                     'number_id' => $number->id,
                     'customer_id' => $customer->id,
                 ]);
@@ -139,7 +137,8 @@ class BalanceController extends Controller
 
     public function destroy(Request $request)
     {
-        NumberCustomer::find($request->id)->delete();
-        return Inertia::flash(['success' => 'nomor berhasil di hapus', 'icon' => 'check-circle'])->back();
+        Customer::find($request->id)->delete();
+        Inertia::flash(['success' => 'nomor saldo berhasil di hapus', 'icon' => 'check-circle', 'classname' => 'bg-green-500'])->back();
+        return back()->with('discovery', $request->discovery);
     }
 }
