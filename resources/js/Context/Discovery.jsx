@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage, useRemember } from "@inertiajs/react";
 import React, { createContext, useState } from "react";
 
 export const DiscoveryContext = createContext();
@@ -8,20 +8,41 @@ const DiscoveryContextProvider = ({ children }) => {
         discovery: [],
     });
 
-    const [category, setCategory] = useState(null);
+    const { props } = usePage();
+
     const [keyword, setKeyword] = useState(null);
     
+    const [category, setCategory] = useState(null);
+
+    const [attribute, setAttribute] = useState(() => {
+        return props.attribute ?? 'kategori';
+    });
+
     const discoverySubmit = (e) => {
         e.preventDefault();
 
-        setData("discovery", [keyword, category]);
+        setData("discovery", {
+            keyword: keyword,
+            category: category,
+            attribute: attribute,
+        });
 
-        post(route(route().current()), {preserveScroll: true});
+        post(route(route().current()), { preserveScroll: true });
     };
 
     return (
         <DiscoveryContext.Provider
-            value={{ discoverySubmit, category, setCategory, keyword, setKeyword, processing, discovery: data.discovery }}
+            value={{
+                discoverySubmit,
+                processing,
+                discovery: data.discovery,
+                category,
+                setCategory,
+                keyword,
+                setKeyword,
+                attribute,
+                setAttribute,
+            }}
         >
             {children}
         </DiscoveryContext.Provider>
