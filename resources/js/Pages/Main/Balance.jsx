@@ -42,7 +42,7 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
 
     return (
         <App>
-            {({ setModal, setModalContent, setEndForm }) => (
+            {({ setModal, setModalContent }) => (
                 <>
                     <HeaderInfo>
                         <HeaderDesc
@@ -68,6 +68,7 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
 
                     <HeaderAccessibillity>
                         <AccessibillityFirst
+                            all={true}
                             dataFilters={[...new Set(categories)]}
                         />
                         <AccesibillitySecond>
@@ -88,7 +89,7 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
                                                 }
                                             />
 
-                                            <FormBalance setEndForm={setEndForm}>
+                                            <FormBalance>
                                                 <FormBalance.Create
                                                     datasFormulir={
                                                         datasFormulir
@@ -105,7 +106,6 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
                         </AccesibillitySecond>
                     </HeaderAccessibillity>
                     <Table
-                        setEndForm={setEndForm}
                         setModal={setModal}
                         setModalContent={setModalContent}
                         columns={columns}
