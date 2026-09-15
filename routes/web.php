@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\BalanceController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,12 +33,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('index');
     });
     Route::prefix('customer')->name('customer.')->group(function (): void {
-        Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::match(['post', 'get'], '/', [CustomerController::class, 'index'])->name('index');
         Route::post('/insert', [CustomerController::class, 'store'])->name('store');
+        Route::put('/update', [CustomerController::class, 'update'])->name('update');
+        Route::post('/destroy', [CustomerController::class, 'destroy'])->name('destroy');
     });
-    Route::prefix('category')->name('category.')->group(function (): void {
-        Route::get('/', [CategoryController::class, 'index'])->name('index');
-        Route::post('/insert', [CategoryController::class, 'store'])->name('store');
+    Route::prefix('attribute')->name('attribute.')->group(function (): void {
+        Route::match(['get', 'post'], '/', [AttributeController::class, 'index'])->name('index');
+        Route::post('/category/insert', [CategoryController::class, 'store'])->name('category.store');
+        Route::put('/category/update', [CategoryController::class, 'update'])->name('category.update');
+        Route::post('/category/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
+        Route::post('/unit/insert', [UnitController::class, 'store'])->name('unit.store');
+        Route::put('/unit/update', [UnitController::class, 'update'])->name('unit.update');
+        Route::post('/unit/destroy', [UnitController::class, 'destroy'])->name('unit.destroy');
     });
     Route::prefix('product')->name('product.')->group(function (): void {
         Route::get('', [ProductController::class, 'index'])->name('index');

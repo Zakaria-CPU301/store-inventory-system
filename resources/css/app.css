@@ -1,32 +1,35 @@
 @import "tailwindcss";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../storage/framework/views/*.php";
 @source "../**/*.blade.php";
 @source "../**/*.js";
 
 .bg-main-navbar {
-    background-color: rgb(3,8,26);
+    background-color: rgb(3, 8, 26);
 }
 
 .bg-main-table {
-    background-color: rgb(18,28,53);
+    background-color: rgb(18, 28, 53);
 }
 
 .bg-table-head {
-    background-color: rgb(13,23,46);
+    background-color: rgb(13, 23, 46);
 }
 
 .bg-main-layout {
-    background-color: rgb(5,14,31);
+    background-color: rgb(5, 14, 31);
 }
 
 .bg-light-sky {
-    background-color: rgb(218,203,255);
+    background-color: rgb(218, 203, 255);
 }
 
 .bg-powderblue {
     background-color: powderblue;
+}
+
+.input::placeholder {
+    text-transform: capitalize;
 }
