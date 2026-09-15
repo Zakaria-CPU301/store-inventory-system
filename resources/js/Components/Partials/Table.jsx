@@ -6,6 +6,11 @@ import FormBalance from "../Form/FormBalance";
 import ModalHeader from "../Elements/ModalHeader";
 import Card from "./Card";
 import Dropdown, { DropDownContext } from "@/Context/Dropdown";
+import { usePage } from "@inertiajs/react";
+import { DiscoveryContext } from "@/Context/Discovery";
+import FormCategory from "../Form/FormCategory";
+import FormUnit from "../Form/FormUnit";
+import FormCustomer from "../Form/FormCustomer";
 
 const Table = ({
     firstAction = null,
@@ -17,19 +22,26 @@ const Table = ({
     className,
     setModal,
     setModalContent,
-    setEndForm
 }) => {
     const result = (obj, keyName) =>
         keyName.split(".").reduce((acc, key) => acc[key], obj);
 
     const { open, identity } = useContext(DropDownContext);
 
+    const page = usePage();
+
+    // console.log(usePage());
+
+    // console.log(
+    //     page.url === "/attribute" &&
+    //         (page.props.attribute === "kategori" ||
+    //             page.props.attribute === null),
+    // );
     return (
         <>
             <div className="w-full relative">
                 <table className="border-collapse w-full bg-main-table rounded-b-2xl">
-                    {route().current("customer.index") ||
-                    route().current("category.index") ? (
+                    {route().current("customer.index") ? (
                         <StandardTableHead columns={columns} />
                     ) : (
                         <SmoothTableHead columns={columns} />
@@ -71,7 +83,31 @@ const Table = ({
                                                             <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
                                                                 <ModalHeader
                                                                     title={
-                                                                        "edit nomor"
+                                                                        page.url ===
+                                                                            "/attribute" &&
+                                                                        (page
+                                                                            .props
+                                                                            .attribute ===
+                                                                            "kategori" ||
+                                                                            page
+                                                                                .props
+                                                                                .attribute ===
+                                                                                null)
+                                                                            ? "edit kategori"
+                                                                            : page.url ===
+                                                                                    "/attribute" &&
+                                                                                page
+                                                                                    .props
+                                                                                    .attribute ===
+                                                                                    "satuan"
+                                                                              ? "edit satuan"
+                                                                              : page.url ===
+                                                                                  "/customer"
+                                                                                ? "edit pelanggan"
+                                                                                : page.url ===
+                                                                                    "/balance"
+                                                                                  ? "edit nomor saldo"
+                                                                                  : null
                                                                     }
                                                                     closeModal={() =>
                                                                         setModal(
@@ -83,16 +119,61 @@ const Table = ({
                                                                     }
                                                                 />
 
-                                                                <FormBalance setEndForm={setEndForm}>
-                                                                    <FormBalance.Update
-                                                                        datasFormulir={
-                                                                            datasFormulir
-                                                                        }
-                                                                        dataEdit={
-                                                                            data
-                                                                        }
-                                                                    />
-                                                                </FormBalance>
+                                                                {page.url ===
+                                                                    "/attribute" &&
+                                                                (page.props
+                                                                    .attribute ===
+                                                                    "kategori" ||
+                                                                    page.props
+                                                                        .attribute ===
+                                                                        null) ? (
+                                                                    <FormCategory>
+                                                                        <FormCategory.Update
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormCategory>
+                                                                ) : page.url ===
+                                                                      "/attribute" &&
+                                                                  page.props
+                                                                      .attribute ===
+                                                                      "satuan" ? (
+                                                                    <FormUnit>
+                                                                        <FormUnit.Update
+                                                                            datasFormulir={
+                                                                                datasFormulir
+                                                                            }
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormUnit>
+                                                                ) : page.url ===
+                                                                  "/customer" ? (
+                                                                    <FormCustomer>
+                                                                        <FormCustomer.Update
+                                                                            datasFormulir={
+                                                                                datasFormulir
+                                                                            }
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormCustomer>
+                                                                ) : page.url ===
+                                                                  "/balance" ? (
+                                                                    <FormBalance>
+                                                                        <FormBalance.Update
+                                                                            datasFormulir={
+                                                                                datasFormulir
+                                                                            }
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormBalance>
+                                                                ) : null}
                                                             </Card>,
                                                         );
                                                     }}
@@ -110,23 +191,97 @@ const Table = ({
                                                             <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
                                                                 <ModalHeader
                                                                     title={
-                                                                        "hapus nomor"
+                                                                        page.url ===
+                                                                            "/attribute" &&
+                                                                        (page
+                                                                            .props
+                                                                            .attribute ===
+                                                                            "kategori" ||
+                                                                            page
+                                                                                .props
+                                                                                .attribute ===
+                                                                                null)
+                                                                            ? "hapus kategori"
+                                                                            : page.url ===
+                                                                                    "/attribute" &&
+                                                                                page
+                                                                                    .props
+                                                                                    .attribute ===
+                                                                                    "satuan"
+                                                                              ? "hapus satuan"
+                                                                              : page.url ===
+                                                                                  "/customer"
+                                                                                ? "hapus pelanggan"
+                                                                                : page.url ===
+                                                                                    "/balance"
+                                                                                  ? "hapus nomor saldo"
+                                                                                  : null
                                                                     }
                                                                     closeModal={() =>
-                                                                        setModal(false)
+                                                                        setModal(
+                                                                            false,
+                                                                        )
                                                                     }
                                                                     iconTitle={
                                                                         "trash"
                                                                     }
                                                                 />
 
-                                                                <FormBalance setModal={setModal} setEndForm={setEndForm}>
-                                                                    <FormBalance.Destroy
-                                                                        dataEdit={
-                                                                            data
-                                                                        }
-                                                                    />
-                                                                </FormBalance>
+                                                                {page.url ===
+                                                                    "/attribute" &&
+                                                                (page.props
+                                                                    .attribute ===
+                                                                    "kategori" ||
+                                                                    page.props
+                                                                        .attribute ===
+                                                                        null) ? (
+                                                                    <FormCategory>
+                                                                        <FormCategory.Destroy
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormCategory>
+                                                                ) : page.url ===
+                                                                      "/attribute" &&
+                                                                  page.props
+                                                                      .attribute ===
+                                                                      "satuan" ? (
+                                                                    <FormUnit>
+                                                                        <FormUnit.Destroy
+                                                                            datasFormulir={
+                                                                                datasFormulir
+                                                                            }
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormUnit>
+                                                                ) : page.url ===
+                                                                  "/customer" ? (
+                                                                    <FormCustomer setModal={setModal}>
+                                                                        <FormCustomer.Destroy
+                                                                            datasFormulir={
+                                                                                datasFormulir
+                                                                            }
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormCustomer>
+                                                                ) : page.url ===
+                                                                  "/balance" ? (
+                                                                    <FormBalance>
+                                                                        <FormBalance.Destroy
+                                                                            datasFormulir={
+                                                                                datasFormulir
+                                                                            }
+                                                                            dataColumn={
+                                                                                data
+                                                                            }
+                                                                        />
+                                                                    </FormBalance>
+                                                                ) : null}
                                                             </Card>,
                                                         );
                                                     }}
