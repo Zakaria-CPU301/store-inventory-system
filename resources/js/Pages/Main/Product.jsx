@@ -10,7 +10,7 @@ import HeaderDesc from "@/Components/Partials/HeaderDesc";
 import HeaderInfo from "@/Components/Partials/HeaderInfo";
 import App from "@/Layouts/App";
 
-const Product = ({ productDatas }) => {
+const Product = ({ productDatas, categoryDatas }) => {
     const categories = [];
     productDatas.map((product) => {
         categories.push(product.categories.category_name);
@@ -18,7 +18,7 @@ const Product = ({ productDatas }) => {
 
     return (
         <App>
-            {({setModal, setModalContent, setEndForm}) => (
+            {({setModal, setModalContent}) => (
                 <>
                     <HeaderInfo>
                         <HeaderDesc
@@ -50,15 +50,15 @@ const Product = ({ productDatas }) => {
                                     setModalContent(() => (
                                         <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
                                             <ModalHeader
-                                                title={"nomor saldo baru"}
+                                                title={"Produk Baru"}
                                                 clickFunc={() =>
                                                     setModal(false)
                                                 }
                                             />
 
-                                            <FormProduct setEndForm={setEndForm}>
+                                            <FormProduct>
                                                 <FormProduct.Create
-                                                    datasFormulir={productDatas}
+                                                    datasFormulir={categoryDatas}
                                                 />
                                             </FormProduct>
                                         </Card>
@@ -79,7 +79,7 @@ const Product = ({ productDatas }) => {
                                         {data.categories.category_name}
                                     </span>
                                     <img
-                                        src={data.product_image}
+                                        src={`/storage/image-products/${data.product_image}`}
                                         alt={data.product_name}
                                         className="w-full h-full object-cover object-center"
                                     />

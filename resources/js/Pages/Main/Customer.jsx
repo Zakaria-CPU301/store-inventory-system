@@ -5,7 +5,7 @@ import InputLabel from "@/Components/Elements/InputLabel";
 import LoadingSession from "@/Components/Elements/LoadingSession";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import SessionInformasion from "@/Components/Elements/SessionInformasion";
-import TextInput from "@/Components/Elements/TextInput";
+import Input from "@/Components/Elements/Input";
 import Card from "@/Components/Partials/Card";
 import FormOverlay from "@/Components/Partials/FormOverlay";
 import HeaderDesc from "@/Components/Partials/HeaderDesc";
@@ -15,6 +15,7 @@ import Table from "@/Components/Partials/Table";
 import App from "@/Layouts/App";
 import { useForm } from "@inertiajs/react";
 import { useState } from "react";
+import FormCustomer from "@/Components/Form/FormCustomer";
 
 const Customer = ({ datas }) => {
     const columns = [
@@ -22,6 +23,10 @@ const Customer = ({ datas }) => {
             key: "cust_name",
             label: "nama pembeli",
             opsionalClassName: "capitalize",
+        },
+        {
+            key: "telp",
+            label: "nomor telepon",
         },
     ];
 
@@ -51,48 +56,8 @@ const Customer = ({ datas }) => {
 
     return (
         <>
-            <SessionInformasion recentlySuccessful={recentlySuccessful} />
-            {showOverlay && (
-                <OverlayModal clickFunc={toggleOverlay}>
-                    <Card
-                        className={
-                            "bg-powderblue w-4/5 md:w-2/4 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl"
-                        }
-                    >
-                        <ModalHeader
-                            clickFunc={toggleOverlay}
-                            title={"tambah pelanggan baru"}
-                        />
-                        <FormOverlay submitForm={submit}>
-                            <div className="grid grid-1">
-                                <div className="">
-                                    <InputLabel value={"Nama pelanggan"} />
-                                    <TextInput
-                                        placeholder="masukkan nama pelanggan"
-                                        type={"text"}
-                                        name="customer"
-                                        value={data.customer}
-                                        onChange={(e) => {
-                                            setData("customer", e.target.value);
-                                            clearErrors("customer");
-                                        }}
-                                    />
-                                    <InputError message={errors.customer} />
-                                </div>
-                            </div>
-
-                            <div className="flex justify-center mt-5">
-                                <Button>
-                                    Kirim
-                                    <LoadingSession processing={processing} />
-                                </Button>
-                            </div>
-                        </FormOverlay>
-                    </Card>
-                </OverlayModal>
-            )}
             <App>
-                {() => (
+                {({ setModal, setModalContent }) => (
                     <>
                         <HeaderInfo>
                             <HeaderDesc
@@ -108,7 +73,27 @@ const Customer = ({ datas }) => {
 
                             <Card>
                                 <Button
-                                    clickFunc={toggleOverlay}
+                                    clickFunc={() => {
+                                        setModal(true);
+                                        setModalContent(
+                                            <Card
+                                                className={
+                                                    "bg-powderblue w-4/5 md:w-2/4 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl"
+                                                }
+                                            >
+                                                <ModalHeader
+                                                    title={"Pelanggan Baru"}
+                                                    closeModal={() =>
+                                                        setModal(false)
+                                                    }
+                                                />
+
+                                                <FormCustomer>
+                                                    <FormCustomer.Create />
+                                                </FormCustomer>
+                                            </Card>,
+                                        );
+                                    }}
                                     className="bg-light-sky text-blue-900 font-bold"
                                 >
                                     Tambah{" "}
@@ -117,6 +102,8 @@ const Customer = ({ datas }) => {
                             </Card>
                         </HeaderInfo>
                         <Table
+                            setModalContent={setModalContent}
+                            setModal={setModal}
                             columns={columns}
                             datas={datas}
                             iconEmpty={"bi bi-person-fill-x"}
