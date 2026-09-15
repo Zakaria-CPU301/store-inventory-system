@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'routeName' => $request->route()->getName(),
+            'attribute' => $request->session()->get('attribute'),
         ];
     }
 }
