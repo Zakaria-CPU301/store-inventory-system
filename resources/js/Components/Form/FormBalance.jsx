@@ -5,14 +5,13 @@ import InputLabel from "../Elements/InputLabel";
 import InputError from "../Elements/InputError";
 import LoadingSession from "../Elements/LoadingSession";
 import Button from "../Elements/Button";
-import SessionInformasion from "../Elements/SessionInformasion";
 import TomSelect from "tom-select";
 import BennerText from "../Elements/BennerText";
 import { DiscoveryContext } from "@/Context/Discovery";
 
 export const FormBalanceContext = createContext();
 
-const FormBalance = ({ children, setModal, setEndForm }) => {
+const FormBalance = ({ children, setModal }) => {
     const {
         data,
         setData,
@@ -81,8 +80,6 @@ const FormBalance = ({ children, setModal, setEndForm }) => {
         }
     }, []);
 
-    useEffect(() => setEndForm(recentlySuccessful), [recentlySuccessful]);
-
     return (
         <FormBalanceContext.Provider
             value={{
@@ -97,7 +94,6 @@ const FormBalance = ({ children, setModal, setEndForm }) => {
                 recentlySuccessful,
             }}
         >
-            <SessionInformasion recentlySuccessful={recentlySuccessful} />
             {children}
         </FormBalanceContext.Provider>
     );
@@ -114,7 +110,7 @@ const Create = ({ datasFormulir }) => {
                     <InputLabel value={"Nama Pelanggan"} />
                     <select
                         className="select-create"
-                        defaultValue={data.customer}
+                        defaultValue={dataColumn.customer}
                         onChange={(e) => {
                             setData("customer", e.target.value);
                             clearErrors("customer");
@@ -133,7 +129,7 @@ const Create = ({ datasFormulir }) => {
                 <div className="">
                     <InputLabel value={"Nomor Deposit"} />
                     <select
-                        value={data.number}
+                        value={dataColumn.number}
                         onChange={(e) => {
                             setData("number", e.target.value);
                             clearErrors("number");
@@ -151,7 +147,7 @@ const Create = ({ datasFormulir }) => {
                 </div>
                 <div className="">
                     <select
-                        value={data.category}
+                        value={dataColumn.category}
                         onChange={(e) => {
                             setData("category", e.target.value);
                             clearErrors("category");
@@ -182,17 +178,17 @@ const Create = ({ datasFormulir }) => {
     );
 };
 
-const Edit = ({ datasFormulir, dataEdit }) => {
+const Edit = ({ datasFormulir, dataColumn }) => {
     const { handleUpdate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
     const { discovery } = useContext(DiscoveryContext);
 
     useEffect(() => {
-        setData("id", dataEdit.id);
-        setData("customer", dataEdit.customers.cust_name);
-        setData("number", dataEdit.number.number);
-        setData("category", dataEdit.number.categories.category_name);
+        setData("id", dataColumn.id);
+        setData("customer", dataColumn.customers.cust_name);
+        setData("number", dataColumn.number.number);
+        setData("category", dataColumn.number.categories.category_name);
         setData("discovery", discovery);
     }, []);
 
@@ -203,7 +199,7 @@ const Edit = ({ datasFormulir, dataEdit }) => {
                     <InputLabel value={"Nama Pelanggan"} />
                     <select
                         className="select-create"
-                        defaultValue={dataEdit.customers.cust_name}
+                        defaultValue={dataColumn.customers.cust_name}
                         onChange={(e) => {
                             setData("customer", e.target.value);
                             clearErrors("customer");
@@ -222,7 +218,7 @@ const Edit = ({ datasFormulir, dataEdit }) => {
                 <div className="">
                     <InputLabel value={"Nomor Deposit"} />
                     <select
-                        defaultValue={dataEdit.number.number}
+                        defaultValue={dataColumn.number.number}
                         onChange={(e) => {
                             setData("number", e.target.value);
                             clearErrors("number");
@@ -240,7 +236,9 @@ const Edit = ({ datasFormulir, dataEdit }) => {
                 </div>
                 <div className="">
                     <select
-                        defaultValue={dataEdit.number.categories.category_name}
+                        defaultValue={
+                            dataColumn.number.categories.category_name
+                        }
                         onChange={(e) => {
                             setData("category", e.target.value);
                             clearErrors("category");
@@ -271,26 +269,31 @@ const Edit = ({ datasFormulir, dataEdit }) => {
     );
 };
 
-const Delete = ({ dataEdit }) => {
+const Destroy = ({ dataColumn }) => {
     const { handleDestroy, setData, processing } =
         useContext(FormBalanceContext);
 
-    useEffect(() => setData("id", dataEdit.id), []);
+    const { discovery } = useContext(DiscoveryContext);
+
+    useEffect(() => {
+        setData("id", dataColumn.id);
+        setData("discovery", discovery);
+    }, []);
 
     return (
         <FormOverlay submitForm={handleDestroy}>
             <div className="flex flex-col w-full space-y-2.5">
                 <BennerText
                     label="nama pelanggan"
-                    dataContent={dataEdit.customers.cust_name}
+                    dataContent={dataColumn.customers.cust_name}
                 />
                 <BennerText
                     label="nomor"
-                    dataContent={dataEdit.number.number}
+                    dataContent={dataColumn.number.number}
                 />
                 <BennerText
                     label="kategori nomor"
-                    dataContent={dataEdit.number.categories.category_name}
+                    dataContent={dataColumn.number.categories.category_name}
                 />
             </div>
             <div className="flex w-full justify-center mt-5">
@@ -309,5 +312,5 @@ const Delete = ({ dataEdit }) => {
 
 FormBalance.Create = Create;
 FormBalance.Update = Edit;
-FormBalance.Destroy = Delete;
+FormBalance.Destroy = Destroy;
 export default FormBalance;

@@ -3,7 +3,6 @@ import { usePage } from "@inertiajs/react";
 
 const SessionInformasion = ({ message, recentlySuccessful = false }) => {
     const { flash } = usePage();
-
     return (
         <>
             <div
