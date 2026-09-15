@@ -1,11 +1,19 @@
 import React, { useContext } from "react";
 import Button from "./Button";
 import { DiscoveryContext } from "@/Context/Discovery";
+import { usePage } from "@inertiajs/react";
 
-const AccessibillityFirst = ({ dataFilters }) => {
-    const { discoverySubmit, setCategory, category, processing } =
-        useContext(DiscoveryContext);
+const AccessibillityFirst = ({ dataFilters, all = false }) => {
+    const {
+        discoverySubmit,
+        processing,
+        setCategory,
+        category,
+        attribute,
+        setAttribute,
+    } = useContext(DiscoveryContext);
 
+    const { url } = usePage();
     return (
         <div
             className={`h-full flex items-center bg-table-head
@@ -25,30 +33,38 @@ const AccessibillityFirst = ({ dataFilters }) => {
                 >
                     {dataFilters.length ? (
                         <>
-                            <Button
-                                disabled={processing}
-                                type="submit"
-                                {...(category === null
-                                    ? {
-                                          className:
-                                              "bg-indigo-100 font-bold text-[bg-main-table]",
-                                      }
-                                    : {})}
-                                clickFunc={() => setCategory(null)}
-                            >
-                                semua
-                            </Button>
-                            {dataFilters.map((dataFilter, index) => (
+                            {all && (
                                 <Button
                                     disabled={processing}
                                     type="submit"
-                                    {...(dataFilter === category
+                                    {...(category === null
                                         ? {
                                               className:
                                                   "bg-indigo-100 font-bold text-[bg-main-table]",
                                           }
                                         : {})}
-                                    clickFunc={() => setCategory(dataFilter)}
+                                    clickFunc={() => setCategory(null)}
+                                >
+                                    semua
+                                </Button>
+                            )}
+                            {dataFilters.map((dataFilter, index) => (
+                                <Button
+                                    disabled={processing}
+                                    type="submit"
+                                    {...(dataFilter === category ||
+                                    dataFilter === attribute
+                                        ? {
+                                              className:
+                                                  "bg-indigo-100 font-bold text-[bg-main-table]",
+                                          }
+                                        : {})}
+                                    clickFunc={() => {
+                                        if (url === "/balance")
+                                            setCategory(dataFilter);
+                                        else if (url === "/attribute")
+                                            setAttribute(dataFilter);
+                                    }}
                                     key={index}
                                 >
                                     {dataFilter}
