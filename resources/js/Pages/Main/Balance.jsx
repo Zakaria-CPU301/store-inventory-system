@@ -91,7 +91,7 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
 
                                             <FormBalance>
                                                 <FormBalance.Create
-                                                    datasFormulir={
+                                                    dataColumn={
                                                         datasFormulir
                                                     }
                                                 />
