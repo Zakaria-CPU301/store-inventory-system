@@ -51,14 +51,14 @@ const Product = ({ productDatas, categoryDatas }) => {
                                         <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
                                             <ModalHeader
                                                 title={"Produk Baru"}
-                                                clickFunc={() =>
+                                                closeModal={() =>
                                                     setModal(false)
                                                 }
                                             />
 
                                             <FormProduct>
                                                 <FormProduct.Create
-                                                    datasFormulir={categoryDatas}
+                                                    dataColumn={categoryDatas}
                                                 />
                                             </FormProduct>
                                         </Card>
