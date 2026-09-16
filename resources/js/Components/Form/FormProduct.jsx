@@ -97,7 +97,7 @@ const FormProduct = ({ children, setModal }) => {
     );
 };
 
-const Create = ({ datasFormulir }) => {
+const Create = ({ dataColumn }) => {
     const { data, setData, handleCreate, processing, errors, clearErrors } =
         useContext(FormProductContext);
 
@@ -108,7 +108,7 @@ const Create = ({ datasFormulir }) => {
         const previewUrl = URL.createObjectURL(file);
         setPreview(previewUrl);
     };
-    console.log(datasFormulir);
+    console.log(dataColumn);
     return (
         <FormOverlay submitForm={handleCreate}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ">
@@ -134,7 +134,7 @@ const Create = ({ datasFormulir }) => {
                         data-placeholder="Pilih atau Tambah"
                     >
                         <option value="">Pilih atau Tambah</option>
-                        {datasFormulir.map((category, i) => (
+                        {dataColumn.map((category, i) => (
                             <option value={category.id} key={i}>
                                 {category.category_name}
                             </option>
@@ -165,7 +165,7 @@ const Create = ({ datasFormulir }) => {
                         data-placeholder="Pilih atau Tambah"
                     >
                         <option value="">Pilih atau Tambah</option>
-                        {datasFormulir.map((category, i) => (
+                        {dataColumn.map((category, i) => (
                             <option value={category.id} key={i}>
                                 {category.category_name}
                             </option>
