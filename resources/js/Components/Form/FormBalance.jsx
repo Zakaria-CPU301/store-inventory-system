@@ -99,7 +99,7 @@ const FormBalance = ({ children, setModal }) => {
     );
 };
 
-const Create = ({ datasFormulir }) => {
+const Create = ({ dataColumn }) => {
     const { handleCreate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
