@@ -35,6 +35,7 @@ export default function Navbar({ toggleSidebar }) {
                     <input
                         type="text"
                         onChange={(e) => setKeyword(e.target.value)}
+                        autoFocus
                         placeholder="Search"
                         className="bg-black w-full h-3/4 px-4 rounded-l-2xl focus:outline-none focus:border-2 focus:border-white"
                     />
