@@ -96,7 +96,6 @@ const Attribute = ({ datas }) => {
                             </AccesibillitySecond>
                         </HeaderAccessibillity>
                         <Table datas={datas} columns={columns} setModal={setModal} setModalContent={setModalContent} />
-
                     </>
                 )}
             </App>
