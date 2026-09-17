@@ -4,7 +4,7 @@ import InputError from "@/Components/Elements/InputError";
 import InputLabel from "@/Components/Elements/InputLabel";
 import LoadingSession from "@/Components/Elements/LoadingSession";
 import ModalHeader from "@/Components/Elements/ModalHeader";
-import SessionInformasion from "@/Components/Elements/SessionInformasion";
+import SessionInformation from "@/Components/Elements/SessionInformation";
 import Input from "@/Components/Elements/Input";
 import Card from "@/Components/Partials/Card";
 import FormOverlay from "@/Components/Partials/FormOverlay";

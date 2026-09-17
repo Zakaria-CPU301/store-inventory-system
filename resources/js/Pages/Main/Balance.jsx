@@ -9,11 +9,8 @@ import CardAmountInfo from "@/Components/Elements/CardAmountInfo";
 import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
 import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
 import "tom-select/dist/css/tom-select.css";
-import { useContext } from "react";
-import { ModalContext } from "@/Context/Modal";
 import ModalHeader from "@/Components/Elements/ModalHeader";
 import FormBalance from "@/Components/Form/FormBalance";
-import SessionInformasion from "@/Components/Elements/SessionInformasion";
 
 function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
     const categories = [];
@@ -91,7 +88,7 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
 
                                             <FormBalance>
                                                 <FormBalance.Create
-                                                    dataColumn={
+                                                    datasFormulir={
                                                         datasFormulir
                                                     }
                                                 />
