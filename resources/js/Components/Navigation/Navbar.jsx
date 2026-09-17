@@ -1,12 +1,12 @@
 import { DiscoveryContext } from "@/Context/Discovery";
-import { usePage } from "@inertiajs/react";
+import { ScannerInputContext } from "@/Context/ScannerInput";
+import { Link, usePage } from "@inertiajs/react";
 import { useContext, useState } from "react";
 
 export default function Navbar({ toggleSidebar }) {
     const user = usePage().props.auth.user;
     const { keyword, setKeyword, discoverySubmit, processing } =
         useContext(DiscoveryContext);
-
     return (
         <>
             <nav className="z-20 w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar ">
@@ -28,6 +28,19 @@ export default function Navbar({ toggleSidebar }) {
                         </span>
                     </div>
                 </div>
+                {usePage().url === "/transaction" ? (
+                    <i
+                        className="bi bi-qr-code-scan text-2xl cursor-pointer"
+                        onClick={() => {
+                            document.getElementById("scanner").focus();
+                        }}
+                    ></i>
+                ) : (
+                    <Link
+                        className="bi bi-qr-code-scan text-2xl"
+                        href={route("transaction.index")}
+                    ></Link>
+                )}
                 <form
                     onSubmit={discoverySubmit}
                     className="flex-1 h-full items-center flex"

@@ -1,19 +1,12 @@
 import NavigatorLine from "./NavigatorLine";
 
-const Sidebar = ({setModal, setModalContent, modal}) => {
+const Sidebar = ({setModalContent, modal}) => {
     return (
         <div className="h-[calc(100vh-4rem)] w-1/5 bg-linear-to-b from-[rgb(18,29,49)] to-[rgb(8,19,40)] left-0 top-16 sticky overflow-auto scrollbar-thumb-purple-400/50 scrollbar-thin scrollbar-gutter-stable overscroll-contain">
             <div className="flex flex-col space-y-3 py-5 px-2.5">
                 <NavigatorLine
-                    pageName="Pemindaian"
-                    modal={modal}
-                    setModal={setModal}
-                    setModalContent={setModalContent}
-                    icon="qr-code-scan"
-                />
-                <NavigatorLine
                     pageName="Cetak Transaksi"
-                    routeName="log.print"
+                    routeName="transaction"
                     icon="printer"
                 />
 
