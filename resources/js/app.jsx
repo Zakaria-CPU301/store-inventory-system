@@ -7,6 +7,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import Dropdown from "./Context/Dropdown";
 import Modal from "./Context/Modal";
+import ScannerInput from "./Context/ScannerInput";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -23,7 +24,9 @@ createInertiaApp({
         root.render(
             <Dropdown>
                 <Modal>
-                    <App {...props} />
+                    <ScannerInput>
+                        <App {...props} />
+                    </ScannerInput>
                 </Modal>
             </Dropdown>,
         );

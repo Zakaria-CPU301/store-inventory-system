@@ -57,8 +57,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/update', [BalanceController::class, 'update'])->name('update');
         Route::post('/destroy', [BalanceController::class, 'destroy'])->name('destroy');
     });
-    Route::prefix('transaction')->name('log.')->group(function () {
-        Route::get('print', [TransactionController::class, 'printIndex'])->name('print.index');
+    Route::prefix('transaction')->name('transaction.')->group(function () {
+        Route::get('/', [TransactionController::class, 'index'])->name('index');
+        Route::post('/scanning', [TransactionController::class, 'scanning'])->name('scanning');
     });
     // Route::get('debt', [DebtController::class, 'index'])->name('debt');
     // Route::get('boarding', [BoardingHouseController::class, 'index'])->name('boarding');
