@@ -49,6 +49,12 @@ const FormProduct = ({ children, setModal }) => {
         });
     };
 
+    const handleScanner = (e) => {
+        e.preventDefault();
+
+        post(route)
+    }
+
     useEffect(() => {
         const selectCreate = document.querySelectorAll(".select-create");
         // const selectUncreate = document.querySelectorAll(".select-uncreate");

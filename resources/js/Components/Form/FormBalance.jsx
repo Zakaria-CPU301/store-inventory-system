@@ -99,7 +99,7 @@ const FormBalance = ({ children, setModal }) => {
     );
 };
 
-const Create = ({ dataColumn }) => {
+const Create = ({ datasFormulir }) => {
     const { handleCreate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
@@ -110,7 +110,6 @@ const Create = ({ dataColumn }) => {
                     <InputLabel value={"Nama Pelanggan"} />
                     <select
                         className="select-create"
-                        defaultValue={dataColumn.customer}
                         onChange={(e) => {
                             setData("customer", e.target.value);
                             clearErrors("customer");
@@ -129,7 +128,7 @@ const Create = ({ dataColumn }) => {
                 <div className="">
                     <InputLabel value={"Nomor Deposit"} />
                     <select
-                        value={dataColumn.number}
+                        value={datasFormulir.number}
                         onChange={(e) => {
                             setData("number", e.target.value);
                             clearErrors("number");
@@ -147,7 +146,7 @@ const Create = ({ dataColumn }) => {
                 </div>
                 <div className="">
                     <select
-                        value={dataColumn.category}
+                        value={datasFormulir.category}
                         onChange={(e) => {
                             setData("category", e.target.value);
                             clearErrors("category");
