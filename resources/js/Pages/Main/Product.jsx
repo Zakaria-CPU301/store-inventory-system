@@ -59,7 +59,7 @@ const Product = ({ productDatas, categoryDatas, unitDatas }) => {
                                                     setModal(false)
                                                 }
                                             />
-
+ 
                                             <FormProduct>
                                                 <FormProduct.Create
                                                     dataColumn={dataColumn}
