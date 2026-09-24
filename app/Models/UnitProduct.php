@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class UnitProduct extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    
-    public function units() {
+
+    public function unit()
+    {
         return $this->belongsTo(Unit::class, 'unit_id');
     }
 
-    public function products() {
+    public function product()
+    {
         return $this->belongsTo(Product::class, 'product_id');
     }
 }

@@ -8,7 +8,8 @@ class Unit extends Model
 {
     protected $fillable = ['unit_name'];
 
-    public function unitProduct() {
+    public function unitProducts()
+    {
         return $this->hasMany(UnitProduct::class);
     }
 }
