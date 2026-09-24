@@ -53,13 +53,13 @@ class CategoryController extends Controller
                 $classname = 'bg-green-500';
             }
             Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $classname]);
+            return back()->with('discovery', $request->discovery);
             DB::commit();
         } catch (Throwable $e) {
             DB::rollback();
             session()->flash('discovery', $request->discovery);
             throw $e;
         }
-        return back()->with('discovery', $request->discovery);
     }
 
     public function destroy(Request $request)

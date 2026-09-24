@@ -15,12 +15,12 @@ class BalanceController extends Controller
 {
     public function filters(Object $query, array $discovery)
     {
-        return $query->whereHas('number.categories', function ($e) use ($discovery) {
+        return $query->whereHas('number.category', function ($e) use ($discovery) {
             $e->where('category_name', 'LIKE', "%{$discovery['category']}%");
         })
             ->where(function ($query) use ($discovery) {
                 $query->when($discovery['keyword'], function ($q, $value) {
-                    $q->whereHas('customers', function ($e) use ($value) {
+                    $q->whereHas('customer', function ($e) use ($value) {
                         $e->where('cust_name', 'LIKE', "%{$value}%");
                     });
                     $q->orWhereHas('number', function ($e) use ($value) {
@@ -32,7 +32,7 @@ class BalanceController extends Controller
 
     public function index(Request $request)
     {
-        $datas = NumberCustomer::with(['customers', 'number.categories']);
+        $datas = NumberCustomer::with(['customer', 'number.category']);
         if ($request->discovery || session('discovery')) {
             $discovery = $request->discovery ?? session('discovery');
             $datas = $this->filters($datas, $discovery);
@@ -41,7 +41,7 @@ class BalanceController extends Controller
         return Inertia::render('Main/Balance', [
             'balanceDatas' => $datas->latest()->get(),
             'customerDatas' => Customer::select('cust_name')->get(),
-            'numberCategoryDatas' => NumberCustomer::with('number.categories')->get(),
+            'numberCategoryDatas' => NumberCustomer::with('number.category')->get(),
         ]);
     }
 
