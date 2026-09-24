@@ -1,5 +1,4 @@
 import { Link } from "@inertiajs/react";
-import Scanning from "../Partials/Scanning";
 import Card from "../Partials/Card";
 
 const NavigatorLine = ({
@@ -32,9 +31,7 @@ const NavigatorLine = ({
                     onClick={() => {
                         setModal(true);
                         setModalContent(
-                            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                                <Scanning modal={modal} />
-                            </Card>,
+                            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl"></Card>,
                         );
                     }}
                     className="flex w-full items-center p-2 space-x-3"

@@ -1,7 +1,6 @@
 import { DiscoveryContext } from "@/Context/Discovery";
-import { ScannerInputContext } from "@/Context/ScannerInput";
 import { Link, usePage } from "@inertiajs/react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 export default function Navbar({ toggleSidebar }) {
     const user = usePage().props.auth.user;
@@ -14,13 +13,13 @@ export default function Navbar({ toggleSidebar }) {
                     <button onClick={toggleSidebar} className="cursor-pointer">
                         <i className="bi bi-list text-white text-3xl"></i>
                     </button>
-                    <div className="flex text-lg space-x-2">
+                    <div className="flex text-lg space-x-0.5 h-full items-center">
                         <img
-                            src="/storage/defaults/logo_light.svg"
-                            className="w-8"
+                            src="/storage/defaults/main_logo.png"
+                            className="w-15 object-center"
                             alt=""
                         />
-                        <span>
+                        <span className="text-xl">
                             Warung
                             <span className="text-white/40 font-bold">
                                 Dalis
@@ -28,13 +27,20 @@ export default function Navbar({ toggleSidebar }) {
                         </span>
                     </div>
                 </div>
-                {usePage().url === "/transaction" ? (
-                    <i
-                        className="bi bi-qr-code-scan text-2xl cursor-pointer"
-                        onClick={() => {
+                {usePage().props.routeName === "transaction" ? (
+                    <button
+                        type="button"
+                        onMouseDown={(e) => {
+                            e.preventDefault();
                             document.getElementById("scanner").focus();
                         }}
-                    ></i>
+                        onTouchStart={(e) => {
+                            e.preventDefault();
+                            document.getElementById("scanner").focus();
+                        }}
+                    >
+                        <i className="bi bi-qr-code-scan text-2xl cursor-pointer"></i>
+                    </button>
                 ) : (
                     <Link
                         className="bi bi-qr-code-scan text-2xl"

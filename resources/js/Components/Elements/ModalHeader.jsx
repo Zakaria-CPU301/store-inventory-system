@@ -2,7 +2,7 @@ import React from "react";
 
 const ModalHeader = ({ title, closeModal, iconTitle }) => {
     return (
-        <div className="flex w-full justify-between items-center sticky top-0 p-4 border-b border-blue-400">
+        <div className="flex w-full justify-between items-center sticky top-0 px-4 pb-4 border-b border-blue-400">
             <div className="text-2xl capitalize font-extrabold text-black/75 flex items-center gap-2.5">
                 {iconTitle && <i className={`bi bi-${iconTitle} text-xl`}></i>}
                 {title}

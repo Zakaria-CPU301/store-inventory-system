@@ -1,18 +1,16 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
 
-const SessionInformation = ({ message, show = false, setShow }) => {
+const SessionInformation = ({ message, className, icon, show = false, setShow }) => {
     const { flash } = usePage();
 
-    if (show) setTimeout(() => setShow(false), 3000);
-    // console.log(show);
-    
+    if (show) setTimeout(() => setShow(false), 1500);
     return (
         <>
             <div
-                className={`${show ? "opacity-100 translate-16" : "opacity-0"} ${flash.classname ?? "bg-[rgb(66,57,76)]"} flex items-center gap-2 translate-0 pointer-events-none rounded-2xl duration-300 fixed top-0 z-100 translate-x-1/2 right-1/2 p-3 text-indigo-50 font-semibold capitalize`}
+                className={`${show ? "opacity-100 translate-16" : "opacity-0"} ${flash.classname ?? className ?? "bg-[rgb(66,57,76)]"} flex items-center gap-2 translate-0 pointer-events-none rounded-2xl duration-300 fixed top-0 z-100 translate-x-1/2 right-1/2 p-3 text-indigo-50 font-semibold capitalize`}
             >
-                <i className={`bi bi-${flash.icon} text-lg`}></i>
+                <i className={`bi bi-${flash.icon ?? icon} text-lg`}></i>
                 <div className="">{flash.success ?? message}</div>
             </div>
         </>
