@@ -58,8 +58,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/destroy', [BalanceController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('transaction')->name('transaction.')->group(function () {
-        Route::get('/', [TransactionController::class, 'index'])->name('index');
+        Route::match(['get', 'post'], '/', [TransactionController::class, 'index'])->name('index');
         Route::post('/scanning', [TransactionController::class, 'scanning'])->name('scanning');
+        Route::post('/invoice', [TransactionController::class, 'invoice'])->name('invoice');
     });
     // Route::get('debt', [DebtController::class, 'index'])->name('debt');
     // Route::get('boarding', [BoardingHouseController::class, 'index'])->name('boarding');
@@ -67,5 +68,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('catatan-aktifitas')->name('activity');
     // Route::get('grafik')->name('chart');
 });
+
+Route::get('mobile-test', function() {
+    return view('asd');
+    });
 
 require __DIR__ . '/auth.php';
