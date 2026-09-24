@@ -11,17 +11,17 @@ class Customer extends Model
 
     protected $fillable = ['cust_name', 'telp'];
 
-    public function debt()
+    public function moneyDebts()
     {
-        return $this->hasMany(Debt::class);
+        return $this->hasMany(MoneyDebt::class);
     }
 
-    public function boarding()
+    public function boardings()
     {
         return $this->hasMany(BoardingHouse::class);
     }
 
-    public function numberCustomer() {
+    public function numberCustomers() {
         return $this->hasMany(NumberCustomer::class);
     }
 }
