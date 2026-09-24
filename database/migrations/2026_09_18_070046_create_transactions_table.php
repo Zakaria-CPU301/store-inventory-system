@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('cust_name')->unique();
-            $table->char('telp', 15)->unique()->nullable();
+            $table->string('qrcode');
+            $table->boolean('incoming');
+            $table->boolean('printing');
+            $table->boolean('status');
+            $table->decimal('total_invoice', 10, 2)->nullable();
+            $table->date('deadlines')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('transactions');
     }
 };

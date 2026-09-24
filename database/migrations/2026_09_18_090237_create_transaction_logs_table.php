@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('transaction_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('cust_name')->unique();
-            $table->char('telp', 15)->unique()->nullable();
+            $table->morphs('invoice_log'); // product, balance, boarding house, monetary debt
+
+            $table->foreignId('transaction_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('transaction_logs');
     }
 };
