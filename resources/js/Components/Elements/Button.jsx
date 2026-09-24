@@ -4,8 +4,8 @@ export default function Button({
     children,
     className,
     clickFunc,
-    props,
     disabled,
+    ...props
 }) {
     return (
         <Dropdown.Close>

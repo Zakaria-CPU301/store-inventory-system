@@ -11,9 +11,10 @@ const AccessibillityFirst = ({ dataFilters, all = false }) => {
         category,
         attribute,
         setAttribute,
+        invoice,
+        setInvoice,
     } = useContext(DiscoveryContext);
-
-    const { url } = usePage();
+    const { routeName } = usePage().props;
     return (
         <div
             className={`h-full flex items-center bg-table-head
@@ -53,21 +54,28 @@ const AccessibillityFirst = ({ dataFilters, all = false }) => {
                                     disabled={processing}
                                     type="submit"
                                     {...(dataFilter === category ||
-                                    dataFilter === attribute
+                                    dataFilter === attribute ||
+                                    dataFilter === invoice
                                         ? {
                                               className:
                                                   "bg-indigo-100 font-bold text-[bg-main-table]",
                                           }
                                         : {})}
                                     clickFunc={() => {
-                                        if (url === "/balance")
+                                        if (routeName === "balance")
                                             setCategory(dataFilter);
-                                        else if (url === "/attribute")
+                                        else if (routeName === "attribute")
                                             setAttribute(dataFilter);
+                                        else if (routeName === "transaction")
+                                            setInvoice(dataFilter);
+                                        document.getElementById("scanner")
+                                            .focus();
                                     }}
                                     key={index}
                                 >
-                                    {dataFilter}
+                                    {routeName === "transaction"
+                                        ? dataFilter.split(".")[0]
+                                        : dataFilter}
                                 </Button>
                             ))}
                         </>
