@@ -11,7 +11,7 @@ class Number extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }

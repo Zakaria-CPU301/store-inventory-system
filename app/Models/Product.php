@@ -11,11 +11,15 @@ class Product extends Model
     
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function categories() {
+    public function transactions() {
+        $this->morphMany(Transaction::class, 'invoice_log');
+    }
+
+    public function category() {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function unitProduct() {
+    public function unitProducts() {
         return $this->hasMany(UnitProduct::class);
     }
 }
