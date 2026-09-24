@@ -11,12 +11,12 @@ class BoardingHouse extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function properties()
+    public function property()
     {
         return $this->belongsTo(Property::class, 'property_id');
     }
 
-    public function customers()
+    public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
