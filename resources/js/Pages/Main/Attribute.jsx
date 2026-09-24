@@ -65,7 +65,7 @@ const Attribute = ({ datas }) => {
                                     clickFunc={() => {
                                         setModal(true);
                                         setModalContent(
-                                            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                                                 <ModalHeader
                                                     title={
                                                         attribute === "satuan"
@@ -95,7 +95,12 @@ const Attribute = ({ datas }) => {
                                 </Button>
                             </AccesibillitySecond>
                         </HeaderAccessibillity>
-                        <Table datas={datas} columns={columns} setModal={setModal} setModalContent={setModalContent} />
+                        <Table
+                            datas={datas}
+                            columns={columns}
+                            setModal={setModal}
+                            setModalContent={setModalContent}
+                        />
                     </>
                 )}
             </App>

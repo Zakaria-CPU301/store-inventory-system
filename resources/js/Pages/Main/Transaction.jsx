@@ -1,192 +1,276 @@
 import AccesibillitySecond from "@/Components/Elements/AccesibillitySecond";
-import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
 import Button from "@/Components/Elements/Button";
+import ModalHeader from "@/Components/Elements/ModalHeader";
 import SessionInformation from "@/Components/Elements/SessionInformation";
+import FormProduct from "@/Components/Form/FormProduct";
+import Card from "@/Components/Partials/Card";
 import HeaderAccessibillity from "@/Components/Partials/HeaderAccessibillity";
 import HeaderDesc from "@/Components/Partials/HeaderDesc";
 import HeaderInfo from "@/Components/Partials/HeaderInfo";
-import { ScannerInputContext } from "@/Context/ScannerInput";
 import App from "@/Layouts/App";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { useContext, useEffect, useState } from "react";
+import AccessibillityFirst from "@/Components/Elements/AccessibillityFirst";
+import React from "react";
+import { DiscoveryContext } from "@/Context/Discovery";
+import { QRCodeSVG } from "qrcode.react";
+import SmoothTableHead from "@/Components/Elements/SmoothTableHead";
 
-const Transaction = () => {
-    const { post, reset, data, setData } = useForm({ codeScan: "" });
+const Transaction = ({
+    datas,
+    categoryDatas,
+    unitDatas,
+    setModal,
+    setModalContent,
+}) => {
+    const { flash } = usePage();
+
+    const { invoice } = useContext(DiscoveryContext);
+
+    const [show, setShow] = useState(false);
+    const [focus, setFocus] = useState();
+    const message = focus ? "siap" : "tidak";
+
+    const { post, reset, data, setData, errors } = useForm({
+        code: "",
+        incoming: true,
+    });
     const scanning = (e) => {
         e.preventDefault();
         post(route("transaction.scanning"), {
-            onSuccess: () => reset("codeScan"),
+            onSuccess: () => reset("code"),
+            onError: () => {
+                reset("code");
+                setShow(true);
+            },
         });
     };
+    const createInvoice = (e) => {
+        e.preventDefault();
+        post(route("transaction.invoice"), { preserveState: false });
+    };
 
-    const [show, setShow] = useState(false);
-    const [code, setCode] = useState("");
+    const qrcode = [];
+    datas.map((data) => {
+        qrcode.push(data.qrcode);
+    });
+
+    const columns = [
+        { label: "nama produk" },
+        // { label: "harga (satuan)" },
+        // { label: "jumlah" },
+        // { label: "harga netto" },
+    ];
+
+    const dataColumn = {
+        categoryDatas: categoryDatas,
+        unitDatas: unitDatas,
+    };
 
     useEffect(() => {
-        const inputScanner = document.getElementById("scanner");
-        console.log(document.activeElement == inputScanner);
+        if (!flash.barcode) return;
+        setModal(true);
+        setModalContent(
+            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
+                <ModalHeader
+                    title={"Produk Baru"}
+                    closeModal={() => setModal(false)}
+                />
 
-        code === "" && document.activeElement == inputScanner
-            ? setShow(true)
-            : setShow(false);
-    }, []);
-    console.log(data.codeScan);
-
+                <FormProduct>
+                    <FormProduct.Create dataColumn={dataColumn} />
+                </FormProduct>
+            </Card>,
+        );
+    }, [flash.barcode]);
     return (
-        <App>
-            {({}) => (
-                <>
-                    <form onSubmit={scanning}>
-                        <SessionInformation
-                            setShow={setShow}
-                            show={show}
-                            message={"pemindai telah siap"}
-                        />
+        <>
+            <SessionInformation
+                icon={"x"}
+                className={"bg-red-500"}
+                message={errors.code}
+                show={show}
+                setShow={setShow}
+            />
+            <form onSubmit={scanning} className="">
+                <Card className={"bg-powderblue flex sticky top-0 w-4/5"}>
+                    {message}
+                </Card>
 
-                        <input
-                            id="scanner"
-                            autoFocus
-                            onFocus={() => setCode("")}
-                            type="text"
-                            value={code}
-                            onChange={(e) => {
-                                setData("codeScan", e.target.value);
-                                setCode(e.target.value);
+                <input
+                    id="scanner"
+                    autoFocus
+                    autoComplete="off"
+                    value={data.code}
+                    onFocus={() => {
+                        setData("code", "");
+                        setFocus(true);
+                    }}
+                    onBlur={() => setFocus(false)}
+                    type="text"
+                    onChange={(e) => setData("code", e.target.value)}
+                    className="bg-white"
+                />
+                <button type="submit"></button>
+            </form>
+            <React.Fragment>
+                {datas.map((data) =>
+                    data.qrcode === invoice ? (
+                        <HeaderInfo>
+                            <div className="flex-1 space-y-5 text-white self-start">
+                                <h1 className="text-3xl font-extrabold capitalize">
+                                    cetak transaksi
+                                </h1>
+                                <div className="">
+                                    Nomor Faktur: {data.qrcode}
+                                </div>
+                            </div>
+
+                            <Card className={"bg-light-sky p-4"}>
+                                <QRCodeSVG
+                                    value={data.qrcode}
+                                    imageSettings={{
+                                        src: "/storage/defaults/dalis_store_logo.png",
+                                        width: 50,
+                                        height: 50,
+                                        excavate: true,
+                                    }}
+                                    title="info faktur transaksi"
+                                    level="H"
+                                />
+                            </Card>
+                        </HeaderInfo>
+                    ) : null,
+                )}
+
+                <HeaderAccessibillity>
+                    <AccessibillityFirst dataFilters={qrcode} />
+                    <AccesibillitySecond>
+                        <Button className="bg-main-table text-indigo-100 font-bold">
+                            Filter{" "}
+                            <i className="bi bi-funnel-fill text-lg text-purple-100"></i>
+                        </Button>
+                        <Button
+                            type="button"
+                            className="bg-light-sky text-blue-900 font-bold"
+                            clickFunc={() => {
+                                setModal(true);
+                                setModalContent(
+                                    <Card className="z-10 bg-powderblue w-1/3 min-h-0 px-4  rounded-2xl">
+                                        <ModalHeader
+                                            title={"jenis mutasi aset"}
+                                            closeModal={() => setModal(false)}
+                                        />
+                                        <form
+                                            onSubmit={createInvoice}
+                                            className="flex w-full justify-evenly py-6"
+                                        >
+                                            <Button
+                                                type="submit"
+                                                clickFunc={() =>
+                                                    setData("incoming", true)
+                                                }
+                                            >
+                                                Masuk
+                                            </Button>
+                                            <Button
+                                                type="submit"
+                                                clickFunc={() =>
+                                                    setData("incoming", false)
+                                                }
+                                            >
+                                                Keluar
+                                            </Button>
+                                        </form>
+                                    </Card>,
+                                );
                             }}
-                            className="bg-white"
-                        />
-                        <button type="submit"></button>
-                    </form>
-                </>
-                // <>
-                //     <HeaderInfo>
-                //         <HeaderDesc title={`cetak transaksi`} />
-                //     </HeaderInfo>
+                        >
+                            Tambah{" "}
+                            <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
+                        </Button>
+                    </AccesibillitySecond>
+                </HeaderAccessibillity>
+                <div className="w-full relative">
+                    <table className="border-collapse w-full bg-main-table rounded-b-2xl">
+                        <SmoothTableHead columns={columns} />
 
-                //     <HeaderAccessibillity>
-                //         <AccessibillityFirst dataFilters={dataFilters} />
-                //         <AccesibillitySecond>
-                //             <Button className="bg-main-table text-indigo-100 font-bold">
-                //                 Filter{" "}
-                //                 <i className="bi bi-funnel-fill text-lg text-purple-100"></i>
-                //             </Button>
-                //             <Button
-                //                 className="bg-light-sky text-blue-900 font-bold"
-                //                 clickFunc={() => {
-                //                     setModal(true);
-                //                     setModalContent();
-                //                     // <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
-                //                     //     <ModalHeader
-                //                     //         title={
-                //                     //             attribute === "satuan"
-                //                     //                 ? "tambah satuan baru"
-                //                     //                 : "tambah kategori baru"
-                //                     //         }
-                //                     //         closeModal={() =>
-                //                     //             setModal(false)
-                //                     //         }
-                //                     //     />
-
-                //                     //     {attribute === "satuan" ? (
-                //                     //         <FormUnit>
-                //                     //             <FormUnit.Create />
-                //                     //         </FormUnit>
-                //                     //     ) : (
-                //                     //         <FormCategory>
-                //                     //             <FormCategory.Create />
-                //                     //         </FormCategory>
-                //                     //     )}
-                //                     // </Card>,
-                //                 }}
-                //             >
-                //                 Tambah{" "}
-                //                 <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
-                //             </Button>
-                //         </AccesibillitySecond>
-                //     </HeaderAccessibillity>
-                //     <div className="w-full relative">
-                //         <table className="border-collapse w-full bg-main-table rounded-b-2xl">
-                //                 <SmoothTableHead columns={columns} />
-
-                //             <tbody className="text-white">
-                //                 {datas.length ? (
-                //                     datas.map((data, index) => (
-                //                         <tr key={index}>
-                //                             <td className="text-center p-3">
-                //                                 {firstAction ?? index + 1}
-                //                             </td>
-                //                             {columns.map((col, i) => (
-                //                                 <td
-                //                                     className={`${col.opsionalClassName ?? "text-center"} p-3`}
-                //                                     key={i}
-                //                                 >
-                //                                     {result(data, col.key)}
-                //                                 </td>
-                //                             ))}
-                //                             <td className="text-center p-3">
-                //                                 <Dropdown.Trigger id={data.id}>
-                //                                     <i
-                //                                         className={`bi bi-three-dots cursor-pointer px-2 py-1 rounded-lg duration-100  ${open && identity === data.id ? "ring-2" : ""}`}
-                //                                     ></i>
-                //                                 </Dropdown.Trigger>
-                //                                 <Dropdown.Content
-                //                                     id={data.id}
-                //                                     width="w-30"
-                //                                     contentClasses="py-2 bg-light-sky"
-                //                                     z={"z-10"}
-                //                                 >
-                //                                     <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
-                //                                         <Button
-                //                                             className={""}
-                //                                             clickFunc={() => {
-                //                                                 setModal(true);
-                //                                                 setModalContent();
-                //                                             }}
-                //                                         >
-                //                                             <i
-                //                                                 className={`bi bi-pencil text-xl`}
-                //                                             ></i>
-                //                                             edit
-                //                                         </Button>
-                //                                         <Button
-                //                                             className={""}
-                //                                             clickFunc={() => {
-                //                                                 setModal(true);
-                //                                                 setModalContent();
-                //                                             }}
-                //                                         >
-                //                                             <i
-                //                                                 className={`bi bi-trash text-xl`}
-                //                                             ></i>
-                //                                             hapus
-                //                                         </Button>
-                //                                     </div>
-                //                                 </Dropdown.Content>
-                //                             </td>
-                //                         </tr>
-                //                     ))
-                //                 ) : (
-                //                     <tr>
-                //                         <td colSpan={100}>
-                //                             <div className="flex flex-col justify-center items-center h-52 gap-4">
-                //                                 <i
-                //                                     className={`${iconEmpty ? iconEmpty : "bi bi-database-fill-x"} text-5xl`}
-                //                                 ></i>
-                //                                 <span className="text-3xl font-extrabold">
-                //                                     {reason ??
-                //                                         "Data tidak di temukan"}
-                //                                 </span>
-                //                             </div>
-                //                         </td>
-                //                     </tr>
-                //                 )}
-                //             </tbody>
-                //         </table>
-                //     </div>
-                // </>
-            )}
-        </App>
+                        <tbody className="text-white">
+                            {datas.map((data, index) =>
+                                data.qrcode === invoice ? (
+                                    data.transaction_logs.length ? (
+                                        data.transaction_logs.map(
+                                            (transaction_log, index) => (
+                                                <tr key={index}>
+                                                    {console.log(
+                                                        transaction_log,
+                                                    )}
+                                                    <td className="text-center p-3">
+                                                        <input
+                                                            type="checkbox"
+                                                            name=""
+                                                            id=""
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            transaction_log
+                                                                .invoice_log
+                                                                .name
+                                                        }
+                                                    </td>
+                                                    <td className="text-center p-3">
+                                                        <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
+                                                            <Button
+                                                                className={""}
+                                                                clickFunc={() => {
+                                                                    setModal(
+                                                                        true,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <i
+                                                                    className={`bi bi-trash text-xl`}
+                                                                ></i>
+                                                                hapus
+                                                            </Button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ),
+                                        )
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={100}>
+                                                <div className="flex flex-col justify-center items-center h-52 gap-4">
+                                                    <i
+                                                        className={`bi bi-database-fill-x text-5xl`}
+                                                    ></i>
+                                                    <span className="text-3xl font-extrabold">
+                                                        {
+                                                            "Data tidak di temukan"
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                ) : null,
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </React.Fragment>
+        </>
     );
 };
+
+Transaction.layout = (page) => (
+    <App>
+        {({ setModal, setModalContent }) => {
+            return React.cloneElement(page, { setModal, setModalContent });
+        }}
+    </App>
+);
 
 export default Transaction;

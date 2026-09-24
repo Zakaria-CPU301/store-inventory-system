@@ -31,7 +31,7 @@ const App = ({ children }) => {
     );
     return (
         <>
-            <SessionInformation show={endForm} />
+            <SessionInformation show={endForm} setShow={setEndForm} />
             <Dropdown>
                 <DiscoveryContextProvider>
                         <Navbar toggleSidebar={toggleSidebar} />

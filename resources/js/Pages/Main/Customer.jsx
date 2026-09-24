@@ -30,30 +30,6 @@ const Customer = ({ datas }) => {
         },
     ];
 
-    const {
-        data,
-        setData,
-        clearErrors,
-        errors,
-        recentlySuccessful,
-        post,
-        processing,
-    } = useForm({
-        customer: "",
-    });
-
-    const [showOverlay, setShowOverlay] = useState(false);
-
-    const toggleOverlay = () => {
-        setShowOverlay(!showOverlay);
-    };
-
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route("customer.store"));
-    };
-
     return (
         <>
             <App>

@@ -10,15 +10,19 @@ import HeaderDesc from "@/Components/Partials/HeaderDesc";
 import HeaderInfo from "@/Components/Partials/HeaderInfo";
 import App from "@/Layouts/App";
 
-const Product = ({ productDatas, categoryDatas }) => {
+const Product = ({ productDatas, categoryDatas, unitDatas }) => {
     const categories = [];
     productDatas.map((product) => {
-        categories.push(product.categories.category_name);
+        categories.push(product.category.category_name);
     });
 
+    const dataColumn = {
+        categoryDatas: categoryDatas,
+        unitDatas: unitDatas,
+    };
     return (
         <App>
-            {({setModal, setModalContent}) => (
+            {({ setModal, setModalContent }) => (
                 <>
                     <HeaderInfo>
                         <HeaderDesc
@@ -48,7 +52,7 @@ const Product = ({ productDatas, categoryDatas }) => {
                                 clickFunc={() => {
                                     setModal(true);
                                     setModalContent(() => (
-                                        <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                        <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                                             <ModalHeader
                                                 title={"Produk Baru"}
                                                 closeModal={() =>
@@ -58,7 +62,7 @@ const Product = ({ productDatas, categoryDatas }) => {
 
                                             <FormProduct>
                                                 <FormProduct.Create
-                                                    dataColumn={categoryDatas}
+                                                    dataColumn={dataColumn}
                                                 />
                                             </FormProduct>
                                         </Card>
@@ -76,20 +80,20 @@ const Product = ({ productDatas, categoryDatas }) => {
                             <Card key={i} className="bg-[rgb(17,27,52)]">
                                 <div className="relative h-1/2 rounded-2xl ring-1 ring-purple-800/70">
                                     <span className="absolute capitalize px-3 py-1 backdrop-blur-xs bg-black/70 text-slate-200 rounded-xl translate-2">
-                                        {data.categories.category_name}
+                                        {data.category.category_name}
                                     </span>
                                     <img
                                         src={`/storage/image-products/${data.product_image}`}
-                                        alt={data.product_name}
+                                        alt={data.name}
                                         className="w-full h-full object-cover object-center"
                                     />
                                 </div>
                                 <div className="flex flex-col text-indigo-100">
                                     <h1
                                         className="text-xl font-bold"
-                                        title={`${data.product_name}`}
+                                        title={`${data.name}`}
                                     >
-                                        {data.product_name.slice(0, 27)}
+                                        {data.name.slice(0, 27)}
                                         {"..."}
                                     </h1>
                                     <span>stok: {data.qty}</span>

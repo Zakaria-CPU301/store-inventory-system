@@ -15,21 +15,22 @@ import FormBalance from "@/Components/Form/FormBalance";
 function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
     const categories = [];
     const customers = [];
+
     balanceDatas.map((customer) => {
-        customers.push(customer.customers.cust_name);
+        customers.push(customer.customer.cust_name);
     });
     numberCategoryDatas.map((category) => {
-        categories.push(category.number.categories.category_name);
+        categories.push(category.number.category.category_name);
     });
 
     const columns = [
         {
-            key: `customers.cust_name`,
+            key: `customer.cust_name`,
             label: "nama pelanggan",
             opsionalClassName: "text-start capitalize",
         },
         { key: `number.number`, label: "nomor saldo" },
-        { key: `number.categories.category_name`, label: "kategori saldo" },
+        { key: `number.category.category_name`, label: "kategori saldo" },
     ];
 
     const datasFormulir = {
@@ -78,7 +79,7 @@ function Balance({ balanceDatas, customerDatas, numberCategoryDatas }) {
                                 clickFunc={() => {
                                     setModal(true);
                                     setModalContent(
-                                        <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                        <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                                             <ModalHeader
                                                 title={"nomor saldo baru"}
                                                 closeModal={() =>
