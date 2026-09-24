@@ -7,7 +7,6 @@ import ModalHeader from "../Elements/ModalHeader";
 import Card from "./Card";
 import Dropdown, { DropDownContext } from "@/Context/Dropdown";
 import { usePage } from "@inertiajs/react";
-import { DiscoveryContext } from "@/Context/Discovery";
 import FormCategory from "../Form/FormCategory";
 import FormUnit from "../Form/FormUnit";
 import FormCustomer from "../Form/FormCustomer";
@@ -28,15 +27,8 @@ const Table = ({
 
     const { open, identity } = useContext(DropDownContext);
 
-    const page = usePage();
+    const { props } = usePage();
 
-    // console.log(usePage());
-
-    // console.log(
-    //     page.url === "/attribute" &&
-    //         (page.props.attribute === "kategori" ||
-    //             page.props.attribute === null),
-    // );
     return (
         <>
             <div className="w-full relative">
@@ -80,32 +72,26 @@ const Table = ({
                                                     clickFunc={() => {
                                                         setModal(true);
                                                         setModalContent(
-                                                            <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                                            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                                                                 <ModalHeader
                                                                     title={
-                                                                        page.url ===
-                                                                            "/attribute" &&
-                                                                        (page
-                                                                            .props
-                                                                            .attribute ===
+                                                                        props.routeName ===
+                                                                            "attribute" &&
+                                                                        (props.attribute ===
                                                                             "kategori" ||
-                                                                            page
-                                                                                .props
-                                                                                .attribute ===
+                                                                            props.attribute ===
                                                                                 null)
                                                                             ? "edit kategori"
-                                                                            : page.url ===
-                                                                                    "/attribute" &&
-                                                                                page
-                                                                                    .props
-                                                                                    .attribute ===
+                                                                            : props.routeName ===
+                                                                                    "attribute" &&
+                                                                                props.attribute ===
                                                                                     "satuan"
                                                                               ? "edit satuan"
-                                                                              : page.url ===
-                                                                                  "/customer"
+                                                                              : props.routeName ===
+                                                                                  "customer"
                                                                                 ? "edit pelanggan"
-                                                                                : page.url ===
-                                                                                    "/balance"
+                                                                                : props.routeName ===
+                                                                                    "balance"
                                                                                   ? "edit nomor saldo"
                                                                                   : null
                                                                     }
@@ -119,13 +105,11 @@ const Table = ({
                                                                     }
                                                                 />
 
-                                                                {page.url ===
-                                                                    "/attribute" &&
-                                                                (page.props
-                                                                    .attribute ===
+                                                                {routeName ===
+                                                                    "attribute" &&
+                                                                (props.attribute ===
                                                                     "kategori" ||
-                                                                    page.props
-                                                                        .attribute ===
+                                                                    props.attribute ===
                                                                         null) ? (
                                                                     <FormCategory>
                                                                         <FormCategory.Update
@@ -134,10 +118,9 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormCategory>
-                                                                ) : page.url ===
-                                                                      "/attribute" &&
-                                                                  page.props
-                                                                      .attribute ===
+                                                                ) : props.routeName ===
+                                                                      "attribute" &&
+                                                                  props.attribute ===
                                                                       "satuan" ? (
                                                                     <FormUnit>
                                                                         <FormUnit.Update
@@ -149,8 +132,8 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormUnit>
-                                                                ) : page.url ===
-                                                                  "/customer" ? (
+                                                                ) : props.routeName ===
+                                                                  "customer" ? (
                                                                     <FormCustomer>
                                                                         <FormCustomer.Update
                                                                             datasFormulir={
@@ -161,8 +144,8 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormCustomer>
-                                                                ) : page.url ===
-                                                                  "/balance" ? (
+                                                                ) : props.routeName ===
+                                                                  "balance" ? (
                                                                     <FormBalance>
                                                                         <FormBalance.Update
                                                                             datasFormulir={
@@ -188,32 +171,26 @@ const Table = ({
                                                     clickFunc={() => {
                                                         setModal(true);
                                                         setModalContent(
-                                                            <Card className="bg-powderblue w-4/5 md:w-2/3 min-h-0 px-4 max-h-[calc(80vh)] rounded-2xl">
+                                                            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                                                                 <ModalHeader
                                                                     title={
-                                                                        page.url ===
-                                                                            "/attribute" &&
-                                                                        (page
-                                                                            .props
-                                                                            .attribute ===
+                                                                        routeName ===
+                                                                            "attribute" &&
+                                                                        (props.attribute ===
                                                                             "kategori" ||
-                                                                            page
-                                                                                .props
-                                                                                .attribute ===
+                                                                            props.attribute ===
                                                                                 null)
                                                                             ? "hapus kategori"
-                                                                            : page.url ===
-                                                                                    "/attribute" &&
-                                                                                page
-                                                                                    .props
-                                                                                    .attribute ===
+                                                                            : routeName ===
+                                                                                    "attribute" &&
+                                                                                props.attribute ===
                                                                                     "satuan"
                                                                               ? "hapus satuan"
-                                                                              : page.url ===
-                                                                                  "/customer"
+                                                                              : routeName ===
+                                                                                  "customer"
                                                                                 ? "hapus pelanggan"
-                                                                                : page.url ===
-                                                                                    "/balance"
+                                                                                : routeName ===
+                                                                                    "balance"
                                                                                   ? "hapus nomor saldo"
                                                                                   : null
                                                                     }
@@ -227,13 +204,11 @@ const Table = ({
                                                                     }
                                                                 />
 
-                                                                {page.url ===
-                                                                    "/attribute" &&
-                                                                (page.props
-                                                                    .attribute ===
+                                                                {routeName ===
+                                                                    "attribute" &&
+                                                                (props.attribute ===
                                                                     "kategori" ||
-                                                                    page.props
-                                                                        .attribute ===
+                                                                    props.attribute ===
                                                                         null) ? (
                                                                     <FormCategory>
                                                                         <FormCategory.Destroy
@@ -242,10 +217,9 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormCategory>
-                                                                ) : page.url ===
-                                                                      "/attribute" &&
-                                                                  page.props
-                                                                      .attribute ===
+                                                                ) : routeName ===
+                                                                      "attribute" &&
+                                                                  props.attribute ===
                                                                       "satuan" ? (
                                                                     <FormUnit>
                                                                         <FormUnit.Destroy
@@ -257,9 +231,13 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormUnit>
-                                                                ) : page.url ===
-                                                                  "/customer" ? (
-                                                                    <FormCustomer setModal={setModal}>
+                                                                ) : routeName ===
+                                                                  "customer" ? (
+                                                                    <FormCustomer
+                                                                        setModal={
+                                                                            setModal
+                                                                        }
+                                                                    >
                                                                         <FormCustomer.Destroy
                                                                             datasFormulir={
                                                                                 datasFormulir
@@ -269,8 +247,8 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormCustomer>
-                                                                ) : page.url ===
-                                                                  "/balance" ? (
+                                                                ) : routeName ===
+                                                                  "balance" ? (
                                                                     <FormBalance>
                                                                         <FormBalance.Destroy
                                                                             datasFormulir={
