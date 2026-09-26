@@ -15,9 +15,9 @@ const DiscoveryContextProvider = ({ children }) => {
     const [category, setCategory] = useState(null);
 
     const [invoice, setInvoice] = useState(() => {
-        return props.codeScan;
+        return props.codeInvoice;
     });
-    useEffect(() => setInvoice(props.codeScan), [props.codeScan])
+    useEffect(() => setInvoice(props.codeInvoice), [props.codeInvoice]);
 
     const [attribute, setAttribute] = useState(() => {
         return props.attribute ?? "kategori";

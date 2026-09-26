@@ -1,11 +1,21 @@
 import { DiscoveryContext } from "@/Context/Discovery";
 import { Link, usePage } from "@inertiajs/react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
-export default function Navbar({ toggleSidebar }) {
+export default function Navbar({ toggleSidebar, focus }) {
     const user = usePage().props.auth.user;
     const { keyword, setKeyword, discoverySubmit, processing } =
         useContext(DiscoveryContext);
+
+    const [searchFocus, setSearchFocus] = useState();
+    useEffect(() => {
+        document
+            .getElementById("searchEngine")
+            .addEventListener("focus", () => setSearchFocus(true));
+        document
+            .getElementById("searchEngine")
+            .addEventListener("blur", () => setSearchFocus(false));
+    });
     return (
         <>
             <nav className="z-20 w-full h-16 sticky top-0 flex justify-between items-center space-x-8 text-white bg-main-navbar ">
@@ -16,7 +26,7 @@ export default function Navbar({ toggleSidebar }) {
                     <div className="flex text-lg space-x-0.5 h-full items-center">
                         <img
                             src="/storage/defaults/main_logo.png"
-                            className="w-15 object-center"
+                            className="w-13.5 object-center"
                             alt=""
                         />
                         <span className="text-xl">
@@ -27,41 +37,56 @@ export default function Navbar({ toggleSidebar }) {
                         </span>
                     </div>
                 </div>
-                {usePage().props.routeName === "transaction" ? (
-                    <button
-                        type="button"
-                        onMouseDown={(e) => {
-                            e.preventDefault();
-                            document.getElementById("scanner").focus();
-                        }}
-                        onTouchStart={(e) => {
-                            e.preventDefault();
-                            document.getElementById("scanner").focus();
-                        }}
-                    >
-                        <i className="bi bi-qr-code-scan text-2xl cursor-pointer"></i>
-                    </button>
-                ) : (
-                    <Link
-                        className="bi bi-qr-code-scan text-2xl"
-                        href={route("transaction.index")}
-                    ></Link>
-                )}
+                <div className={`flex bg-black`}>
+                    {usePage().props.routeName === "transaction" ? (
+                        <button
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                document.getElementById("scanner").focus();
+                            }}
+                            onTouchStart={(e) => {
+                                e.preventDefault();
+                                document.getElementById("scanner").focus();
+                            }}
+                            className={`flex items-center cursor-pointer py-1 px-2.5 space-x-2 rounded-lg text-2xl  ${focus ? "bg-amber-300 text-black" : "bg-red-600 text-white"}`}
+                        >
+                            <i className="bi bi-qr-code-scan"></i>
+                            {focus ? (
+                                <i className="bi bi-check-circle"></i>
+                            ) : (
+                                <i className="bi bi-x-circle"></i>
+                            )}
+                        </button>
+                    ) : (
+                        <Link
+                            href={route("transaction.index")}
+                            className={`flex items-center cursor-pointer py-1 px-2.5 space-x-2 rounded-lg text-2xl  ${focus ? "bg-amber-300 text-black" : "bg-red-600 text-white"}`}
+                        >
+                            <i className="bi bi-qr-code-scan"></i>
+                            {focus ? (
+                                <i className="bi bi-check-circle"></i>
+                            ) : (
+                                <i className="bi bi-x-circle"></i>
+                            )}
+                        </Link>
+                    )}
+                </div>
                 <form
                     onSubmit={discoverySubmit}
                     className="flex-1 h-full items-center flex"
                 >
                     <input
+                        id="searchEngine"
                         type="text"
                         onChange={(e) => setKeyword(e.target.value)}
                         autoFocus
                         placeholder="Search"
-                        className="bg-black w-full h-3/4 px-4 rounded-l-2xl focus:outline-none focus:border-2 focus:border-white"
+                        className="bg-black w-full h-3/4 px-4 rounded-l-2xl border border-white/10 outline-none focus:ring-2 focus:ring-white"
                     />
                     <button
                         disabled={processing}
                         type="submit"
-                        className="bg-black border-l-2 border-white/10 rounded-r-2xl h-3/4 w-[10%] flex items-center justify-center cursor-pointer"
+                        className={`bg-black outline-none ${searchFocus ? " ring-2 ring-white" : "border border-y border-r border-white/10"} rounded-r-2xl h-3/4 w-[10%] flex items-center justify-center cursor-pointer`}
                     >
                         <i className="bi bi-search text-lg"></i>
                     </button>
