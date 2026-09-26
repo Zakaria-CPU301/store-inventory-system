@@ -19,12 +19,12 @@ class TransactionController extends Controller
         if (!$transaction->where('printing', true)->exists()) {
             $this->createInvoice($transaction, false);
         } else if ($request->discovery) {
-            session()->put('codeScan', $request->discovery['invoice']);
-            Inertia::share('codeScan', $request->discovery['invoice']);
-        } else if (!session('codeScan')) {
+            session()->put('codeInvoice', $request->discovery['invoice']);
+            Inertia::share('codeInvoice', $request->discovery['invoice']);
+        } else if (!session('codeInvoice')) {
             $latestInvoice = Transaction::latest()->first()->qrcode;
-            session()->put('codeScan', $latestInvoice);
-            Inertia::share('codeScan', $latestInvoice);
+            session()->put('codeInvoice', $latestInvoice);
+            Inertia::share('codeInvoice', $latestInvoice);
         }
 
         return Inertia::render('Main/Transaction', [
@@ -34,36 +34,41 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function scanning(Request $request)
+    public function dataIntoInvoice(Request $request)
     {
         $invoice = Transaction::where('qrcode', 'LIKE', "{$request->code}")->first();
+        $transaction = Transaction::where('qrcode', Inertia::getShared('codeInvoice'))->first();
         $product = Product::where('barcode', $request->code)->first();
         $qrcodeInvoice = str_contains($request->code, 'faktur-');
-        if ($qrcodeInvoice) {
+        if ($qrcodeInvoice) { // QRCode faktur-
             $invoice->update(['printing' => true]);
         } else {
-            if (ctype_digit($request->code)) {
-                if ($product) {
-                    $invoice = Transaction::where('qrcode', Inertia::getShared('codeScan'))->first();
+            if (ctype_digit($request->code)) { // barcode
+                if ($product && !$transaction->incoming) { // produk sudah ada dan pengeluaran
                     TransactionLog::create([
-                        'transaction_id' => $invoice->id,
+                        'transaction_id' => $transaction->id,
                         'invoice_log_type' => Product::class,
                         'invoice_log_id' => $product->id
                     ]);
-                } else {
-                    Inertia::flash('barcode', $request->code);
+                } else if ($transaction->incoming) { // pemasukan
+                    if ($product) Inertia::flash(['barcode' => $request->code, 'purchase_transaction' => true, 'timestamp' => now()]);
+                    else Inertia::flash(['barcode' => $request->code, 'timestamp' => now()]);
+                } else { // produk belum ada
+                    $classname = 'bg-orange-500';
+                    $icon = 'exclamation-circle';
+                    $success = 'produk tidak ada';
+                    Inertia::flash(['success' => $success, 'icon' => $icon, 'classname' => $classname]);
                 }
             } else {
                 $classname = 'bg-red-500';
                 $icon = 'x-circle';
-                $success = 'QRCode tidak terdaftar, silahkan pindai yang lain!';
+                $success = 'QRCode tidak terdaftar';
                 Inertia::flash(['success' => $success, 'icon' => $icon, 'classname' => $classname]);
             }
         }
 
         return back();
     }
-
 
     public function invoice(Request $request)
     {
@@ -72,15 +77,16 @@ class TransactionController extends Controller
 
     public function createInvoice(Object $transaction, bool $mutationMethod)
     {
-        $getLatestId = Transaction::latest()->first()?->id + 1 ?? 1;
-        $hashId = Str::uuid();
+        $getLatestId = Transaction::latest()->first()->id + 1;
+        $hashId = Str::upper(Str::uuid());
         $makeQRCode = "faktur-{$getLatestId}.{$hashId}";
         $transaction->create([
             'qrcode' => $makeQRCode,
             'incoming' => $mutationMethod,
-            'printing' => true
+            'printing' => true,
+            'status' => false
         ]);
-        Inertia::share('codeScan', $makeQRCode);
-        session()->put('codeScan', $makeQRCode);
+        Inertia::share('codeInvoice', $makeQRCode);
+        session()->put('codeInvoice', $makeQRCode);
     }
 }

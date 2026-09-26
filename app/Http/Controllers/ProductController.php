@@ -26,6 +26,12 @@ class ProductController extends Controller
             $datas = $this->filters($datas, $request->discovery);
         }
 
+        if (!session('codeInvoice')) {
+            $latestInvoice = Transaction::latest()->first()->qrcode;
+            session()->put('codeInvoice', $latestInvoice);
+            Inertia::share('codeInvoice', $latestInvoice);
+        }
+
         return Inertia::render('Main/Product', [
             'productDatas' => $datas->get(),
             'categoryDatas' => Category::whereNotIn('category_name', ['token', 'dana', 'pulsa', 'paket data'])->get(),
@@ -33,16 +39,13 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function initStore(Request $request)
     {
-        // dd($request);
         $validate = $request->validate([
             'barcode' => 'nullable',
             'title' => ['required', 'max:225'],
-            'units' => 'required',
             'units.*.unit' => ['required'],
-            'units.*.qty' => ['required', 'numeric', 'min:0'],
-            'units.*.price' => ['required', 'numeric', 'min:500'],
+            'units.*.atom' => ['required', 'numeric', 'min:0'],
             'image' => ['nullable', File::image()->max('500kb')],
             'category' => ['nullable'],
             'desc' => ['nullable'],
@@ -50,35 +53,48 @@ class ProductController extends Controller
             'title.required' => 'nama produk tidak boleh kosong',
             'title.max' => 'nama produk terlalu panjang',
             'units.*.unit.required' => 'satuan tidak boleh kosong',
-            'units.*.qty.required' => 'jumlah produk tidak boleh kosong',
-            'units.*.price.required' => 'jumlah produk tidak boleh kosong',
-            'units.*.price.min' => 'harga produk minimal Rp.500'
+            'units.*.atom.required' => 'jumlah produk tidak boleh kosong',
         ]);
-        // foreach($request->units as $unit) ;
-dd($request->units);
+
         $path = null;
         if ($request->file('image')) {
             $path = $request->file('image')->store('image-products', 'public');
             $path = str_replace('image-products/', '', $path);
         }
 
-        $category = Category::firstOrCreate(['category_name' => $validate['category']], ['category_name' => $validate['category']]);
-
         $product = Product::create([
             'barcode' => (int) ($validate['barcode']),
             'name' => $validate['title'],
             'product_image' => $path,
             'description' => $validate['desc'],
-            'category_id' => $category->id,
+            'category_id' => $validate['category'],
         ]);
 
-        // UnitProduct::create(['product_id' => $product->id, 'unit_id' => $re]);
+        foreach ($validate['units'] as  $units) {
+            UnitProduct::create([
+                'total_atom' => $units['atom'],
+                'product_id' => $product->id,
+                'unit_id' => $units['unit']
+            ]);
+        }
 
-        $invoice = Transaction::where('qrcode', Inertia::getShared('codeScan'))->first();
+        $invoice = Transaction::where('qrcode', Inertia::getShared('codeInvoice'))->first();
         TransactionLog::create([
-            'transaction_id' => $invoice->id,
             'invoice_log_type' => Product::class,
             'invoice_log_id' => $product->id,
+            'transaction_id' => $invoice->id,
+        ]);
+
+        return Inertia::flash(['barcode' => $product->barcode, 'purchase_transaction' => true, 'timestamp' => now()])->back();
+    }
+
+    public function purchaseStore(Request $request)
+    {
+        $validate = $request->validate([
+            'units.*.price' => ['required', 'numeric', 'min:500'],
+        ], [
+            'units.*.price.required' => 'jumlah produk tidak boleh kosong',
+            'units.*.price.min' => 'harga produk minimal Rp.500'
         ]);
     }
 }
