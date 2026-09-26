@@ -26,40 +26,33 @@ const FormProduct = ({ children, setModal }) => {
         barcode: barcode ?? "",
         qrcode: usePage().props.qrcode,
         title: "",
-        units: [{ unit: "", qty: 0, price: 0.0 }],
+        units: [{ unit: "", atom: 0, price: 0.0 }],
         image: null,
         category: "",
         desc: "",
     });
 
-    const handleCreate = (e) => {
+    const handleInitProduct = (e) => {
         e.preventDefault();
-
-        post(route("product.store"));
+        post(route("product.init"));
+    };
+    const handlePurchaseProduct = (e) => {
+        e.preventDefault();
+        post(route("product.purchase"));
     };
     const handleUpdate = (e) => {
         e.preventDefault();
-
         put(route("product.update"), {
             preserveScroll: true,
         });
     };
     const handleDestroy = (e) => {
         e.preventDefault();
-
         post(route("product.destroy"), {
             preserveScroll: true,
             onSuccess: () => setModal(false),
         });
     };
-
-    const handleScanner = (e) => {
-        e.preventDefault();
-
-        post(route);
-    };
-
-    const [units, setUnits] = useState([{ id: Date.now() }]);
 
     useEffect(() => {
         // const selectCreate = document.querySelectorAll(".select-create");
@@ -95,7 +88,8 @@ const FormProduct = ({ children, setModal }) => {
     return (
         <FormProductContext.Provider
             value={{
-                handleCreate,
+                handleInitProduct,
+                handlePurchaseProduct,
                 handleUpdate,
                 handleDestroy,
                 data,
@@ -104,8 +98,6 @@ const FormProduct = ({ children, setModal }) => {
                 processing,
                 clearErrors,
                 recentlySuccessful,
-                units,
-                setUnits,
             }}
         >
             {children}
@@ -114,10 +106,12 @@ const FormProduct = ({ children, setModal }) => {
 };
 
 const Create = ({ dataColumn }) => {
+    const { flash } = usePage();
     const {
         data,
         setData,
-        handleCreate,
+        handleInitProduct,
+        handlePurchaseProduct,
         processing,
         errors,
         clearErrors,
@@ -138,7 +132,7 @@ const Create = ({ dataColumn }) => {
             ...data.units,
             {
                 unit: "",
-                qty: 0,
+                atom: 0,
                 price: 0.0,
             },
         ]);
@@ -160,9 +154,15 @@ const Create = ({ dataColumn }) => {
 
         setData("units", units);
     };
-    console.log(data.units);
+    console.log(flash)
     return (
-        <FormOverlay submitForm={handleCreate}>
+        <FormOverlay
+            submitForm={
+                flash.purchase_transaction
+                    ? handlePurchaseProduct
+                    : handleInitProduct
+            }
+        >
             <div className="flex flex-col">
                 <div className="border-x p-4 flex flex-col border-indigo-400">
                     <div className="">
@@ -187,26 +187,32 @@ const Create = ({ dataColumn }) => {
                             </td>
                         </tr>
                         <tr>
-                            <th className="w-[35%] border border-indigo-400">
+                            <th className=" border border-indigo-400">
                                 <InputLabel
                                     className="w-full"
                                     value={"nama satuan"}
                                 />
                             </th>
-                            <th className="w-[20%] border border-indigo-400">
+                            <th className=" border border-indigo-400">
                                 <InputLabel
                                     className="w-full"
                                     value={"Jumlah (pcs)"}
                                 />
                             </th>
-                            <th className="w-[35%] border border-indigo-400">
-                                <InputLabel
-                                    className="w-full"
-                                    value={"Harga (satuan)"}
-                                />
-                            </th>
+                            {flash.purchase_transaction && (
+                                <th className="border border-indigo-400">
+                                    <InputLabel
+                                        className="w-full"
+                                        value={"Harga (satuan)"}
+                                    />
+                                </th>
+                            )}
                             <th className="border border-indigo-400">
-                                <button type="button" onClick={handleNewUnit} title="Tambah satuan produk">
+                                <button
+                                    type="button"
+                                    onClick={handleNewUnit}
+                                    title="Tambah satuan produk"
+                                >
                                     <i className="bi bi-plus-circle-fill text-blue-500 hover:text-blue-700 duration-200 cursor-pointer text-3xl"></i>
                                 </button>
                             </th>
@@ -214,8 +220,8 @@ const Create = ({ dataColumn }) => {
                     </thead>
                     <tbody id="unit-settings">
                         {data.units.map((unit, index) => (
-                            <tr key={index} className="p-5">
-                                <td className="w-[35%] px-1.5 py-3">
+                            <tr key={index}>
+                                <td className="px-1.5 py-3">
                                     <select
                                         onChange={(e) =>
                                             handleUnitChange(
@@ -224,7 +230,7 @@ const Create = ({ dataColumn }) => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="input text-sm md:text-xl p-3 w-full rounded-md shadow-md border border-gray-300 focus:border-indigo-600 hover:border-indigo-300 duration-150 outline-none"
+                                        className="text-sm md:text-xl p-3 w-full rounded-md shadow-md border border-gray-300 focus:border-indigo-600 hover:border-indigo-300 duration-150 outline-none"
                                         data-placeholder="Pilih satuan"
                                     >
                                         <option value="">Pilih satuan</option>
@@ -238,41 +244,45 @@ const Create = ({ dataColumn }) => {
                                         message={errors[`units.${index}.unit`]}
                                     />
                                 </td>
-                                <td className="w-[20%] px-1.5 py-3 border-indigo-400">
+                                <td className="px-1.5 py-3 border-indigo-400">
                                     <Input
                                         type="number"
-                                        defaultValue={0}
+                                        defaultValue={1}
                                         min={0}
                                         onChange={(e) =>
                                             handleUnitChange(
                                                 index,
-                                                "qty",
+                                                "atom",
                                                 e.target.value,
                                             )
                                         }
                                     />
                                     <InputError
-                                        message={errors[`units.${index}.qty`]}
+                                        message={errors[`units.${index}.atom`]}
                                     />
                                 </td>
-                                <td className="w-[35%] px-1.5 py-3 border-indigo-400">
-                                    <Input
-                                        type="number"
-                                        defaultValue={0}
-                                        min={0}
-                                        onChange={(e) =>
-                                            handleUnitChange(
-                                                index,
-                                                "price",
-                                                e.target.value,
-                                            )
-                                        }
-                                    />
-                                    <InputError
-                                        message={errors[`units.${index}.price`]}
-                                    />
-                                </td>
-                                <td className="h-full">
+                                {flash.purchase_transaction && (
+                                    <td className="px-1.5 py-3 border-indigo-400">
+                                        <Input
+                                            type="number"
+                                            defaultValue={0}
+                                            min={0}
+                                            onChange={(e) =>
+                                                handleUnitChange(
+                                                    index,
+                                                    "price",
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            message={
+                                                errors[`units.${index}.price`]
+                                            }
+                                        />
+                                    </td>
+                                )}
+                                <td className="">
                                     <div className="flex flex-1 justify-center">
                                         <button
                                             type="button"

@@ -21,6 +21,7 @@ const FormUnit = ({ children, setModal }) => {
         recentlySuccessful,
         processing,
         clearErrors,
+        reset,
     } = useForm({
         id: null,
         unit_name: "",
@@ -29,7 +30,9 @@ const FormUnit = ({ children, setModal }) => {
     const handleCreate = (e) => {
         e.preventDefault();
 
-        post(route(`attribute.unit.store`));
+        post(route(`attribute.unit.store`), {
+            onSuccess: () => reset("unit_name"),
+        });
     };
     const handleUpdate = (e) => {
         e.preventDefault();
@@ -68,7 +71,7 @@ const FormUnit = ({ children, setModal }) => {
 };
 
 const Create = () => {
-    const { setData, handleCreate, processing, errors, clearErrors } =
+    const { data, setData, handleCreate, processing, errors, clearErrors } =
         useContext(FormUnitContext);
 
     return (
@@ -77,6 +80,7 @@ const Create = () => {
                 <InputLabel value={"Nama Satuan"} />
                 <Input
                     placeholder="Ketik Nama Satuan"
+                    value={data.unit_name}
                     onChange={(e) => {
                         setData("unit_name", e.target.value);
                         clearErrors("unit_name");
@@ -139,8 +143,7 @@ const Update = ({ dataColumn }) => {
 };
 
 const Destroy = ({ dataColumn }) => {
-    const { handleDestroy, setData, processing } =
-        useContext(FormUnitContext);
+    const { handleDestroy, setData, processing } = useContext(FormUnitContext);
 
     const { discovery } = useContext(DiscoveryContext);
 
