@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('qrcode');
             $table->boolean('incoming');
             $table->boolean('printing');
-            $table->boolean('status');
+            $table->boolean('status'); // lunas?
             $table->decimal('total_invoice', 10, 2)->nullable();
             $table->date('deadlines')->nullable();
+
+            $table->foreignId('store_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

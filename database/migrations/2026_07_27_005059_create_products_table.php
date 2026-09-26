@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('barcode', 50)->unique()->nullable();
             $table->string('name');
+            $table->integer('total_stock_atom')->nullable();
             $table->string('product_image')->nullable();
             $table->text('description')->nullable();
 

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('transaction_logs', function (Blueprint $table) {
             $table->id();
             $table->morphs('invoice_log'); // product, balance, boarding house, monetary debt
+            $table->decimal('purchase_price', 10, 2)->nullable();
+            $table->decimal('selling_price', 10, 2)->nullable();
 
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
