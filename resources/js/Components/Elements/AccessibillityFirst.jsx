@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Button from "./Button";
 import { DiscoveryContext } from "@/Context/Discovery";
 import { usePage } from "@inertiajs/react";
+import Product from "@/Pages/Main/Product";
 
 const AccessibillityFirst = ({ dataFilters, all = false }) => {
     const {
@@ -17,20 +18,20 @@ const AccessibillityFirst = ({ dataFilters, all = false }) => {
     const { routeName } = usePage().props;
     return (
         <div
-            className={`h-full flex items-center bg-table-head
+            className={`overflow-x-scroll scrollbar-none h-full flex items-center bg-table-head
                 ${dataFilters.length ? "" : " min-w-1/2"} 
                 ${
-                    route().current("product.index")
+                    routeName === "product"
                         ? "rounded-l-2xl flex-1 py-0.5 pl-0.5"
-                        : "rounded-t-2xl px-5"
+                        : "rounded-t-2xl pl-3"
                 }`}
         >
             <div
-                className={`h-full w-full items-center flex ${route().current("product.index") ? "justify-center bg-main-layout rounded-2xl px-3" : ""}`}
+                className={`h-full w-full items-center flex ${routeName === "product" ? "justify-center bg-main-layout rounded-2xl px-3" : ""}`}
             >
                 <form
                     onSubmit={discoverySubmit}
-                    className="w-full flex overflow-x-scroll space-x-3 whitespace-nowrap scrollbar-none rounded-lg"
+                    className="w-full flex whitespace-nowrap rounded-lg"
                 >
                     {dataFilters.length ? (
                         <>
@@ -68,9 +69,17 @@ const AccessibillityFirst = ({ dataFilters, all = false }) => {
                                             setAttribute(dataFilter);
                                         else if (routeName === "transaction")
                                             setInvoice(dataFilter);
-                                        document.getElementById("scanner")
+                                        document
+                                            .getElementById("scanner")
                                             .focus();
                                     }}
+                                    className={`mr-3 font-semibold ${
+                                        dataFilter === category ||
+                                        dataFilter === attribute ||
+                                        dataFilter === invoice
+                                            ? "bg-indigo-100 font-bold text-black"
+                                            : "text-indigo-100 bg-main-table"
+                                    }`}
                                     key={index}
                                 >
                                     {routeName === "transaction"

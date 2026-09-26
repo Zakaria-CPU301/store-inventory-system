@@ -10,7 +10,7 @@ const ModalHeader = ({ title, closeModal, iconTitle }) => {
             <div className="flex-1 text-center"></div>
             <div
                 onClick={closeModal}
-                className="w-10 h-10 grid place-items-center hover:bg-red-700/75 hover:text-white hover:rotate-180 cursor-pointer duration-300 rounded-full"
+                className="w-10 h-10 grid place-items-center lg:hover:bg-red-700/75 lg:hover:text-white lg:hover:rotate-180 cursor-pointer duration-300 rounded-full"
             >
                 <i className="bi bi-x text-3xl"></i>
             </div>
