@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Property;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -31,6 +32,15 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('asd'),
             'remember_token' => Str::random(6)
+        ]);
+
+        $hashId = Str::upper(Str::uuid());
+        $makeQRCode = "faktur-1.{$hashId}";
+        Transaction::factory()->create([
+            'qrcode' => $makeQRCode,
+            'incoming' => false,
+            'printing' => true,
+            'status' => false,
         ]);
 
         Category::factory()->createMany([

@@ -49,7 +49,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::prefix('product')->name('product.')->group(function (): void {
         Route::get('', [ProductController::class, 'index'])->name('index');
-        Route::post('/insert', [ProductController::class, 'store'])->name('store');
+        Route::post('/insert', [ProductController::class, 'initStore'])->name('init');
+        Route::post('/purchase', [ProductController::class, 'purchaseStore'])->name(' purchase');
     });
     Route::prefix('balance')->name('balance.')->group(function (): void {
         Route::match(['get', 'post'], '/', [BalanceController::class, 'index'])->name('index');
@@ -59,7 +60,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
     Route::prefix('transaction')->name('transaction.')->group(function () {
         Route::match(['get', 'post'], '/', [TransactionController::class, 'index'])->name('index');
-        Route::post('/scanning', [TransactionController::class, 'scanning'])->name('scanning');
+        Route::post('/scanning', [TransactionController::class, 'dataIntoInvoice'])->name('dataIntoInvoice');
         Route::post('/invoice', [TransactionController::class, 'invoice'])->name('invoice');
     });
     // Route::get('debt', [DebtController::class, 'index'])->name('debt');
