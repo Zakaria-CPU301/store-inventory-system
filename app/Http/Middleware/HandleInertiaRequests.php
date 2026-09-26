@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'routeName' => str_replace('.index', '', $request->route()->getName()),
             'attribute' => $request->session()->get('attribute'),
-            'codeScan' => $request->session()->get('codeScan')
+            'codeInvoice' => $request->session()->get('codeInvoice')
         ];
     }
 }
