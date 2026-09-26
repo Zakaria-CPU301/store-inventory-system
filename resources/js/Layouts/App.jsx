@@ -24,6 +24,7 @@ const App = ({ children }) => {
 
     const { flash } = usePage();
     const [endForm, setEndForm] = useState(false);
+    const [focus, setFocus] = useState();
 
     useEffect(
         () => (flash.success ? setEndForm(true) : setEndForm(false)),
@@ -34,22 +35,22 @@ const App = ({ children }) => {
             <SessionInformation show={endForm} setShow={setEndForm} />
             <Dropdown>
                 <DiscoveryContextProvider>
-                        <Navbar toggleSidebar={toggleSidebar} />
-                        <div className="flex bg-main-layout w-full min-h-[calc(100vh-4rem)]">
-                            {(showSidebar === true ||
-                                showSidebar === "true") && (
-                                <Sidebar
-                                    modal={modal}
-                                    setModalContent={setModalContent}
-                                />
-                            )}
-                            <main className="p-8 flex-1 min-w-0 w-full">
-                                {children({
-                                    setModalContent,
-                                    setModal,
-                                })}
-                            </main>
-                        </div>
+                    <Navbar toggleSidebar={toggleSidebar} focus={focus} />
+                    <div className="flex bg-main-layout w-full min-h-[calc(100vh-4rem)]">
+                        {(showSidebar === true || showSidebar === "true") && (
+                            <Sidebar
+                                modal={modal}
+                                setModalContent={setModalContent}
+                            />
+                        )}
+                        <main className="p-8 flex-1 min-w-0 w-full">
+                            {children({
+                                setModalContent,
+                                setModal,
+                                setFocus,
+                            })}
+                        </main>
+                    </div>
                     {modal && <Modal.Content />}
                 </DiscoveryContextProvider>
             </Dropdown>

@@ -22,14 +22,13 @@ const Transaction = ({
     unitDatas,
     setModal,
     setModalContent,
+    setFocus,
 }) => {
     const { flash } = usePage();
 
     const { invoice } = useContext(DiscoveryContext);
 
     const [show, setShow] = useState(false);
-    const [focus, setFocus] = useState();
-    const message = focus ? "siap" : "tidak";
 
     const { post, reset, data, setData, errors } = useForm({
         code: "",
@@ -37,7 +36,7 @@ const Transaction = ({
     });
     const scanning = (e) => {
         e.preventDefault();
-        post(route("transaction.scanning"), {
+        post(route("transaction.dataIntoInvoice"), {
             onSuccess: () => reset("code"),
             onError: () => {
                 reset("code");
@@ -67,22 +66,25 @@ const Transaction = ({
         unitDatas: unitDatas,
     };
 
-    useEffect(() => {
-        if (!flash.barcode) return;
+    const handleFormProduct = () => {
         setModal(true);
-        setModalContent(
+        setModalContent(() => (
             <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                 <ModalHeader
-                    title={"Produk Baru"}
+                    title={"Pengaturan Produk Baru"}
                     closeModal={() => setModal(false)}
                 />
 
                 <FormProduct>
                     <FormProduct.Create dataColumn={dataColumn} />
                 </FormProduct>
-            </Card>,
-        );
-    }, [flash.barcode]);
+            </Card>
+        ));
+    };
+
+    useEffect(() => {
+        if (flash.barcode) handleFormProduct();
+    }, [flash.timestamp]);
     return (
         <>
             <SessionInformation
@@ -92,11 +94,10 @@ const Transaction = ({
                 show={show}
                 setShow={setShow}
             />
-            <form onSubmit={scanning} className="">
-                <Card className={"bg-powderblue flex sticky top-0 w-4/5"}>
-                    {message}
-                </Card>
-
+            <form
+                onSubmit={scanning}
+                className="absolute top-0 left-0 pointer-events-none opacity-0"
+            >
                 <input
                     id="scanner"
                     autoFocus
@@ -119,21 +120,43 @@ const Transaction = ({
                         <HeaderInfo>
                             <div className="flex-1 space-y-5 text-white self-start">
                                 <h1 className="text-3xl font-extrabold capitalize">
-                                    cetak transaksi
+                                    cetak transaksi{" "}
+                                    <span>
+                                        {data.incoming ? (
+                                            <>
+                                                pemasukan{" "}
+                                                <i className="bi bi-cart-plus-fill"></i>
+                                            </>
+                                        ) : (
+                                            <>
+                                                penjualan{" "}
+                                                <i className="bi bi-cart-dash-fill"></i>
+                                            </>
+                                        )}
+                                    </span>
                                 </h1>
-                                <div className="">
-                                    Nomor Faktur: {data.qrcode}
+                                <div className="flex flex-col capitalize">
+                                    <label className="">
+                                        nomor faktur:{" "}
+                                        {data.qrcode
+                                            .split("-")
+                                            .splice(0, 2)
+                                            .join("-")}
+                                    </label>
                                 </div>
                             </div>
-
-                            <Card className={"bg-light-sky p-4"}>
+                            <Card
+                                className={
+                                    "shadow-[0_0px_5px_0px_rgba(255,255,255,255.20)] bg-white p-2.5"
+                                }
+                            >
                                 <QRCodeSVG
                                     value={data.qrcode}
                                     imageSettings={{
                                         src: "/storage/defaults/dalis_store_logo.png",
-                                        width: 50,
-                                        height: 50,
-                                        excavate: true,
+                                        width: 60,
+                                        height: 60,
+                                        excavate: false,
                                     }}
                                     title="info faktur transaksi"
                                     level="H"
@@ -171,7 +194,7 @@ const Transaction = ({
                                                     setData("incoming", true)
                                                 }
                                             >
-                                                Masuk
+                                                Pemasukan
                                             </Button>
                                             <Button
                                                 type="submit"
@@ -179,7 +202,7 @@ const Transaction = ({
                                                     setData("incoming", false)
                                                 }
                                             >
-                                                Keluar
+                                                Penjualan
                                             </Button>
                                         </form>
                                     </Card>,
@@ -202,9 +225,6 @@ const Transaction = ({
                                         data.transaction_logs.map(
                                             (transaction_log, index) => (
                                                 <tr key={index}>
-                                                    {console.log(
-                                                        transaction_log,
-                                                    )}
                                                     <td className="text-center p-3">
                                                         <input
                                                             type="checkbox"
@@ -267,8 +287,12 @@ const Transaction = ({
 
 Transaction.layout = (page) => (
     <App>
-        {({ setModal, setModalContent }) => {
-            return React.cloneElement(page, { setModal, setModalContent });
+        {({ setModal, setModalContent, setFocus }) => {
+            return React.cloneElement(page, {
+                setModal,
+                setModalContent,
+                setFocus,
+            });
         }}
     </App>
 );
