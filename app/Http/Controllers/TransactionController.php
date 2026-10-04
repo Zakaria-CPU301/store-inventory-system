@@ -28,7 +28,7 @@ class TransactionController extends Controller
         }
 
         return Inertia::render('Main/Transaction', [
-            'datas' => $transaction->with(['transactionLogs.invoice_log'])->where('printing', true)->latest()->get(),
+            'datas' => $transaction->with(['transactionLogs.invoice_log.unitProducts.unit'])->where('printing', true)->latest()->get(),
             'categoryDatas' => Category::whereNotIn('category_name', ['pulsa', 'dana', 'paket data', 'listrik'])->get(),
             'unitDatas' => Unit::all()
         ]);
@@ -38,21 +38,36 @@ class TransactionController extends Controller
     {
         $invoice = Transaction::where('qrcode', 'LIKE', "{$request->code}")->first();
         $transaction = Transaction::where('qrcode', Inertia::getShared('codeInvoice'))->first();
-        $product = Product::where('barcode', $request->code)->first();
+        $product = Product::with(['unitProducts.unit'])->where('barcode', $request->code)->first();
         $qrcodeInvoice = str_contains($request->code, 'faktur-');
         if ($qrcodeInvoice) { // QRCode faktur-
-            $invoice->update(['printing' => true]);
+            $invoice->update(['printing' => true]); 
         } else {
             if (ctype_digit($request->code)) { // barcode
                 if ($product && !$transaction->incoming) { // produk sudah ada dan pengeluaran
-                    TransactionLog::create([
-                        'transaction_id' => $transaction->id,
-                        'invoice_log_type' => Product::class,
-                        'invoice_log_id' => $product->id
-                    ]);
+                    if (!$product->total_stock_atom) {
+                        $classname = 'bg-red-500';
+                        $icon = 'x-circle';
+                        $success = "stok {$product->name} habis";
+                        Inertia::flash(['success' => $success, 'icon' => $icon, 'classname' => $classname]);
+                    } else {
+                        TransactionLog::create([
+                            'transaction_id' => $transaction->id,
+                            'invoice_log_type' => Product::class,
+                            'invoice_log_id' => $product->id
+                        ]);
+                    }
                 } else if ($transaction->incoming) { // pemasukan
-                    if ($product) Inertia::flash(['barcode' => $request->code, 'purchase_transaction' => true, 'timestamp' => now()]);
-                    else Inertia::flash(['barcode' => $request->code, 'timestamp' => now()]);
+                    if ($product) {
+                        Inertia::flash(['barcode' => $request->code, 'timestamp' => now()]);
+                        Inertia::share('transaction_data', $product);
+                        session()->put('transaction_data', $product);
+                    }
+                    else {
+                        Inertia::flash(['barcode' => $request->code, 'timestamp' => now()]);
+                        Inertia::share('transaction_data', null);
+                        session()->put('transaction_data', null);
+                    }
                 } else { // produk belum ada
                     $classname = 'bg-orange-500';
                     $icon = 'exclamation-circle';

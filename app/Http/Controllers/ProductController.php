@@ -46,6 +46,7 @@ class ProductController extends Controller
             'title' => ['required', 'max:225'],
             'units.*.unit' => ['required'],
             'units.*.atom' => ['required', 'numeric', 'min:0'],
+            'unitDefault' => 'required',
             'image' => ['nullable', File::image()->max('500kb')],
             'category' => ['nullable'],
             'desc' => ['nullable'],
@@ -65,6 +66,7 @@ class ProductController extends Controller
         $product = Product::create([
             'barcode' => (int) ($validate['barcode']),
             'name' => $validate['title'],
+            'unit_default' => $validate['unitDefault'],
             'product_image' => $path,
             'description' => $validate['desc'],
             'category_id' => $validate['category'],
@@ -78,23 +80,24 @@ class ProductController extends Controller
             ]);
         }
 
-        $invoice = Transaction::where('qrcode', Inertia::getShared('codeInvoice'))->first();
-        TransactionLog::create([
-            'invoice_log_type' => Product::class,
-            'invoice_log_id' => $product->id,
-            'transaction_id' => $invoice->id,
-        ]);
+        $message = 'data berhasil di tambahkan!';
+            $icon = 'check-circle';
+            $className = 'bg-green-500';
 
-        return Inertia::flash(['barcode' => $product->barcode, 'purchase_transaction' => true, 'timestamp' => now()])->back();
+        Inertia::flash(['barcode' => $product->barcode, 'success' => $message, 'icon' => $icon, 'classname' => $className ?? null])->back();
+        Inertia::share(['transaction_data' => $product, 'timestamp' => now()]);
+        session()->put(['transaction_data' => $product, 'timestamp' => now()]);
+        return back();
     }
 
     public function purchaseStore(Request $request)
     {
         $validate = $request->validate([
             'units.*.price' => ['required', 'numeric', 'min:500'],
-        ], [
-            'units.*.price.required' => 'jumlah produk tidak boleh kosong',
-            'units.*.price.min' => 'harga produk minimal Rp.500'
-        ]);
+            ], [
+                'units.*.price.required' => 'jumlah produk tidak boleh kosong',
+                'units.*.price.min' => 'harga produk minimal Rp.500'
+                ]);
+                dd($request->all());
     }
 }

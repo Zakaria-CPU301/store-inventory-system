@@ -54,14 +54,6 @@ const AccessibillityFirst = ({ dataFilters, all = false }) => {
                                 <Button
                                     disabled={processing}
                                     type="submit"
-                                    {...(dataFilter === category ||
-                                    dataFilter === attribute ||
-                                    dataFilter === invoice
-                                        ? {
-                                              className:
-                                                  "bg-indigo-100 font-bold text-[bg-main-table]",
-                                          }
-                                        : {})}
                                     clickFunc={() => {
                                         if (routeName === "balance")
                                             setCategory(dataFilter);
@@ -73,12 +65,14 @@ const AccessibillityFirst = ({ dataFilters, all = false }) => {
                                             .getElementById("scanner")
                                             .focus();
                                     }}
-                                    className={`mr-3 font-semibold ${
+                                    className={`mr-3 font-semibold 
+                                        ${processing ? 'cursor-progress' : 'cursor-pointer'}
+                                        ${
                                         dataFilter === category ||
                                         dataFilter === attribute ||
                                         dataFilter === invoice
                                             ? "bg-indigo-100 font-bold text-black"
-                                            : "text-indigo-100 bg-main-table"
+                                            : "text-indigo-100 font-semibold bg-main-table"
                                     }`}
                                     key={index}
                                 >

@@ -48,9 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/unit/destroy', [UnitController::class, 'destroy'])->name('unit.destroy');
     });
     Route::prefix('product')->name('product.')->group(function (): void {
-        Route::get('', [ProductController::class, 'index'])->name('index');
+        Route::get('/', [ProductController::class, 'index'])->name('index');
         Route::post('/insert', [ProductController::class, 'initStore'])->name('init');
-        Route::post('/purchase', [ProductController::class, 'purchaseStore'])->name(' purchase');
+        Route::post('/purchase', [ProductController::class, 'purchaseStore'])->name('purchase');
     });
     Route::prefix('balance')->name('balance.')->group(function (): void {
         Route::match(['get', 'post'], '/', [BalanceController::class, 'index'])->name('index');

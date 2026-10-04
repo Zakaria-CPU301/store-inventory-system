@@ -15,6 +15,7 @@ import React from "react";
 import { DiscoveryContext } from "@/Context/Discovery";
 import { QRCodeSVG } from "qrcode.react";
 import SmoothTableHead from "@/Components/Elements/SmoothTableHead";
+import Select from "@/Components/Elements/Select";
 
 const Transaction = ({
     datas,
@@ -46,7 +47,9 @@ const Transaction = ({
     };
     const createInvoice = (e) => {
         e.preventDefault();
-        post(route("transaction.invoice"), { preserveState: false });
+        post(route("transaction.invoice"), {
+            onSuccess: () => setModal(false),
+        });
     };
 
     const qrcode = [];
@@ -56,7 +59,7 @@ const Transaction = ({
 
     const columns = [
         { label: "nama produk" },
-        // { label: "harga (satuan)" },
+        { label: "satuan" },
         // { label: "jumlah" },
         // { label: "harga netto" },
     ];
@@ -83,7 +86,9 @@ const Transaction = ({
     };
 
     useEffect(() => {
-        if (flash.barcode) handleFormProduct();
+        if (flash.barcode) {
+            handleFormProduct();
+        } else return;
     }, [flash.timestamp]);
     return (
         <>
@@ -114,10 +119,10 @@ const Transaction = ({
                 />
                 <button type="submit"></button>
             </form>
-            <React.Fragment>
-                {datas.map((data) =>
+            <>
+                {datas.map((data, i) =>
                     data.qrcode === invoice ? (
-                        <HeaderInfo>
+                        <HeaderInfo key={i}>
                             <div className="flex-1 space-y-5 text-white self-start">
                                 <h1 className="text-3xl font-extrabold capitalize">
                                     cetak transaksi{" "}
@@ -216,71 +221,112 @@ const Transaction = ({
                 </HeaderAccessibillity>
                 <div className="w-full relative">
                     <table className="border-collapse w-full bg-main-table rounded-b-2xl">
-                        <SmoothTableHead columns={columns} />
+                        <SmoothTableHead
+                            columns={columns}
+                            checkbox={<input type="checkbox" />}
+                        />
 
                         <tbody className="text-white">
-                            {datas.map((data, index) =>
-                                data.qrcode === invoice ? (
-                                    data.transaction_logs.length ? (
-                                        data.transaction_logs.map(
-                                            (transaction_log, index) => (
-                                                <tr key={index}>
-                                                    <td className="text-center p-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            name=""
-                                                            id=""
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            transaction_log
-                                                                .invoice_log
-                                                                .name
-                                                        }
-                                                    </td>
-                                                    <td className="text-center p-3">
-                                                        <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
-                                                            <Button
-                                                                className={""}
-                                                                clickFunc={() => {
-                                                                    setModal(
-                                                                        true,
-                                                                    );
-                                                                }}
+                            {datas.map((data, i) => (
+                                <React.Fragment key={i}>
+                                    {data.qrcode === invoice ? (
+                                        data.transaction_logs.length ? (
+                                            data.transaction_logs.map(
+                                                (transaction_log, i) => (
+                                                    <tr key={i}>
+                                                        <td className="text-center p-3">
+                                                            <input
+                                                                type="checkbox"
+                                                                name=""
+                                                                id=""
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                transaction_log
+                                                                    .invoice_log
+                                                                    .name
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <Select
+                                                                defaultValue={
+                                                                    transaction_log
+                                                                        .invoice_log
+                                                                        .unit_default
+                                                                }
                                                             >
-                                                                <i
-                                                                    className={`bi bi-trash text-xl`}
-                                                                ></i>
-                                                                hapus
-                                                            </Button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ),
+                                                                {transaction_log.invoice_log.unit_products.map(
+                                                                    (
+                                                                        unit_product,
+                                                                        i,
+                                                                    ) => (
+                                                                        <option
+                                                                            key={
+                                                                                i
+                                                                            }
+                                                                            value={
+                                                                                unit_product
+                                                                                    .unit
+                                                                                    .id
+                                                                            }
+                                                                            className="bg-black"
+                                                                        >
+                                                                            {
+                                                                                unit_product
+                                                                                    .unit
+                                                                                    .unit_name
+                                                                            }
+                                                                        </option>
+                                                                    ),
+                                                                )}
+                                                            </Select>
+                                                        </td>
+                                                        <td className="text-center p-3">
+                                                            <div className="flex flex-col items-center capitalize justify-start space-y-3  text-black">
+                                                                <Button
+                                                                    className={
+                                                                        ""
+                                                                    }
+                                                                    clickFunc={() => {
+                                                                        setModal(
+                                                                            true,
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <i
+                                                                        className={`bi bi-trash text-xl`}
+                                                                    ></i>
+                                                                    hapus
+                                                                </Button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ),
+                                            )
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={100}>
+                                                    <div className="flex flex-col justify-center items-center h-52 gap-4">
+                                                        <i
+                                                            className={`bi bi-database-fill-x text-5xl`}
+                                                        ></i>
+                                                        <span className="text-3xl font-extrabold">
+                                                            {
+                                                                "Data tidak di temukan"
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         )
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={100}>
-                                                <div className="flex flex-col justify-center items-center h-52 gap-4">
-                                                    <i
-                                                        className={`bi bi-database-fill-x text-5xl`}
-                                                    ></i>
-                                                    <span className="text-3xl font-extrabold">
-                                                        {
-                                                            "Data tidak di temukan"
-                                                        }
-                                                    </span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                ) : null,
-                            )}
+                                    ) : null}
+                                </React.Fragment>
+                            ))}
                         </tbody>
                     </table>
                 </div>
-            </React.Fragment>
+            </>
         </>
     );
 };

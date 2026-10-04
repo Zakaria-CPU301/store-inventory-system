@@ -1,10 +1,17 @@
+import { usePage } from "@inertiajs/react";
 import React from "react";
 
-const SmoothTableHead = ({columns}) => {
+const SmoothTableHead = ({ columns, checkbox }) => {
+    const { routeName } = usePage().props;
+
     return (
         <thead className="z-20 bg-table-head text-white sticky top-34">
             <tr>
-                <th className="capitalize p-3">no</th>
+                {routeName === "transaction" ? (
+                    <th className="capitalize p-3">{checkbox}</th>
+                ) : (
+                    <th className="capitalize p-3">no</th>
+                )}
                 {columns.map((name, index) => (
                     <th className="capitalize p-3" key={index}>
                         {name.label}

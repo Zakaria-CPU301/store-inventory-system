@@ -7,12 +7,14 @@ import InputError from "../Elements/InputError";
 import LoadingSession from "../Elements/LoadingSession";
 import Input from "../Elements/Input";
 import TomSelect from "tom-select";
+import Select from "../Elements/Select";
 
 export const FormProductContext = createContext();
 
 const FormProduct = ({ children, setModal }) => {
     const { barcode } = usePage().flash;
 
+    const [selected, setSelected] = useState(0);
     const {
         data,
         setData,
@@ -23,10 +25,12 @@ const FormProduct = ({ children, setModal }) => {
         processing,
         clearErrors,
     } = useForm({
+        id: null,
         barcode: barcode ?? "",
         qrcode: usePage().props.qrcode,
-        title: "",
+        name: "",
         units: [{ unit: "", atom: 0, price: 0.0 }],
+        unitDefault: 0,
         image: null,
         category: "",
         desc: "",
@@ -98,6 +102,8 @@ const FormProduct = ({ children, setModal }) => {
                 processing,
                 clearErrors,
                 recentlySuccessful,
+                selected,
+                setSelected,
             }}
         >
             {children}
@@ -106,6 +112,7 @@ const FormProduct = ({ children, setModal }) => {
 };
 
 const Create = ({ dataColumn }) => {
+    const { props } = usePage();
     const { flash } = usePage();
     const {
         data,
@@ -115,8 +122,8 @@ const Create = ({ dataColumn }) => {
         processing,
         errors,
         clearErrors,
-        units,
-        setUnits,
+        selected,
+        setSelected,
     } = useContext(FormProductContext);
 
     const [preview, setPreview] = useState(null);
@@ -154,11 +161,29 @@ const Create = ({ dataColumn }) => {
 
         setData("units", units);
     };
-    console.log(flash)
+    useEffect(() => {
+        if (!props.transaction_data) return;
+
+        setData("id", props.transaction_data.id);
+        setData("name", props.transaction_data.name);
+        const unitProduct = props.transaction_data.unit_products.map((unitProduct) => {
+            console.log(unitProduct)
+            return {
+                unit: unitProduct.unit.unit_name,
+                atom: unitProduct.total_atom,
+            }
+        });
+
+        setData("units", [
+            ...data.units,
+            ...unitProduct
+        ]);
+    }, [props.transaction_data]);
+    console.log(data);
     return (
         <FormOverlay
             submitForm={
-                flash.purchase_transaction
+                props.transaction_data
                     ? handlePurchaseProduct
                     : handleInitProduct
             }
@@ -169,12 +194,14 @@ const Create = ({ dataColumn }) => {
                         <InputLabel value={"Nama Produk"} />
                         <Input
                             placeholder="Required"
+                            value={data.name}
+                            disabled={!!props.transaction_data}
                             onChange={(e) => {
-                                setData("title", e.target.value);
-                                clearErrors("title");
+                                setData("name", e.target.value);
+                                clearErrors("name");
                             }}
                         />
-                        <InputError message={errors.title} />
+                        <InputError message={errors.name} />
                     </div>
                 </div>
                 <table className="border-x border-b border-indigo-400">
@@ -187,6 +214,14 @@ const Create = ({ dataColumn }) => {
                             </td>
                         </tr>
                         <tr>
+                            {!props.transaction_data && (
+                                <th className=" border border-indigo-400">
+                                    <InputLabel
+                                        className="w-full h-full"
+                                        value={"default"}
+                                    />
+                                </th>
+                            )}
                             <th className=" border border-indigo-400">
                                 <InputLabel
                                     className="w-full"
@@ -199,7 +234,7 @@ const Create = ({ dataColumn }) => {
                                     value={"Jumlah (pcs)"}
                                 />
                             </th>
-                            {flash.purchase_transaction && (
+                            {props.transaction_data && (
                                 <th className="border border-indigo-400">
                                     <InputLabel
                                         className="w-full"
@@ -207,22 +242,35 @@ const Create = ({ dataColumn }) => {
                                     />
                                 </th>
                             )}
-                            <th className="border border-indigo-400">
-                                <button
-                                    type="button"
-                                    onClick={handleNewUnit}
-                                    title="Tambah satuan produk"
-                                >
-                                    <i className="bi bi-plus-circle-fill text-blue-500 hover:text-blue-700 duration-200 cursor-pointer text-3xl"></i>
-                                </button>
-                            </th>
+                            {!props.transaction_data && (
+                                <th className="border border-indigo-400">
+                                    <button
+                                        type="button"
+                                        onClick={handleNewUnit}
+                                        title="Tambah satuan produk"
+                                    >
+                                        <i className="bi bi-plus-circle-fill text-blue-500 hover:text-blue-700 duration-200 cursor-pointer text-3xl"></i>
+                                    </button>
+                                </th>
+                            )}
                         </tr>
                     </thead>
                     <tbody id="unit-settings">
                         {data.units.map((unit, index) => (
                             <tr key={index}>
+                                {!props.transaction_data && (
+                                    <td className="px-1.5 py-3">
+                                        <Input
+                                            type="radio"
+                                            checked={index === selected}
+                                            onChange={() => setSelected(index)}
+                                            className="h-full"
+                                        />
+                                    </td>
+                                )}
                                 <td className="px-1.5 py-3">
-                                    <select
+                                    <Select
+                                        selected={selected}
                                         onChange={(e) =>
                                             handleUnitChange(
                                                 index,
@@ -230,8 +278,7 @@ const Create = ({ dataColumn }) => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="text-sm md:text-xl p-3 w-full rounded-md shadow-md border border-gray-300 focus:border-indigo-600 hover:border-indigo-300 duration-150 outline-none"
-                                        data-placeholder="Pilih satuan"
+                                        defaultValue={}
                                     >
                                         <option value="">Pilih satuan</option>
                                         {dataColumn.unitDatas.map((unit, i) => (
@@ -239,7 +286,7 @@ const Create = ({ dataColumn }) => {
                                                 {unit.unit_name}
                                             </option>
                                         ))}
-                                    </select>
+                                    </Select>
                                     <InputError
                                         message={errors[`units.${index}.unit`]}
                                     />
@@ -248,7 +295,6 @@ const Create = ({ dataColumn }) => {
                                     <Input
                                         type="number"
                                         defaultValue={1}
-                                        min={0}
                                         onChange={(e) =>
                                             handleUnitChange(
                                                 index,
@@ -261,7 +307,7 @@ const Create = ({ dataColumn }) => {
                                         message={errors[`units.${index}.atom`]}
                                     />
                                 </td>
-                                {flash.purchase_transaction && (
+                                {props.transaction_data && (
                                     <td className="px-1.5 py-3 border-indigo-400">
                                         <Input
                                             type="number"
@@ -282,19 +328,21 @@ const Create = ({ dataColumn }) => {
                                         />
                                     </td>
                                 )}
-                                <td className="">
-                                    <div className="flex flex-1 justify-center">
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                handleReduceUnit(index)
-                                            }
-                                            className="duration-200 bg-red-500 hover:bg-red-700 text-white p-1 cursor-pointer rounded-md"
-                                        >
-                                            <i className="bi bi-trash text-lg"></i>
-                                        </button>
-                                    </div>
-                                </td>
+                                {!props.transaction_data && (
+                                    <td className="">
+                                        <div className="flex flex-1 justify-center">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleReduceUnit(index)
+                                                }
+                                                className="duration-200 bg-red-500 hover:bg-red-700 text-white p-1 cursor-pointer rounded-md"
+                                            >
+                                                <i className="bi bi-trash text-lg"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>
