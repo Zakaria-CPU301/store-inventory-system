@@ -178,6 +178,7 @@ const Create = ({ datasFormulir }) => {
 };
 
 const Edit = ({ datasFormulir, dataColumn }) => {
+    console.log(dataColumn);
     const { handleUpdate, data, setData, errors, processing, clearErrors } =
         useContext(FormBalanceContext);
 
@@ -185,9 +186,9 @@ const Edit = ({ datasFormulir, dataColumn }) => {
 
     useEffect(() => {
         setData("id", dataColumn.id);
-        setData("customer", dataColumn.customers.cust_name);
+        setData("customer", dataColumn.customer.cust_name);
         setData("number", dataColumn.number.number);
-        setData("category", dataColumn.number.categories.category_name);
+        setData("category", dataColumn.number.category.category_name);
         setData("discovery", discovery);
     }, []);
 
@@ -198,7 +199,7 @@ const Edit = ({ datasFormulir, dataColumn }) => {
                     <InputLabel value={"Nama Pelanggan"} />
                     <select
                         className="select-create"
-                        defaultValue={dataColumn.customers.cust_name}
+                        defaultValue={dataColumn.customer.cust_name}
                         onChange={(e) => {
                             setData("customer", e.target.value);
                             clearErrors("customer");
@@ -236,7 +237,7 @@ const Edit = ({ datasFormulir, dataColumn }) => {
                 <div className="">
                     <select
                         defaultValue={
-                            dataColumn.number.categories.category_name
+                            dataColumn.number.category.category_name
                         }
                         onChange={(e) => {
                             setData("category", e.target.value);
@@ -269,6 +270,7 @@ const Edit = ({ datasFormulir, dataColumn }) => {
 };
 
 const Destroy = ({ dataColumn }) => {
+    console.log(dataColumn);
     const { handleDestroy, setData, processing } =
         useContext(FormBalanceContext);
 
@@ -284,7 +286,7 @@ const Destroy = ({ dataColumn }) => {
             <div className="flex flex-col w-full space-y-2.5">
                 <BennerText
                     label="nama pelanggan"
-                    dataContent={dataColumn.customers.cust_name}
+                    dataContent={dataColumn.customer.cust_name}
                 />
                 <BennerText
                     label="nomor"
@@ -292,7 +294,7 @@ const Destroy = ({ dataColumn }) => {
                 />
                 <BennerText
                     label="kategori nomor"
-                    dataContent={dataColumn.number.categories.category_name}
+                    dataContent={dataColumn.number.category.category_name}
                 />
             </div>
             <div className="flex w-full justify-center mt-5">

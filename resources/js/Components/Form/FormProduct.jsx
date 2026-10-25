@@ -278,7 +278,6 @@ const Create = ({ dataColumn }) => {
                                                 e.target.value,
                                             )
                                         }
-                                        defaultValue={}
                                     >
                                         <option value="">Pilih satuan</option>
                                         {dataColumn.unitDatas.map((unit, i) => (

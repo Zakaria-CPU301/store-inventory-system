@@ -12,7 +12,7 @@ const Sidebar = ({setModalContent, modal}) => {
 
                 <h1 className="font-bold text-xl text-white/60">Utama</h1>
                 <NavigatorLine
-                    pageName="dasbor"
+                    pageName="dashboard"
                     routeName="dashboard"
                     icon="border-style"
                     amountNotif="20"

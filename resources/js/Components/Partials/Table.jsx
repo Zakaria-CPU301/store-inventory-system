@@ -27,7 +27,8 @@ const Table = ({
 
     const { open, identity } = useContext(DropDownContext);
 
-    const { props } = usePage();
+    const { attribute } = usePage().props;
+    const { routeName } = usePage().props;
 
     return (
         <>
@@ -75,22 +76,22 @@ const Table = ({
                                                             <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
                                                                 <ModalHeader
                                                                     title={
-                                                                        props.routeName ===
+                                                                        routeName ===
                                                                             "attribute" &&
-                                                                        (props.attribute ===
+                                                                        (attribute ===
                                                                             "kategori" ||
-                                                                            props.attribute ===
+                                                                            attribute ===
                                                                                 null)
                                                                             ? "edit kategori"
-                                                                            : props.routeName ===
+                                                                            : routeName ===
                                                                                     "attribute" &&
-                                                                                props.attribute ===
+                                                                                attribute ===
                                                                                     "satuan"
                                                                               ? "edit satuan"
-                                                                              : props.routeName ===
+                                                                              : routeName ===
                                                                                   "customer"
                                                                                 ? "edit pelanggan"
-                                                                                : props.routeName ===
+                                                                                : routeName ===
                                                                                     "balance"
                                                                                   ? "edit nomor saldo"
                                                                                   : null
@@ -107,9 +108,9 @@ const Table = ({
 
                                                                 {routeName ===
                                                                     "attribute" &&
-                                                                (props.attribute ===
+                                                                (attribute ===
                                                                     "kategori" ||
-                                                                    props.attribute ===
+                                                                    attribute ===
                                                                         null) ? (
                                                                     <FormCategory>
                                                                         <FormCategory.Update
@@ -118,9 +119,9 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormCategory>
-                                                                ) : props.routeName ===
+                                                                ) : routeName ===
                                                                       "attribute" &&
-                                                                  props.attribute ===
+                                                                  attribute ===
                                                                       "satuan" ? (
                                                                     <FormUnit>
                                                                         <FormUnit.Update
@@ -132,7 +133,7 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormUnit>
-                                                                ) : props.routeName ===
+                                                                ) : routeName ===
                                                                   "customer" ? (
                                                                     <FormCustomer>
                                                                         <FormCustomer.Update
@@ -144,7 +145,7 @@ const Table = ({
                                                                             }
                                                                         />
                                                                     </FormCustomer>
-                                                                ) : props.routeName ===
+                                                                ) : routeName ===
                                                                   "balance" ? (
                                                                     <FormBalance>
                                                                         <FormBalance.Update
@@ -176,14 +177,14 @@ const Table = ({
                                                                     title={
                                                                         routeName ===
                                                                             "attribute" &&
-                                                                        (props.attribute ===
+                                                                        (attribute ===
                                                                             "kategori" ||
-                                                                            props.attribute ===
+                                                                            attribute ===
                                                                                 null)
                                                                             ? "hapus kategori"
                                                                             : routeName ===
                                                                                     "attribute" &&
-                                                                                props.attribute ===
+                                                                                attribute ===
                                                                                     "satuan"
                                                                               ? "hapus satuan"
                                                                               : routeName ===
@@ -191,7 +192,7 @@ const Table = ({
                                                                                 ? "hapus pelanggan"
                                                                                 : routeName ===
                                                                                     "balance"
-                                                                                  ? "hapus nomor saldo"
+                                                                                  ? "hapus nomor saldo?"
                                                                                   : null
                                                                     }
                                                                     closeModal={() =>
@@ -206,9 +207,9 @@ const Table = ({
 
                                                                 {routeName ===
                                                                     "attribute" &&
-                                                                (props.attribute ===
+                                                                (attribute ===
                                                                     "kategori" ||
-                                                                    props.attribute ===
+                                                                    attribute ===
                                                                         null) ? (
                                                                     <FormCategory>
                                                                         <FormCategory.Destroy
@@ -219,7 +220,7 @@ const Table = ({
                                                                     </FormCategory>
                                                                 ) : routeName ===
                                                                       "attribute" &&
-                                                                  props.attribute ===
+                                                                  attribute ===
                                                                       "satuan" ? (
                                                                     <FormUnit>
                                                                         <FormUnit.Destroy
@@ -249,7 +250,7 @@ const Table = ({
                                                                     </FormCustomer>
                                                                 ) : routeName ===
                                                                   "balance" ? (
-                                                                    <FormBalance>
+                                                                    <FormBalance setModal={setModal}>
                                                                         <FormBalance.Destroy
                                                                             datasFormulir={
                                                                                 datasFormulir
