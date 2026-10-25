@@ -137,7 +137,7 @@ class BalanceController extends Controller
 
     public function destroy(Request $request)
     {
-        Customer::find($request->id)->delete();
+        NumberCustomer::find($request->id)->delete();
         Inertia::flash(['success' => 'nomor saldo berhasil di hapus', 'icon' => 'check-circle', 'classname' => 'bg-green-500'])->back();
         return back()->with('discovery', $request->discovery);
     }
