@@ -214,7 +214,7 @@ const Transaction = ({
                                 );
                             }}
                         >
-                            Tambah{" "}
+                            Tambah Faktur{" "}
                             <i className="bi bi-plus-circle-fill text-lg text-blue-900"></i>
                         </Button>
                     </AccesibillitySecond>

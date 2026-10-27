@@ -40,11 +40,11 @@ class TransactionController extends Controller
         $transaction = Transaction::where('qrcode', Inertia::getShared('codeInvoice'))->first();
         $product = Product::with(['unitProducts.unit'])->where('barcode', $request->code)->first();
         $qrcodeInvoice = str_contains($request->code, 'faktur-');
-        if ($qrcodeInvoice) { // QRCode faktur-
+        if ($qrcodeInvoice) { // QRCode faktur-n
             $invoice->update(['printing' => true]); 
         } else {
             if (ctype_digit($request->code)) { // barcode
-                if ($product && !$transaction->incoming) { // produk sudah ada dan pengeluaran
+                if ($product && !$transaction->incoming) { // produk sudah ada dan produk keluar
                     if (!$product->total_stock_atom) {
                         $classname = 'bg-red-500';
                         $icon = 'x-circle';
@@ -57,13 +57,12 @@ class TransactionController extends Controller
                             'invoice_log_id' => $product->id
                         ]);
                     }
-                } else if ($transaction->incoming) { // pemasukan
-                    if ($product) {
+                } else if ($transaction->incoming) { // transaksi masuk
+                    if ($product) { // produk sudah ada
                         Inertia::flash(['barcode' => $request->code, 'timestamp' => now()]);
                         Inertia::share('transaction_data', $product);
                         session()->put('transaction_data', $product);
-                    }
-                    else {
+                    } else {
                         Inertia::flash(['barcode' => $request->code, 'timestamp' => now()]);
                         Inertia::share('transaction_data', null);
                         session()->put('transaction_data', null);
