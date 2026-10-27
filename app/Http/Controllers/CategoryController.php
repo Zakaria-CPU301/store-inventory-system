@@ -47,14 +47,15 @@ class CategoryController extends Controller
                 $icon = 'exclamation-circle';
                 $classname = 'bg-yellow-600';
             } else {
-                Category::find($request->id)->update($validate);
+                Category::find($request->id)->update(['category_name' => $validate['category_name']]);
                 $message = 'kategori berhasil di edit';
                 $icon = 'check-circle';
                 $classname = 'bg-green-500';
             }
+            DB::commit();
+            
             Inertia::flash(['success' => $message, 'icon' => $icon, 'classname' => $classname]);
             return back()->with('discovery', $request->discovery);
-            DB::commit();
         } catch (Throwable $e) {
             DB::rollback();
             session()->flash('discovery', $request->discovery);

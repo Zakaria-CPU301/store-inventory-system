@@ -211,7 +211,7 @@ const Table = ({
                                                                     "kategori" ||
                                                                     attribute ===
                                                                         null) ? (
-                                                                    <FormCategory>
+                                                                    <FormCategory setModal={setModal}>
                                                                         <FormCategory.Destroy
                                                                             dataColumn={
                                                                                 data
@@ -222,7 +222,7 @@ const Table = ({
                                                                       "attribute" &&
                                                                   attribute ===
                                                                       "satuan" ? (
-                                                                    <FormUnit>
+                                                                    <FormUnit setModal={setModal}>
                                                                         <FormUnit.Destroy
                                                                             datasFormulir={
                                                                                 datasFormulir
