@@ -45,7 +45,7 @@ const FormUnit = ({ children, setModal }) => {
     const handleDestroy = (e) => {
         e.preventDefault();
 
-        post(route("attribute.category.destroy"), {
+        post(route("attribute.unit.destroy"), {
             preserveScroll: true,
             onSuccess: () => setModal(false),
         });

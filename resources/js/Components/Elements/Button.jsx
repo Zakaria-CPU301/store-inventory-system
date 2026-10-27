@@ -12,7 +12,7 @@ export default function Button({
             <button
                 {...props}
                 onClick={clickFunc}
-                className={`rounded-2xl capitalize py-2 px-3 flex gap-2 ${className ? className : "bg-main-table font-semibold text-indigo-100"}`}
+                className={`rounded-2xl capitalize py-2 px-3 flex gap-2 cursor-pointer ${className ? className : "bg-main-table font-semibold text-indigo-100"}`}
                 disabled={disabled}
             >
                 {children}

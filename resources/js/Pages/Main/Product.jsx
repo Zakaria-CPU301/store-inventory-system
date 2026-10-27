@@ -9,7 +9,7 @@ import HeaderAccessibillity from "@/Components/Partials/HeaderAccessibillity";
 import HeaderDesc from "@/Components/Partials/HeaderDesc";
 import HeaderInfo from "@/Components/Partials/HeaderInfo";
 import App from "@/Layouts/App";
-import { useForm, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import React, { useEffect } from "react";
 
 const Product = ({
@@ -37,25 +37,25 @@ const Product = ({
         unitDatas: unitDatas,
     };
 
-    const handleFormProduct = () => {
-        setModal(true);
-        setModalContent(() => (
-            <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
-                <ModalHeader
-                    title={"Pengaturan Produk Baru"}
-                    closeModal={() => setModal(false)}
-                />
+    // const handleFormProduct = () => {
+    //     setModal(true);
+    //     setModalContent(() => (
+    //         <Card className="z-10 bg-powderblue w-4/5 md:w-2/3 min-h-0 p-4 max-h-[calc(80vh)] rounded-2xl">
+    //             <ModalHeader
+    //                 title={"Pengaturan Produk Baru"}
+    //                 closeModal={() => setModal(false)}
+    //             />
 
-                <FormProduct>
-                    <FormProduct.Create dataColumn={dataColumn} />
-                </FormProduct>
-            </Card>
-        ));
-    };
+    //             <FormProduct>
+    //                 <FormProduct.Create dataColumn={dataColumn} />
+    //             </FormProduct>
+    //         </Card>
+    //     ));
+    // };
 
-    useEffect(() => {
-        if (flash.barcode) handleFormProduct();
-    }, [flash.timestamp]);
+    // useEffect(() => {
+    //     if (flash.barcode) handleFormProduct();
+    // }, [flash.timestamp]);
     return (
         <>
             <HeaderInfo>
@@ -81,10 +81,11 @@ const Product = ({
                     <Button
                         type="button"
                         className="bg-light-sky text-blue-900 font-bold"
-                        clickFunc={handleFormProduct}
                     >
-                        Tambah{" "}
-                        <i className="bi bi-plus-circle-fill text-lg"></i>
+                        <Link href={route('transaction.index')}>
+                            Tambah Produk{" "}
+                            <i className="bi bi-plus-circle-fill text-lg"></i>
+                        </Link>
                     </Button>
                 </AccesibillitySecond>
             </HeaderAccessibillity>
